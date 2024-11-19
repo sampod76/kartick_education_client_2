@@ -1,18 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
 'use client';
-import React from 'react';
-import LinkGroup from './LinkGroup';
-import NavLink from './NavLink';
-import Image from 'next/image';
-import { AllImage } from '@/assets/AllImge';
-import Logo from '../shared/Logo';
+import { Form, message } from 'antd';
 import Link from 'next/link';
-import { Button, Form, Input, message } from 'antd';
-import { CiLinkedin } from 'react-icons/ci';
-import { CiFacebook } from 'react-icons/ci';
-import { AiFillTwitterCircle } from 'react-icons/ai';
-import { IoLogoInstagram } from 'react-icons/io';
-import PDFViewer from '../ui/PdfViewer';
+import Logo from '../shared/Logo';
 const Footer = () => {
   const footerNavs = [
     {
@@ -20,11 +10,11 @@ const Footer = () => {
       items: [
         {
           // href: '/',
-          name: 'Partners',
+          name: 'F&Q',
         },
         {
           // href: '/',
-          name: 'Blog',
+          name: 'Partners',
         },
         {
           // href: '/',

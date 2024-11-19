@@ -1,8 +1,7 @@
 import { AllImage } from '@/assets/AllImge';
-import { Col, Row } from 'antd';
+import { Col, Row, Tooltip } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
 
 export default function WelcomeMissionStatement() {
   return (
@@ -122,7 +121,7 @@ export default function WelcomeMissionStatement() {
           </div>
         </div>
       </div>
-      <div className="container mx-auto mt-3 grid grid-cols-2 gap-4 px-10 text-center text-3xl md:mb-10 lg:w-[60%] lg:grid-cols-4 xl:gap-10 2xl:px-20">
+      <div className="container mx-auto mt-3 grid grid-cols-2 gap-4 px-10 text-center text-3xl md:mb-10 lg:w-[60%] lg:grid-cols-5 xl:gap-8 2xl:px-20">
         <Link href={'/enroll'}>
           <div
             data-aos="fade-right"
@@ -181,6 +180,23 @@ export default function WelcomeMissionStatement() {
               className="h-16 w-20"
             />
             <h4 className="mt-2 text-3xl font-medium text-white">Grow</h4>
+          </div>
+        </Link>
+        <Link href={'/faq'}>
+          <div
+            data-aos="fade-left"
+            className="flex h-[9rem] flex-col items-center justify-center rounded-2xl border bg-[#2a63ff]"
+          >
+            <Image
+              src={
+                'https://img.freepik.com/free-vector/website-faq-section-user-help-desk-customer-support-frequently-asked-questions-problem-solution-quiz-game-confused-man-cartoon-character_335657-1602.jpg?t=st=1732053689~exp=1732057289~hmac=05036dfe4012f9920cf6575e25c5645dd7f666cb20844b95c454764b6c62c937&w=740'
+              }
+              alt=""
+              width={200}
+              height={200}
+              className="h-16 w-20 rounded-full"
+            />
+            <h4 className="mt-2 text-3xl font-medium text-white">F&Q</h4>
           </div>
         </Link>
       </div>
