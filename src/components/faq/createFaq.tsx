@@ -3,6 +3,7 @@
 import { useAddFaqMutation } from '@/redux/api/faqApi';
 import { Error_model_hook, Success_model } from '@/utils/modalHook';
 import { Button, Col, Form, Input, Row } from 'antd';
+import dynamic from 'next/dynamic';
 import { useState } from 'react';
 const TextEditorNotSetValue = dynamic(
   () => import('@/components/shared/TextEditor/TextEditorNotSetForm'),
