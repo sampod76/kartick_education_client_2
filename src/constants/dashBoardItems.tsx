@@ -471,7 +471,7 @@ export const dashboardItems = (role: string, setCollapsed?: any) => {
           label: (
             <Link
               onClick={() => (setCollapsed ? setCollapsed(false) : null)}
-              href={`/${role}/package/create`}
+              href={`/${role}/faq/create`}
             >
               Create FAQ
             </Link>
@@ -487,7 +487,7 @@ export const dashboardItems = (role: string, setCollapsed?: any) => {
               FAQ List
             </Link>
           ),
-          key: `/${role}/package`,
+          key: `/${role}/faq`,
         },
       ],
     },
