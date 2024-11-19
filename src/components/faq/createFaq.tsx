@@ -1,11 +1,15 @@
 'use client';
 
-import TextEditorNotSetValue from '@/components/shared/TextEditor/TextEditorNotSetForm';
 import { useAddFaqMutation } from '@/redux/api/faqApi';
 import { Error_model_hook, Success_model } from '@/utils/modalHook';
 import { Button, Col, Form, Input, Row } from 'antd';
 import { useState } from 'react';
-
+const TextEditorNotSetValue = dynamic(
+  () => import('@/components/shared/TextEditor/TextEditorNotSetForm'),
+  {
+    ssr: false, // Disable server-side rendering for this component
+  },
+);
 const CreateFaqCom = ({ value }: { value?: any }) => {
   console.log('🚀 ~ CreateFaqCom ~ value:', value);
   const [form] = Form.useForm();
