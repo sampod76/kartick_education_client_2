@@ -463,6 +463,35 @@ export const dashboardItems = (role: string, setCollapsed?: any) => {
       ],
     },
     {
+      label: 'FAQ',
+      key: 'FAQ-Package',
+      icon: <GiJetPack />,
+      children: [
+        {
+          label: (
+            <Link
+              onClick={() => (setCollapsed ? setCollapsed(false) : null)}
+              href={`/${role}/package/create`}
+            >
+              Create FAQ
+            </Link>
+          ),
+          key: `/${role}/faq/create`,
+        },
+        {
+          label: (
+            <Link
+              onClick={() => (setCollapsed ? setCollapsed(false) : null)}
+              href={`/${role}/faq`}
+            >
+              FAQ List
+            </Link>
+          ),
+          key: `/${role}/package`,
+        },
+      ],
+    },
+    {
       label: 'Home Video Upload',
       key: 'Home-Video-Upload',
       icon: <GiJetPack />,

@@ -1,37 +1,24 @@
 'use client';
 import ActionBar from '@/components/ui/ActionBar';
-import UMBreadCrumb from '@/components/ui/UMBreadCrumb';
-import { Button, Input, message } from 'antd';
-import Link from 'next/link';
-import {
-  DeleteOutlined,
-  EditOutlined,
-  FilterOutlined,
-  ReloadOutlined,
-  EyeOutlined,
-} from '@ant-design/icons';
-import { useState } from 'react';
-import { useDebounced } from '@/redux/hooks';
 import UMTable from '@/components/ui/UMTable';
+import { useDebounced } from '@/redux/hooks';
+import { ReloadOutlined } from '@ant-design/icons';
+import { Button, Dropdown, Input, Menu, Space } from 'antd';
+import { useState } from 'react';
 
-import dayjs from 'dayjs';
-import UMModal from '@/components/ui/UMModal';
-import {
-  useDeleteServiceMutation,
-  useGetMultipalServicesQuery,
-} from '@/redux/api/serviceApi';
-import Image from 'next/image';
 import { Error_model_hook, Success_model, confirm_modal } from '@/utils/modalHook';
+import dayjs from 'dayjs';
 
-import { USER_ROLE } from '@/constants/role';
+import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
+import ModalComponent from '@/components/Modal/ModalComponents';
+import CreateFaqCom from '@/components/faq/createFaq';
 import { useDeleteFaqMutation, useGetAllFaqQuery } from '@/redux/api/faqApi';
-import { getUserInfo } from '@/services/auth.service';
 
 const FaqList = () => {
-  const userInfo = getUserInfo() as any;
+  const { userInfo } = useGlobalContext();
 
   const query: Record<string, any> = {};
-  const [deleteFaq] = useDeleteFaqMutation();
+  const [deleteFaq, { isLoading: deleteFaqLoading }] = useDeleteFaqMutation();
 
   const [page, setPage] = useState<number>(1);
   const [size, setSize] = useState<number>(10);
@@ -83,20 +70,8 @@ const FaqList = () => {
 
   const columns = [
     {
-      title: '',
-      render: function (data: any) {
-        return <>{<Image src={data?.image} width={80} height={50} alt="dd" />}</>;
-      },
-      width: 100,
-    },
-    {
-      title: 'Title',
-      dataIndex: 'title',
-      ellipsis: true,
-    },
-    {
-      title: 'Content',
-      dataIndex: 'content',
+      title: 'Question',
+      dataIndex: 'question',
       ellipsis: true,
     },
 
@@ -115,29 +90,63 @@ const FaqList = () => {
     },
     {
       title: 'Action',
-      dataIndex: '_id',
+
       width: 130,
-      render: function (data: any) {
+      render: function (record: any) {
         return (
           <>
-            <Link href={`/${userInfo?.role}/faq/details/${data}`}>
-              <Button type="primary">
-                <EyeOutlined />
-              </Button>
-            </Link>
-            <Link href={`/${userInfo?.role}/faq/edit/${data}`}>
-              <Button
-                style={{
-                  margin: '0px 5px',
-                }}
-                type="default"
+            <Space size="middle">
+              <Dropdown
+                overlay={
+                  <Menu>
+                    <Menu.Item key="details">
+                      <ModalComponent
+                        button={
+                          <Button className="!w-20" type="default">
+                            View
+                          </Button>
+                        }
+                      >
+                        <CreateFaqCom value={record} />
+                      </ModalComponent>
+                    </Menu.Item>
+
+                    <Menu.Item key="edit">
+                      <ModalComponent
+                        button={
+                          <Button className="!w-20" type="default">
+                            Edit
+                          </Button>
+                        }
+                      >
+                        <CreateFaqCom value={record} />
+                      </ModalComponent>
+                    </Menu.Item>
+
+                    <Menu.Item
+                      key="delete"
+                      onClick={() => {
+                        handleDelete(record._id);
+                      }}
+                    >
+                      <Button className="!w-20" type="dashed">
+                        Delete
+                      </Button>
+                    </Menu.Item>
+
+                    {/* <Menu.Item key="add_milestone">
+                    <Link
+                      href={`/${userInfo?.role}/course/create/milestone/${record?._id}?courseName=${record?.title}`}
+                    >
+                      Add Milestone
+                    </Link>
+                  </Menu.Item> */}
+                  </Menu>
+                }
               >
-                <EditOutlined />
-              </Button>
-            </Link>
-            <Button onClick={() => handleDelete(data)} type="default" danger>
-              <DeleteOutlined />
-            </Button>
+                <button className="text-blue-700">Action</button>
+              </Dropdown>
+            </Space>
           </>
         );
       },
@@ -160,18 +169,6 @@ const FaqList = () => {
     setSearchTerm('');
   };
 
-  const deleteAdminHandler = async (id: string) => {
-    try {
-      const res = await deleteFaq(id);
-      if (res) {
-        message.success('Admin Successfully Deleted!');
-        setOpen(false);
-      }
-    } catch (error: any) {
-      Error_model_hook(error.message);
-    }
-  };
-
   return (
     <div>
       {/* <UMBreadCrumb
@@ -190,11 +187,9 @@ const FaqList = () => {
           style={{
             width: '250px',
           }}
+          value={searchTerm}
         />
         <div>
-          <Link href={`/${userInfo?.role}/faq/create`}>
-            <Button type="primary">Create Faq</Button>
-          </Link>
           {(!!sortBy || !!sortOrder || !!searchTerm) && (
             <Button style={{ margin: '0px 5px' }} type="default" onClick={resetFilters}>
               <ReloadOutlined />
@@ -214,15 +209,6 @@ const FaqList = () => {
         onTableChange={onTableChange}
         showPagination={true}
       />
-
-      <UMModal
-        title="Remove admin"
-        isOpen={open}
-        closeModal={() => setOpen(false)}
-        handleOk={() => deleteAdminHandler(adminId)}
-      >
-        <p className="my-5">Do you want to remove this admin?</p>
-      </UMModal>
     </div>
   );
 };

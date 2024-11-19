@@ -7,10 +7,12 @@ const TextEditorNotSetValue = ({
   setTextEditorValue,
   defaultTextEditorValue = '',
   name = 'details',
+  height = 500,
 }: {
   textEditorValue?: string;
   defaultTextEditorValue?: string;
   name?: string;
+  height?: number;
   setTextEditorValue: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const editor = useRef<any>(null);
@@ -23,6 +25,8 @@ const TextEditorNotSetValue = ({
       placeholder: 'Start typing...',
       defaultMode: 1, // Set default alignment to left
       toolbarAdaptive: false,
+      //  height: height, // Set the height of the editor
+      minHeight: height,
     }),
     [],
   );

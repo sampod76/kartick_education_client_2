@@ -29,10 +29,7 @@ const TextEditor = dynamic(() => import('@/components/shared/TextEditor/TextEdit
 export default function CreateCourseByCategory() {
   const [isReset, setIsReset] = useState(false);
   const [textEditorValue, setTextEditorValue] = useState('');
-  console.log(
-    '🚀 ~ file: page.tsx:43 ~ CreateCoursePage ~ textEditorValue:',
-    textEditorValue,
-  );
+
   const [addCourse, { isLoading, error }] = useAddCourseMutation();
 
   // !  tag selection
