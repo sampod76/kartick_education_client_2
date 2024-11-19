@@ -1,0 +1,235 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora&display=swap');
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: 'Lora', serif;
+  /* max-width: "1536px";
+  margin-inline: "auto"; */
+  /* font-family: 'Roboto Condensed', sans-serif; */
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.sc-kOHUsU {
+  padding: 1em;
+  width: 1000px;
+  height: 1000px;
+}
+.container2 {
+  width: 100%;
+}
+@media (min-width: 640px) {
+  .container2 {
+    max-width: 640px;
+  }
+}
+@media (min-width: 768px) {
+  .container2 {
+    max-width: 768px;
+  }
+}
+@media (min-width: 1024px) {
+  .container2 {
+    max-width: 1024px;
+  }
+}
+@media (min-width: 1280px) {
+  .container2 {
+    max-width: 1280px;
+  }
+}
+@media (min-width: 1536px) {
+  .container2 {
+    max-width: 1536px;
+  }
+}
+
+/* //! Sarwar */
+.shadow1 {
+  box-shadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)';
+}
+.block-flex {
+  display: flex;
+  justify-content: space-between;
+  /* align-items: center; */
+  gap: '1em';
+}
+
+@media screen and (max-width: 600px) {
+  .block-flex {
+    display: flex;
+    flex-direction: column;
+    /* background-color: aqua; */
+  }
+  .width-full {
+    width: '100%';
+  }
+}
+
+/* //! sampod */
+.bodyText {
+  @apply text-base;
+}
+.bodyHeaderText {
+  @apply text-2xl font-bold lg:text-3xl;
+}
+
+/* Heading levels */
+.jodit-wysiwyg h1 {
+  @apply text-2xl font-bold;
+}
+h1 {
+  @apply text-2xl font-bold;
+}
+
+.jodit-wysiwyg h2 {
+  @apply text-xl font-bold;
+}
+h2 {
+  @apply text-xl font-bold;
+}
+
+.jodit-wysiwyg h3 {
+  @apply text-lg font-semibold;
+}
+h3 {
+  @apply text-lg font-semibold;
+}
+
+.jodit-wysiwyg h4 {
+  @apply text-base font-medium;
+}
+h4 {
+  @apply text-base font-medium;
+}
+
+/* Quotes */
+.jodit-wysiwyg blockquote {
+  @apply rounded-lg border border-gray-200 bg-gray-100 p-4;
+}
+
+blockquote {
+  @apply rounded-lg border border-gray-200 bg-gray-100 p-4;
+}
+
+/* Code blocks */
+.jodit-wysiwyg pre,
+.jodit-wysiwyg code {
+  @apply rounded-lg bg-gray-900 px-4 py-2 font-mono text-white;
+}
+
+code {
+  @apply rounded-lg bg-gray-900 px-4 py-2 font-mono text-white;
+}
+pre {
+  @apply rounded-lg bg-gray-900 px-4 py-2 font-mono text-white;
+}
+
+/* Unordered lists */
+.jodit-wysiwyg ul {
+  @apply list-inside list-disc pl-8;
+}
+ul {
+  @apply list-inside list-disc pl-8;
+}
+.jodit-wysiwyg ol {
+  @apply list-inside list-decimal pl-8;
+}
+ol {
+  @apply list-inside list-decimal pl-8;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #ddd; /* Add border for the table */
+}
+
+td {
+  width: 16.6667%;
+  padding: 8px; /* Add padding for better spacing */
+  border: 1px solid #ddd; /* Add border for the table cells */
+}
+
+.enabled {
+  color: #333; /* Default text color for enabled state */
+}
+
+.disabled {
+  color: #999; /* Text color for disabled state */
+}
+
+.activated {
+  color: #007bff; /* Text color for active state */
+}
+
+.warning {
+  color: #ffc107; /* Text color for warning state */
+}
+
+.error {
+  color: #dc3545; /* Text color for error state */
+}
+
+.colorCheck {
+  @apply bg-slate-600 md:bg-blue-500 lg:bg-red-300 xl:bg-green-400;
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: black rgb(209, 213, 219);
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: #fb8500;
+  border-radius: 10px;
+  border: 2px solid #f0f0f0;
+}
+
+/* 
+
+*/
+
+/* AudioRecorderStyles.css */
+.audio-recorder-container {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+
+.audio-recorder-button {
+  background-color: #4caf50;
+  color: white;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin: 0 5px;
+}
+
+.audio-recorder-stop-button {
+  background-color: #e53935;
+}
+
+.audio-visualizer {
+  width: 100%;
+  height: 4px;
+  background-color: #4caf50;
+  border-radius: 2px;
+  margin-left: 8px;
+}
