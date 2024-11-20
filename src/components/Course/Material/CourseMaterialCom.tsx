@@ -2,12 +2,15 @@
 
 import LoadingSkeleton from '@/components/ui/Loading/LoadingSkeleton';
 import { useGetSingleCourseQuery } from '@/redux/api/adminApi/courseApi';
-import { Tabs } from 'antd';
+import { Empty, Tabs } from 'antd';
 
+import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
+import AdditionalCourseCard from './AdditionalCourse/AdditionalCourseCard';
 import Announcement from './Announcement/AnnouncementDistList';
 import CourseCardMaterial from './CourseCardMaterial';
 
 export default function CourseMaterialCom({ courseId }: { courseId: string }) {
+  const { userInfo } = useGlobalContext();
   const { data, isLoading } = useGetSingleCourseQuery(courseId);
 
   if (isLoading) {
@@ -20,22 +23,29 @@ export default function CourseMaterialCom({ courseId }: { courseId: string }) {
       label: 'Announcement',
       children: <Announcement courseId={courseId} />,
     },
-    {
-      key: '2',
-      label: 'Tab 2',
-      children: <div>Content for Tab 2</div>,
-    },
+    // {
+    //   key: '2',
+    //   label: 'Additional courses',
+    //   children: <AdditionalCourseCard additional_courses={data.additional_courses} />,
+    // },
     {
       key: '3',
       label: 'Tab 3',
-      children: <div>Content for Tab 3</div>,
+      children: <Empty />,
     },
     {
       key: '4',
       label: 'Tab 4',
-      children: <div>Content for Tab 4</div>,
+      children: <Empty />,
     },
   ];
+  if (userInfo?.role === 'seller') {
+    items.splice(1, 0, {
+      key: '2',
+      label: 'Additional courses',
+      children: <AdditionalCourseCard additional_courses={data.additional_courses} />,
+    });
+  }
 
   return (
     <div>

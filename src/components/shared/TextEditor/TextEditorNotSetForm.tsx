@@ -7,7 +7,7 @@ const TextEditorNotSetValue = ({
   setTextEditorValue,
   defaultTextEditorValue = '',
   name = 'details',
-  height = 500,
+  height,
 }: {
   textEditorValue?: string;
   defaultTextEditorValue?: string;
@@ -26,7 +26,7 @@ const TextEditorNotSetValue = ({
       defaultMode: 1, // Set default alignment to left
       toolbarAdaptive: false,
       //  height: height, // Set the height of the editor
-      minHeight: height,
+      minHeight: height || 500,
     }),
     [],
   );
