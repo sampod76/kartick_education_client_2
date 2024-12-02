@@ -1,6 +1,6 @@
 import { IMeta } from '@/types';
-import { baseApi } from '../baseApi';
 import { tagTypes } from '../../tag-types';
+import { baseApi } from '../baseApi';
 
 const ADMIN_URL = '/admin';
 
@@ -11,7 +11,8 @@ export const AdminApi = baseApi.injectEndpoints({
         url: '/users/create-admin',
         method: 'POST',
         data: data,
-        contentType: 'application/json',
+        contentType: 'multipart/form-data',
+        // contentType: 'application/json',
       }),
       invalidatesTags: [tagTypes.admin],
     }),

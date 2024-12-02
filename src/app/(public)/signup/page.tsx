@@ -194,7 +194,7 @@ const SignUpTeacherAndStudent = ({ setOpen }: any) => {
                   rules={[{ required: true, message: 'Please select your role!' }]}
                 >
                   <Select placeholder="Select role">
-                    <Option value="teacher">Teacher</Option>
+                    <Option value="seller">Teacher</Option>
                     <Option value="student">Student</Option>
                   </Select>
                 </Form.Item>
