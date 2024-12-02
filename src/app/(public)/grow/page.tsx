@@ -1,10 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
 'use client';
-import MeetCard from '@/components/shared/MeetCard';
 import SupportDonateHelpDesk from '@/components/widgets/SupportDonate';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
 
 export default function Leadership() {
   return (
@@ -49,13 +47,13 @@ export default function Leadership() {
           <p data-aos="zoom-in" className="bodyText -mt-4 lg:pb-6">
             In addition to academic learning, our Social and Emotional Learning (SEL)
             curriculum plays a crucial role in fostering emotional resilience and social
-            awareness. By participating in programs like iBlossom Cast and engaging in
-            hands-on projects, students gain confidence, improve communication skills, and
-            learn to work collaboratively with others. The support provided by The
-            Learning Arc further ensures that every student receives personalized guidance
-            and tutoring, allowing them to overcome challenges and thrive in their
-            educational journey. At iBlossomLearn, your child's growth is our priority,
-            and we're committed to helping them reach their full potential.
+            awareness. By participating in programs like Iblossomlearn P.D Institute and
+            engaging in hands-on projects, students gain confidence, improve communication
+            skills, and learn to work collaboratively with others. The support provided by
+            The Learning Arc further ensures that every student receives personalized
+            guidance and tutoring, allowing them to overcome challenges and thrive in
+            their educational journey. At iBlossomLearn, your child's growth is our
+            priority, and we're committed to helping them reach their full potential.
           </p>
           <Link
             href={'https://forms.gle/K3xoLk3cTUfohn9X8'}

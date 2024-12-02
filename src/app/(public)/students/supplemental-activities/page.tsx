@@ -3,7 +3,6 @@
 import SupportDonateHelpDesk from '@/components/widgets/SupportDonate';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
 
 export default function SupplementalActivities() {
   return (
@@ -43,9 +42,9 @@ export default function SupplementalActivities() {
             initiative, The Learning Arc, students have access to free tutoring and
             academic support, ensuring that every learner has the resources they need to
             thrive. Whether it's virtual science experiments, art projects, coding
-            workshops, or participation in iBlossom Cast, our supplemental activities
-            provide students with opportunities to explore their interests, build new
-            skills, and deepen their understanding of the world around them.
+            workshops, or participation in Iblossomlearn P.D Institute, our supplemental
+            activities provide students with opportunities to explore their interests,
+            build new skills, and deepen their understanding of the world around them.
           </p>
         </div>
         <div className="mb-20 items-center justify-center space-y-5 bg-black p-5 py-14 text-start text-white lg:space-y-16">
@@ -95,7 +94,9 @@ export default function SupplementalActivities() {
               </div>
 
               <div className="space-y-3">
-                <h2 className="text-xl font-bold">4. iBlossom Cast Participation</h2>
+                <h2 className="text-xl font-bold">
+                  4. Iblossomlearn P.D Institute Participation
+                </h2>
                 <p className="text-sm">
                   <span className="font-semibold">Time per Session:</span> 30-45 minutes
                 </p>
@@ -157,6 +158,6 @@ export default function SupplementalActivities() {
   className: "lg:h-[75vh]",
 };
 const bodyText = {
-  text: "At iBlossomLearn, we enrich every student’s educational experience through a diverse range of supplemental activities that extend beyond the traditional classroom. These activities are designed to engage learners at all levels, offering hands-on learning, creative projects, and interactive challenges that foster critical thinking and creativity. Additionally, through our non-profit initiative, The Learning Arc, students have access to free tutoring and academic support, ensuring that every learner has the resources they need to thrive. Whether it's virtual science experiments, art projects, coding workshops, or participation in iBlossom Cast, our supplemental activities provide students with opportunities to explore their interests, build new skills, and deepen their understanding of the world around them.",
+  text: "At iBlossomLearn, we enrich every student’s educational experience through a diverse range of supplemental activities that extend beyond the traditional classroom. These activities are designed to engage learners at all levels, offering hands-on learning, creative projects, and interactive challenges that foster critical thinking and creativity. Additionally, through our non-profit initiative, The Learning Arc, students have access to free tutoring and academic support, ensuring that every learner has the resources they need to thrive. Whether it's virtual science experiments, art projects, coding workshops, or participation in Iblossomlearn P.D Institute, our supplemental activities provide students with opportunities to explore their interests, build new skills, and deepen their understanding of the world around them.",
 };
  */

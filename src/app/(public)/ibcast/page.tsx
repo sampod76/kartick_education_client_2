@@ -1,13 +1,11 @@
 /* eslint-disable react/no-unescaped-entities */
 'use client';
-import Image from 'next/image';
-import React from 'react';
-import dynamic from 'next/dynamic';
 import SupportDonateHelpDesk from '@/components/widgets/SupportDonate';
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
+import Link from 'next/link';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
-import { getBaseUrl } from '@/helpers/config/envConfig';
-import Link from 'next/link';
 const DynamicInput = dynamic(() => import('antd/es/input'), { ssr: false });
 export default function CareerOpportunitiesComponents() {
   return (
@@ -26,24 +24,25 @@ export default function CareerOpportunitiesComponents() {
               //   data-aos="zoom-out"
               className="absolute left-1/2 top-1/2 mx-auto w-fit -translate-x-1/2 -translate-y-1/2 transform whitespace-nowrap rounded-[35px] bg-white bg-opacity-50 px-5 py-3 text-center text-xl text-black lg:px-16 lg:text-2xl"
             >
-              IBLossom Cast
+              Iblossomlearn P.D Institute
             </h1>
           </div>
         </div>
         <div className="h-10 bg-primary"></div>
         <div className="mb-20 flex flex-col items-center justify-center space-y-5 px-5 py-7 text-center lg:space-y-8 lg:px-28 lg:text-xl">
           <h1 data-aos="zoom-in" className="bodyHeaderText mt-2 lg:mt-6">
-            IBLossom Cast
+            Iblossomlearn P.D Institute
           </h1>
           <p data-aos="zoom-in" className="bodyText lg:pb-2">
-            IBlossom Cast is an innovative platform at iBlossomLearn designed to enhance
-            students' creative expression and communication skills. Through iBlossom Cast,
-            students can create and share their own podcasts, allowing them to explore
-            storytelling, build confidence, and engage with diverse topics in a unique
-            format. This platform also provides an opportunity for students to listen to
-            educational content on the go, making learning more flexible and accessible.
-            iBlossom Cast fosters a sense of community as students collaborate on
-            projects, developing teamwork and enhancing their digital literacy skills.
+            Iblossomlearn P.D Institute is an innovative platform at iBlossomLearn
+            designed to enhance students' creative expression and communication skills.
+            Through Iblossomlearn P.D Institute, students can create and share their own
+            podcasts, allowing them to explore storytelling, build confidence, and engage
+            with diverse topics in a unique format. This platform also provides an
+            opportunity for students to listen to educational content on the go, making
+            learning more flexible and accessible. Iblossomlearn P.D Institute fosters a
+            sense of community as students collaborate on projects, developing teamwork
+            and enhancing their digital literacy skills.
           </p>
           <div data-aos="zoom-out" className="bodyText lg:pb-2">
             Download the Free Audio Tool:
