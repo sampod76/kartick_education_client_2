@@ -24,7 +24,7 @@ export default function SellerUserlistModal({ courseId }: { courseId: string }) 
   const [sortOrder, setSortOrder] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const query: Record<string, string | number> = {};
-  query['needProperty'] = 'course';
+  query['needProperty'] = 'courses';
   query['limit'] = size;
   query['page'] = page;
   query['sortBy'] = sortBy;
@@ -39,6 +39,7 @@ export default function SellerUserlistModal({ courseId }: { courseId: string }) 
     query['searchTerm'] = debouncedSearchTerm;
   }
   const { data, isLoading, isFetching } = useGetAllSellersQuery(query);
+  // console.log('🚀 ~ SellerUserlistModal ~ data:', data);
   const mainDate = data?.data;
 
   const meta = data?.meta;
