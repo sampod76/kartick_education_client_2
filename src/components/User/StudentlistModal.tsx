@@ -22,7 +22,7 @@ export default function StudentsModal({ courseId }: { courseId: string }) {
   const [sortOrder, setSortOrder] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const query: Record<string, string | number> = {};
-  query['needProperty'] = 'purchase_courses';
+  query['needProperty'] = 'course';
   query['limit'] = size;
   query['page'] = page;
   query['sortBy'] = sortBy;
@@ -117,7 +117,7 @@ export default function StudentsModal({ courseId }: { courseId: string }) {
       render: (record: any) => {
         console.log('🚀 ~ record:', record);
         const accesscourseArray: any[] = record.accessCourses;
-        const isExaistCourse = accesscourseArray.find(
+        const isExaistCourse = accesscourseArray?.find(
           (access) => access.course === courseId,
         );
 
