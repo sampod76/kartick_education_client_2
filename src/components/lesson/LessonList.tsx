@@ -46,23 +46,12 @@ export default function LessonList({
     module: moduleId,
     ...lesson_query,
   });
-  console.log(lessonData, 'lessonData');
   const { data: checkPurchase, isLoading: CheckPurchaseLoading } =
     useGetCoursePermissionQuery({ course: courseId });
-  // console.log("🚀 ~ checkPurchase:", checkPurchase);
-  if (checkPurchase?.data) {
-    IsExistPremonitionCourse = !!checkPurchase?.data;
+  // console.log('🚀 ~ checkPurchase:', checkPurchase?.data?.data);
+  if (checkPurchase?.data?.data) {
+    IsExistPremonitionCourse = !!checkPurchase?.data?.data;
   }
-  // const quiz_query: Record<string, any> = {};
-  // //! for Course options selection
-  // quiz_query['limit'] = 999999;
-  // quiz_query['isDelete'] = ENUM_YN.NO;
-  // const { data: QuizData, isLoading: quizLoading } = useGetAllQuizQuery({
-  //   status: 'active',
-  //   isDelete: ENUM_YN.NO,
-  //   module: moduleId,
-  //   ...quiz_query,
-  // });
 
   if (isLoading || CheckPurchaseLoading) {
     return <LoadingSkeleton />;
@@ -71,7 +60,7 @@ export default function LessonList({
   const playerVideoFunc = (lesson: any, index?: number) => {
     if (
       IsExistPremonitionCourse ||
-      lesson?.lesson_number == (0 || 1)
+      index == 0
       // || index === 0//! for first open video
     ) {
       return (
@@ -131,7 +120,7 @@ export default function LessonList({
           <div>
             <div className="">
               <div className="relative my-1 flex items-center justify-center">
-                {playerVideoFunc(lesson)}
+                {playerVideoFunc(lesson, index)}
               </div>
               {/* {lesson?.details && CutText(lesson?.details, 200)} */}
               {/* <EllipsisMiddle suffixCount={3} maxLength={300}>
@@ -203,7 +192,7 @@ export default function LessonList({
           <div>
             <div className="">
               <div className="my-2 flex items-center justify-center">
-                {playerVideoFunc(lesson)}
+                {playerVideoFunc(lesson, index)}
               </div>
 
               <div className="line-clamp-3">
