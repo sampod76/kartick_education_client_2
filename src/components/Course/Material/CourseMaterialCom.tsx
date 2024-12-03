@@ -39,7 +39,7 @@ export default function CourseMaterialCom({ courseId }: { courseId: string }) {
       children: <Empty />,
     },
   ];
-  if (userInfo?.role === 'seller') {
+  if (userInfo?.role === 'seller' || userInfo?.role === 'admin') {
     items.splice(1, 0, {
       key: '2',
       label: 'Additional courses',

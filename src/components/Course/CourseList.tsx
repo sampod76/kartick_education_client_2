@@ -20,6 +20,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useGlobalContext } from '../ContextApi/GlobalContextApi';
 import SellerUserlistModal from '../User/SellerUserlistModal';
+import StudentsModal from '../User/StudentlistModal';
 
 const CourseList = () => {
   const query: Record<string, any> = {};
@@ -227,6 +228,12 @@ const CourseList = () => {
                     button={<Button>Add/Remove Teacher</Button>}
                   >
                     <SellerUserlistModal courseId={record._id} />
+                  </ModalComponent>
+                  <ModalComponent
+                    width={1000}
+                    button={<Button>Add/Remove Student</Button>}
+                  >
+                    <StudentsModal courseId={record._id} />
                   </ModalComponent>
 
                   {/* <Menu.Item key="add_milestone">

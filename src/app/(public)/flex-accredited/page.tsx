@@ -1,8 +1,6 @@
-import CustomeHero from '@/components/widgets/CustomeHero';
 import SupportDonateHelpDesk from '@/components/widgets/SupportDonate';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
 
 const page = () => {
   return (

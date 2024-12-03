@@ -30,9 +30,7 @@ export default function LessonList({
   //! for purchased data of a user
   const categoryId = moduleData?.category || moduleData?.milestone?.course?.category?._id;
   const courseId = moduleData?.course || moduleData?.milestone?.course?._id;
-
   let IsExistPremonitionCourse: any = false;
-
   //! for Course options selection
   const lesson_query: Record<string, any> = {};
   lesson_query['limit'] = 999999;
