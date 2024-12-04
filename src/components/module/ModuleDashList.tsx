@@ -1,6 +1,5 @@
 'use client';
 import ActionBar from '@/components/ui/ActionBar';
-import UMBreadCrumb from '@/components/ui/UMBreadCrumb';
 import UMTable from '@/components/ui/UMTable';
 import { useDebounced } from '@/redux/hooks';
 import { ReloadOutlined } from '@ant-design/icons';
@@ -17,7 +16,6 @@ import Image from 'next/image';
 import { AllImage } from '@/assets/AllImge';
 import FilterMilestone from '@/components/dashboard/Filter/FilterMilestone';
 import ModalComponent from '@/components/Modal/ModalComponents';
-import HeadingUI from '@/components/ui/dashboardUI/HeadingUI';
 import {
   useDeleteModuleMutation,
   useGetAllModuleQuery,
@@ -29,7 +27,17 @@ import { useGetAllCategoryChildrenQuery } from '@/redux/api/categoryChildrenApi'
 import { IDecodedInfo, getUserInfo } from '@/services/auth.service';
 import SelectCategoryChildren from '../Forms/GeneralField/SelectCategoryChildren';
 
-export default function ModuleDashList() {
+export default function ModuleDashList({
+  queryObject,
+}: {
+  queryObject?: {
+    category?: string;
+    course?: string;
+    milestone: string;
+    sortBy?: string;
+    setSortOrder?: string;
+  };
+}) {
   const userInfo = getUserInfo() as IDecodedInfo;
   //
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -45,9 +53,12 @@ export default function ModuleDashList() {
   if (userInfo?.role !== 'admin') {
     queryCategory['author'] = userInfo?.id;
   }
-  const { data: Category, isLoading: categoryLoading } = useGetAllCategoryChildrenQuery({
-    ...queryCategory,
-  });
+  const { data: Category, isLoading: categoryLoading } = useGetAllCategoryChildrenQuery(
+    {
+      ...queryCategory,
+    },
+    { skip: !!queryObject?.milestone },
+  );
   const categoryData: any = Category?.data;
   //----------------------------------------------------------------
 
@@ -59,8 +70,8 @@ export default function ModuleDashList() {
 
   const [page, setPage] = useState<number>(1);
   const [size, setSize] = useState<number>(10);
-  const [sortBy, setSortBy] = useState<string>('');
-  const [sortOrder, setSortOrder] = useState<string>('asc');
+  const [sortBy, setSortBy] = useState<string>(queryObject?.sortBy || '');
+  const [sortOrder, setSortOrder] = useState<string>(queryObject?.setSortOrder || '');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [open, setOpen] = useState<boolean>(false);
   const [adminId, setAdminId] = useState<string>('');
@@ -71,9 +82,9 @@ export default function ModuleDashList() {
   query['sortBy'] = sortBy;
   query['sortOrder'] = sortOrder;
   query['status'] = 'active';
-  query['category'] = category?._id;
-  query['course'] = course?._id;
-  query['milestone'] = milestone?._id;
+  query['category'] = queryObject?.category || category?._id;
+  query['course'] = queryObject?.course || course?._id;
+  query['milestone'] = queryObject?.milestone || milestone?._id;
   if (filterValue) {
     query['milestone'] = filterValue;
   }
@@ -195,7 +206,11 @@ export default function ModuleDashList() {
                       Edit
                     </Link>
                   </Menu.Item>
-
+                  <Menu.Item key="Material">
+                    <Link href={`/${userInfo?.role}/module/material/${record._id}`}>
+                      Material
+                    </Link>
+                  </Menu.Item>
                   <Menu.Item
                     key="delete"
                     onClick={() => {
@@ -274,46 +289,36 @@ export default function ModuleDashList() {
         padding: '1rem',
       }}
     >
-      <UMBreadCrumb
-        items={[
-          {
-            label: 'admin',
-            link: `/${userInfo?.role}`,
-          },
-          {
-            label: 'Module',
-            link: `/${userInfo?.role}/module`,
-          },
-        ]}
-      />
-      <HeadingUI>Module List</HeadingUI>
-      <ActionBar>
-        <div className="flex gap-2">
-          <Input
-            size="large"
-            placeholder="Search"
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{
-              width: '20%',
-            }}
-          />
-          <FilterMilestone filterValue={filterValue} setFilterValue={setFilterValue} />
-        </div>
-        <div>
-          <Button type="default" style={{ marginRight: '5px' }} onClick={showDrawer}>
-            Filter
-          </Button>
-
-          <Link href={`/${userInfo?.role}/module/create`}>
-            <Button type="default">Create Module</Button>
-          </Link>
-          {(!!sortBy || !!sortOrder || !!searchTerm) && (
-            <Button style={{ margin: '0px 5px' }} type="default" onClick={resetFilters}>
-              <ReloadOutlined />
+      <h1>Module List</h1>
+      {!queryObject?.milestone && (
+        <ActionBar>
+          <div className="flex gap-2">
+            <Input
+              size="large"
+              placeholder="Search"
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{
+                width: '250px',
+              }}
+            />
+            <FilterMilestone filterValue={filterValue} setFilterValue={setFilterValue} />
+          </div>
+          <div>
+            <Button type="default" style={{ marginRight: '5px' }} onClick={showDrawer}>
+              Filter
             </Button>
-          )}
-        </div>
-      </ActionBar>
+
+            <Link href={`/${userInfo?.role}/module/create`}>
+              <Button type="default">Create Module</Button>
+            </Link>
+            {(!!sortBy || !!sortOrder || !!searchTerm) && (
+              <Button style={{ margin: '0px 5px' }} type="default" onClick={resetFilters}>
+                <ReloadOutlined />
+              </Button>
+            )}
+          </div>
+        </ActionBar>
+      )}
       <UMTable
         loading={isLoading || isFetching}
         columns={columns}

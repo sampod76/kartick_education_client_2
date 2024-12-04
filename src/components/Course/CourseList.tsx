@@ -204,14 +204,14 @@ const CourseList = () => {
                   <Menu.Item key="details">
                     <Link href={`/course/milestone/${record._id}`}>View</Link>
                   </Menu.Item>
-                  <Menu.Item key="Material">
-                    <Link href={`/${userInfo?.role}/course/material/${record._id}`}>
-                      Material
-                    </Link>
-                  </Menu.Item>
                   <Menu.Item key="edit">
                     <Link href={`/${userInfo?.role}/course/edit/${record._id}`}>
                       Edit
+                    </Link>
+                  </Menu.Item>
+                  <Menu.Item key="Material">
+                    <Link href={`/${userInfo?.role}/course/material/${record._id}`}>
+                      Material
                     </Link>
                   </Menu.Item>
 

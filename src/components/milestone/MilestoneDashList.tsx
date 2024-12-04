@@ -198,6 +198,11 @@ const MileStoneList = ({
                       Edit
                     </Link>
                   </Menu.Item>
+                  <Menu.Item key="Material">
+                    <Link href={`/${userInfo?.role}/milestone/material/${record._id}`}>
+                      Material
+                    </Link>
+                  </Menu.Item>
                   {/* <Menu.Item key="add_milestone">
                     <Link
                       href={`/${userInfo?.role}/milestone/create/module/${record?._id}?milestoneName=${record?.title}`}
