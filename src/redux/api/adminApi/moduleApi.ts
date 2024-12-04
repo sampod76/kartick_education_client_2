@@ -56,6 +56,16 @@ export const moduleApi = baseApi.injectEndpoints({
       },
       invalidatesTags: [tagTypes.module, tagTypes.categoryChildren],
     }),
+    updateModuleSerialNumber: build.mutation({
+      query: ({ data }) => {
+        return {
+          url: `${MODULE_URL}/serialnumber-update`,
+          method: 'PATCH',
+          data: data,
+        };
+      },
+      invalidatesTags: [tagTypes.module],
+    }),
 
     // delete ac department
     deleteModule: build.mutation({
@@ -75,4 +85,6 @@ export const {
   useGetAllModuleQuery,
   useGetSingleModuleQuery,
   useUpdateModuleMutation,
+  //
+  useUpdateModuleSerialNumberMutation,
 } = moduleApi;

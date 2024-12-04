@@ -38,6 +38,7 @@ export default function ModuleDashList({
     setSortOrder?: string;
   };
 }) {
+  console.log(queryObject, 'queryObject');
   const userInfo = getUserInfo() as IDecodedInfo;
   //
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -82,7 +83,7 @@ export default function ModuleDashList({
   query['sortBy'] = sortBy;
   query['sortOrder'] = sortOrder;
   query['status'] = 'active';
-  query['category'] = queryObject?.category || category?._id;
+  // query['category'] = queryObject?.category || category?._id;
   query['course'] = queryObject?.course || course?._id;
   query['milestone'] = queryObject?.milestone || milestone?._id;
   if (filterValue) {

@@ -1,9 +1,10 @@
 //@ts-nocheck
 'use client';
+
 import {
-  useGetAllMilestoneQuery,
-  useUpdateMilestoneSerialNumberMutation,
-} from '@/redux/api/adminApi/milestoneApi';
+  useGetAllModuleQuery,
+  useUpdateModuleSerialNumberMutation,
+} from '@/redux/api/adminApi/moduleApi';
 import { useDebounced } from '@/redux/hooks';
 import { ErrorModal, Success_model } from '@/utils/modalHook';
 import { Button, message } from 'antd';
@@ -33,13 +34,13 @@ const ModuleSerialUpdate = ({
   const { userInfo } = useGlobalContext();
 
   const [updateSerialNumber, { isLoading: Sloading }] =
-    useUpdateMilestoneSerialNumberMutation();
+    useUpdateModuleSerialNumberMutation();
 
   const query: Record<string, any> = {};
 
   const [page, setPage] = useState<number>(1);
   const [size, setSize] = useState<number>(99999);
-  const [sortBy, setSortBy] = useState<string>('milestone_number');
+  const [sortBy, setSortBy] = useState<string>('module_number');
   const [sortOrder, setSortOrder] = useState<string>('asc');
   const [searchTerm, setSearchTerm] = useState<string>('');
 
@@ -48,8 +49,9 @@ const ModuleSerialUpdate = ({
   query['sortBy'] = sortBy;
   query['sortOrder'] = sortOrder;
   query['status'] = 'active';
-  query['category'] = queryObject?.category;
+  // query['category'] = queryObject?.category;
   query['course'] = queryObject?.course;
+  query['milestone'] = queryObject?.milestone || milestone?._id;
 
   if (userInfo?.role !== 'admin') {
     query['author'] = userInfo?.id;
@@ -64,19 +66,19 @@ const ModuleSerialUpdate = ({
     query['searchTerm'] = debouncedSearchTerm;
   }
 
-  const { data = [], isLoading } = useGetAllMilestoneQuery({ ...query });
+  const { data, isLoading } = useGetAllModuleQuery({ ...query });
 
-  const milestoneData = data?.data || [];
+  const moduleData = data?.data || [];
   useEffect(() => {
-    if (milestoneData?.length) {
-      updateCharacters(milestoneData);
+    if (moduleData?.length) {
+      updateCharacters(moduleData);
     }
-  }, [milestoneData]);
+  }, [moduleData]);
 
   const updateSerialNumberFunction = async () => {
     try {
       if (characters?.length === 0) {
-        message.error('No milestone selected to update position');
+        message.error('No selected to update position');
         return;
       }
       const bodyData = characters.map((c, i) => {

@@ -4,14 +4,14 @@ import LoadingSkeleton from '@/components/ui/Loading/LoadingSkeleton';
 import { Tabs } from 'antd';
 
 import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
-import MilestoneSerialUpdate from '@/components/milestone/MilestoneSerialUpdate';
 import ModuleDashList from '@/components/module/ModuleDashList';
-import { useGetSingleMilestoneQuery } from '@/redux/api/adminApi/milestoneApi';
 import ModuleSerialUpdate from '@/components/module/ModulSerialUpdate';
+import { useGetSingleMilestoneQuery } from '@/redux/api/adminApi/milestoneApi';
 
 export default function MilestoneMaterialCom({ milestoneId }: { milestoneId: string }) {
   const { userInfo } = useGlobalContext();
   const { data, isLoading } = useGetSingleMilestoneQuery(milestoneId);
+  console.log('🚀 ~ MilestoneMaterialCom ~ data:', data);
 
   if (isLoading) {
     return <LoadingSkeleton />;
