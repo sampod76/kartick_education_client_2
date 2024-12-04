@@ -110,16 +110,16 @@ const SIngleCourse = ({ course }: { course: any }) => {
 
           <div className="flex flex-col gap-2">
             <div className="flex flex-row items-center justify-between gap-2 px-2 py-1 text-xs text-gray-900 sm:text-sm">
-              <span className="font-regular flex w-full flex-row items-center justify-center whitespace-nowrap rounded-md bg-primary p-2 py-1 text-black">
-                <CgPlayButtonO className="mr-1 text-lg font-extrabold text-black" />{' '}
+              <span className="font-regular flex w-full flex-row items-center justify-center whitespace-nowrap rounded-md bg-primary p-2 py-1 text-white">
+                <CgPlayButtonO className="mr-1 text-lg font-extrabold text-white" />{' '}
                 {course?.totalModuleSize || 0} Modules
               </span>
 
-              <span className="flex w-full items-center justify-center gap-1 whitespace-nowrap rounded-md bg-primary p-2 py-1 text-black">
-                <SnippetsOutlined style={{ color: 'black', font: 'bold' }} />
+              <span className="flex w-full items-center justify-center gap-1 whitespace-nowrap rounded-md bg-primary p-2 py-1 text-white">
+                <SnippetsOutlined style={{ color: 'white', font: 'bold' }} />
                 {course?.totalLessonSize || 0} Lessons
               </span>
-              <span className="flex w-full items-center justify-center gap-1 whitespace-nowrap rounded-md bg-primary p-2 py-1 text-black">
+              <span className="flex w-full items-center justify-center gap-1 whitespace-nowrap rounded-md bg-primary p-2 py-1 text-white">
                 <FaUsers /> {course?.totalEnrollStudentSize || 0} Students
               </span>
             </div>

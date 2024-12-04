@@ -5,6 +5,8 @@ import { useGetSingleCourseQuery } from '@/redux/api/adminApi/courseApi';
 import { Empty, Tabs } from 'antd';
 
 import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
+import MileStoneList from '@/components/milestone/MilestoneDashList';
+import MilestoneSerialUpdate from '@/components/milestone/MilestoneSerialUpdate';
 import AdditionalCourseCard from './AdditionalCourse/AdditionalCourseCard';
 import Announcement from './Announcement/AnnouncementDistList';
 import CourseCardMaterial from './CourseCardMaterial';
@@ -30,8 +32,40 @@ export default function CourseMaterialCom({ courseId }: { courseId: string }) {
     // },
     {
       key: '3',
-      label: 'Tab 3',
-      children: <Empty />,
+      label: 'Milestone',
+      children: (
+        <div>
+          <Tabs
+            type="card"
+            centered
+            items={[
+              {
+                key: '1',
+                label: 'Milestone List',
+                children: (
+                  <MileStoneList
+                    queryObject={{
+                      course: courseId,
+                      category: data.category?._id,
+                      sortBy: 'milestone_number',
+                      setSortOrder: 'asc',
+                    }}
+                  />
+                ),
+              },
+              {
+                key: '2',
+                label: 'Milestone Position Update',
+                children: (
+                  <MilestoneSerialUpdate
+                    queryObject={{ course: courseId, category: data.category?._id }}
+                  />
+                ),
+              },
+            ]}
+          />
+        </div>
+      ),
     },
     {
       key: '4',

@@ -24,6 +24,7 @@ const MilestoneHomeList = ({ courseId }: { courseId: string }) => {
 
   const query: Record<string, any> = {};
   query['limit'] = 999999;
+  query['sortBy'] = 'milestone_number';
   query['sortOrder'] = 'asc';
   query['status'] = 'active';
   query['isDelete'] = ENUM_YN.NO;

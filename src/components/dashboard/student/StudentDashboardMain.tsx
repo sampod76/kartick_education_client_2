@@ -27,14 +27,14 @@ export default function StudentDashboardMain() {
     {
       isDelete: ENUM_YN.NO,
       status: 'active',
-      author: userInfo?.id,
+      userId: userInfo?.id,
       page: current,
       limit: pageCount,
     },
     { skip: !Boolean(userInfo?.id) },
   );
 
-  console.log(allPurchaseCourse, 'allPurchaseCourse');
+  // console.log(allPurchaseCourse, 'allPurchaseCourse');
 
   const {
     data: allPurchasePackage,
@@ -73,7 +73,7 @@ export default function StudentDashboardMain() {
 
   const CourseCard: React.FC<any> = ({ courseDetails }) => {
     return (
-      <div className="m-4 h-fit max-w-sm overflow-hidden rounded-2xl bg-white p-4 shadow-lg">
+      <div className="m-4 h-full max-w-sm overflow-hidden rounded-2xl bg-white p-4 shadow-lg flex flex-col justify-between items-center py-5">
         <CustomImageTag
           className="h-48 w-full rounded-t-lg object-cover"
           src={fileObjectToLink(courseDetails?.image || courseDetails?.img)}
@@ -88,12 +88,12 @@ export default function StudentDashboardMain() {
             }&courseDetailsName=${courseDetails?.title}&category=${
               courseDetails?.category?._id || courseDetails?.category
             }`}
-            className="mb-2 text-xl font-bold"
+            className="mb-2 text-xl font-bold line-clamp-2"
           >
             {courseDetails?.title}
           </Link>
 
-          <p className="text-base text-gray-700">
+          <p className="text-base text-gray-700 line-clamp-2">
             <span className="font-semibold">{courseDetails?.category?.title}</span>
           </p>
         </div>
@@ -175,7 +175,7 @@ export default function StudentDashboardMain() {
           </div>
           <div>
             {allPurchaseCourse?.data?.length ? (
-              <div className="mx-auto grid w-full grid-cols-1 gap-2 p-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+              <div className="mx-auto grid w-full h-full grid-cols-1 gap-2 p-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 my-2">
                 {allPurchaseCourse?.data?.map((course: any) => (
                   <CourseCard key={course._id} courseDetails={course?.course} />
                 ))}

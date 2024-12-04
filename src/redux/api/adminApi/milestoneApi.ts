@@ -58,6 +58,16 @@ export const milestoneApi = baseApi.injectEndpoints({
       },
       invalidatesTags: [tagTypes.milestone, tagTypes.categoryChildren],
     }),
+    updateMilestoneSerialNumber: build.mutation({
+      query: ({ data }) => {
+        return {
+          url: `${MILESTONE_URL}/serialnumber-update`,
+          method: 'PATCH',
+          data: data,
+        };
+      },
+      invalidatesTags: [tagTypes.milestone],
+    }),
 
     // delete ac department
     deleteMilestone: build.mutation({
@@ -77,4 +87,6 @@ export const {
   useGetAllMilestoneQuery,
   useGetSingleMilestoneQuery,
   useUpdateMilestoneMutation,
+  //
+  useUpdateMilestoneSerialNumberMutation,
 } = milestoneApi;

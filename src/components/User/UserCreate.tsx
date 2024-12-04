@@ -51,7 +51,7 @@ const UserCreateComponent = ({
         values.image = imageUrl[0];
       }
       let res;
-      console.log('🚀 ~ onSubmit ~ values:', values);
+      // console.log('🚀 ~ onSubmit ~ values:', values);
 
       if (values?.role === USER_ROLE.STUDENT) {
         const { password, ...allValue } = values;
@@ -120,7 +120,9 @@ const UserCreateComponent = ({
               marginBottom: '10px',
             }}
           >
-            <p className="text-center text-2xl font-semibold">Create account</p>
+            <p className="text-center text-2xl font-semibold">
+              Create account ({role.value === USER_ROLE.SELLER ? 'Teacher' : role.value})
+            </p>
             <hr className="my-2 border" />
             <Row gutter={[16, 16]}>
               <Col xs={24} md={12} lg={8}>

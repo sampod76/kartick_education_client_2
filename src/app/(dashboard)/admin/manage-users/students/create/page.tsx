@@ -1,17 +1,18 @@
-'use client';
+import UserCreateComponent from '@/components/User/UserCreate';
+import { USER_ROLE } from '@/constants/role';
 
-import CreateStudentComponent from '@/components/student/addStudentByAuthor/addStudentComponent';
-import { getUserInfo } from '@/services/auth.service';
-import { useState } from 'react';
+export default function CreateStudentPage() {
+  const role: {
+    label: string;
+    value: string;
+  } = {
+    label: USER_ROLE.STUDENT,
+    value: USER_ROLE.STUDENT,
+  };
 
-const CreateStudentPage = () => {
-  const userInfo = getUserInfo() as { email: string; id: string } | undefined;
-  const [open, setOpen] = useState(false);
   return (
-    <div>
-      <CreateStudentComponent author={userInfo?.id} setOpen={setOpen} />
-    </div>
+    <>
+      <UserCreateComponent role={role} />
+    </>
   );
-};
-
-export default CreateStudentPage;
+}

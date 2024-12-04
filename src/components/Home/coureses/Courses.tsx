@@ -89,7 +89,7 @@ const Courses = ({
   return (
     <div className="relative">
       <div
-        className={`container mx-auto flex items-center justify-end`}
+        className={`container mx-auto flex items-center justify-center `}
         title="blog List"
       >
         <Input
@@ -98,10 +98,10 @@ const Courses = ({
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           style={{
-            width: '250px',
+            // width: '250px',
             marginTop: '-8px',
           }}
-          className="!bg-opacity-45"
+          className="!bg-opacity-45 !w-[70%] ring-2 ring-cyan-800 "
         />
         <div>
           {!!searchTerm && (

@@ -118,7 +118,7 @@ const CourseList = () => {
       title: 'Name',
       // fixed:"left",
       dataIndex: 'title',
-      // ellipsis: true,
+      ellipsis: true,
       // responsive: ['md','sm']
     },
     {
