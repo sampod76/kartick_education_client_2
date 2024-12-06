@@ -30,17 +30,6 @@ const SIngleCourse = ({ course }: { course: any }) => {
   const router = useRouter();
 
   const [addCart] = useAddCartMutation();
-  const arr = [
-    ' ',
-    HomeCourseImage,
-    HomeCourseImage2,
-    HomeCourseImage3,
-    HomeCourseImage4,
-    HomeCourseImage5,
-    HomeCourseImage6,
-  ];
-
-  const indexArray = Math.floor(Math.random() * 6 + 1);
 
   const addToCartHandler = async (CartCourse: ICourseData) => {
     // dispatch(addToCart(CartCourse))
