@@ -1,10 +1,10 @@
 /* eslint-disable react/no-unescaped-entities */
 'use client';
+import CustomImageTag from '@/components/ui/CustomTag/CustomImageTag';
 import SupportDonateHelpDesk from '@/components/widgets/SupportDonate';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
-import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 const DynamicInput = dynamic(() => import('antd/es/input'), { ssr: false });
 export default function CareerOpportunitiesComponents() {
@@ -34,66 +34,58 @@ export default function CareerOpportunitiesComponents() {
             Iblossomlearn P.D Institute
           </h1>
           <p data-aos="zoom-in" className="bodyText lg:pb-2">
-            Iblossomlearn P.D Institute is an innovative platform at iBlossomLearn
-            designed to enhance students' creative expression and communication skills.
-            Through Iblossomlearn P.D Institute, students can create and share their own
-            podcasts, allowing them to explore storytelling, build confidence, and engage
-            with diverse topics in a unique format. This platform also provides an
-            opportunity for students to listen to educational content on the go, making
-            learning more flexible and accessible. Iblossomlearn P.D Institute fosters a
-            sense of community as students collaborate on projects, developing teamwork
-            and enhancing their digital literacy skills.
+            iBlossomLearn offers a diverse range of professional development courses
+            designed to cater to various fields and interests. Whether you're looking to
+            enhance your business acumen, refine your technical writing skills, or delve
+            into the world of hospitality, iBlossomLearn has you covered. Their courses
+            are meticulously crafted to provide practical knowledge and skills that can be
+            immediately applied in the workplace, ensuring that learners are well-equipped
+            to meet the demands of their respective industries.
           </p>
-          <div data-aos="zoom-out" className="bodyText lg:pb-2">
-            Download the Free Audio Tool:
-            <br />
-            <Link
-              href={'http://audacityteam.org/download'}
-              className="cursor-pointer text-center text-[16px] text-blue-500"
-            >
-              (Download audacity)
-            </Link>
-            <div className="mx-auto mt-2 flex max-w-[400px] justify-center">
-              {/* <audio crossOrigin="anonymous" controls>
-                <source
-                  src={
-                    getBaseUrl() + '/paly-audio/' + 'audio-5456646456454.mp3'
-                  }
-                  type="audio/ogg"
-                />
-              </audio> */}
-              <AudioPlayer
-                autoPlay={false}
-                // src={getBaseUrl() + '/paly-audio/' + 'audio-5456646456454.mp3'}
-                src={
-                  'https://iblossomlearn.s3.us-east-2.amazonaws.com/audios/audio-5456646456454.mp3'
-                }
-                // onPlay={e => console.log("onPlay")}
-                crossOrigin="anonymous"
-                preload="auto"
-                // onLoadedMetaData={}
-                // other props here
-              />
-            </div>
-            <br />{' '}
-            <span className="">
-              Audacity. Follow the link below. For creating podcasts, a great free audio
-              tool is Audacity. It's an open-source audio recording and editing software
-              that is perfect for beginners and experienced users alike. You can download
-              it for free from audacityteam.org. Audacity offers a range of features that
-              make it easy to record, edit, and produce high-quality audio for podcasts.
-            </span>
-          </div>
+
+          <CustomImageTag
+            src={
+              'https://d30hkubekb1969.cloudfront.net/upload/images/page11-1733516489362.png'
+            }
+          />
+
           <p data-aos="zoom-in" className="bodyText lg:pb-2">
-            Students at iBlossomLearn can easily access this free podcasting tool,
-            Audacity, by visiting audacityteam.org. From there, they can download the
-            software directly to their computers. Once installed, students can use
-            Audacity to record, edit, and produce their podcasts as part of their iBlossom
-            Cast projects. This tool, combined with the guidance provided through
-            iBlossomLearn, empowers students to create high-quality audio content and
-            develop their storytelling and communication skills.
+            Moreover, iBlossomLearn's commitment to personalized learning means that each
+            course is tailored to meet the unique needs of its students. This
+            individualized approach not only fosters a deeper understanding of the subject
+            matter but also encourages continuous professional growth. By investing in
+            iBlossomLearn's professional development courses, individuals can stay ahead
+            in their careers, unlock new opportunities, and achieve their full potential.
           </p>
-          <Link
+          <CustomImageTag
+            src={
+              'https://d30hkubekb1969.cloudfront.net/upload/images/pasdfdsge11-1733516570519.png'
+            }
+          />
+          <p className="bodyText lg:pb-2">
+            iBlossomLearn provides students with an excellent opportunity to align their
+            learning experience with their career aspirations. By enrolling in courses
+            that are directly relevant to their career goals, students can build a strong
+            foundation of knowledge and skills that will serve them well in their
+            professional journeys. Whether it's gaining insights into the latest business
+            strategies, mastering the art of technical writing, or acquiring essential
+            hospitality management skills, iBlossomLearn’s courses offer a clear pathway
+            to career advancement. This targeted approach ensures that students not only
+            excel academically but also gain the practical expertise needed to thrive in
+            their chosen fields.
+          </p>
+
+          <Link href={'/enroll?category=65b7dad8e838e88e3a7b2c11'}>
+            <div
+              data-aos="zoom-out"
+              className="mt-6 w-80 self-center rounded-3xl border-2 border-primary p-1"
+            >
+              <button className="w-full rounded-3xl bg-primary p-2 px-5 text-[12px] text-white lg:text-base">
+                <p className="text-xl">Ready, Set, Go</p>
+              </button>
+            </div>
+          </Link>
+          {/* <Link
             href={
               'https://docs.google.com/forms/d/e/1FAIpQLScPZDeLe5XJPpVQMWf6fcET6Y_FhzC97JKbRc_UwOq6-wGfFg/viewform'
             }
@@ -106,7 +98,7 @@ export default function CareerOpportunitiesComponents() {
                 <p className="text-xl">Ready, Set, Create</p>
               </button>
             </div>
-          </Link>
+          </Link> */}
         </div>
       </div>
       <SupportDonateHelpDesk />

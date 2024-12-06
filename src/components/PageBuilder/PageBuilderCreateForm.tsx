@@ -6,7 +6,7 @@ import {
 import { Error_model_hook } from '@/utils/modalHook';
 import { Button, Form, Input, message, Select, Upload } from 'antd';
 import CustomImageTag from '../ui/CustomTag/CustomImageTag';
-const MemberModal = ({
+const PageBuilderCreateForm = ({
   initialValues,
   readOnly = false,
 }: {
@@ -197,4 +197,4 @@ const MemberModal = ({
   );
 };
 
-export default MemberModal;
+export default PageBuilderCreateForm;

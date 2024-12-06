@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 'use client';
 import { ReloadOutlined } from '@ant-design/icons';
 
@@ -11,26 +12,28 @@ import { confirm_modal, Error_model_hook, Success_model } from '@/utils/modalHoo
 import { Button, Dropdown, Input, Select, Space, TableProps, Tooltip } from 'antd';
 import { useState } from 'react';
 
+import ModalComponent from '@/components/Modal/ModalComponents';
+import MemberModal from '@/components/PageBuilder/PageBuilderCreateForm';
+import ActionBar from '@/components/ui/ActionBar';
 import CustomImageTag from '@/components/ui/CustomTag/CustomImageTag';
+import UMTable from '@/components/ui/UMTable';
 import { IMeta } from '@/types/common';
-import ModalComponent from '../Modal/ModalComponents';
-import ActionBar from '../ui/ActionBar';
-import UMTable from '../ui/UMTable';
-import MemberModal from './MemberModal';
-export default function MemberListCom() {
+import fileObjectToLink from '@/utils/fileObjectToLink';
+
+export default function PageBuilderListPage() {
   //
   const query: Record<string, any> = {};
   const [page, setPage] = useState<number>(1);
   const [size, setSize] = useState<number>(100);
-  const [sortBy, setSortBy] = useState<string>('serial_number');
+  const [sortBy, setSortBy] = useState<string>('');
   const [sortOrder, setSortOrder] = useState<string>('desc');
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [memberType, setMemberType] = useState<string>('');
+  const [pageType, setPageType] = useState<string>('');
   query['limit'] = size;
   query['page'] = page;
   query['sortBy'] = sortBy;
   query['sortOrder'] = sortOrder;
-  query['memberType'] = memberType;
+  query['pageType'] = pageType;
 
   const { data, isLoading } = useGetAllMemberQuery(query);
   const [deleteCategory, { isLoading: dLoading }] = useDeleteMemberMutation();
@@ -61,15 +64,15 @@ export default function MemberListCom() {
       render: (record: any) => (
         <div className="flex items-center justify-start gap-2">
           <CustomImageTag
-            src={record?.image}
+            src={fileObjectToLink(record?.bannerImage)}
             width={550}
             height={550}
             preview={true}
             className="h-8 w-8 rounded-full shadow-lg md:h-12 md:w-12"
             alt=""
           />
-          <Tooltip title={record.title}>
-            <p className="truncate">{record.title}</p>
+          <Tooltip title={record.heading}>
+            <p className="truncate">{record.heading}</p>
           </Tooltip>
         </div>
       ),
@@ -77,7 +80,7 @@ export default function MemberListCom() {
     {
       title: 'Type',
       key: '_id',
-      dataIndex: ['memberType'],
+      dataIndex: ['pageType'],
       width: 150,
     },
     {
@@ -182,7 +185,7 @@ export default function MemberListCom() {
     setSortBy('');
     setSortOrder('');
     setSearchTerm('');
-    setMemberType('');
+    setPageType('');
   };
 
   return (
@@ -204,7 +207,7 @@ export default function MemberListCom() {
         <ActionBar>
           <div className="mx-2">
             <Select
-              onChange={(value) => setMemberType(value)}
+              onChange={(value) => setPageType(value)}
               placeholder="Select a member type"
               allowClear
               size="large"
