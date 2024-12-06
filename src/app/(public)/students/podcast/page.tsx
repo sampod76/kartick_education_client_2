@@ -1,3 +1,4 @@
+'use client';
 import podcastStart from '@/assets/podcast/podcast_star.png';
 import podcast from '@/assets/podcast/sidePerson.png';
 import podcastSide from '@/assets/podcast/sidePodCastOnlye.png';
