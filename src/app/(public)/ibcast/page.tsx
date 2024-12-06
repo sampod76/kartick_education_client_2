@@ -75,7 +75,7 @@ export default function CareerOpportunitiesComponents() {
             their chosen fields.
           </p>
 
-          <Link href={'/enroll?category=65b7dad8e838e88e3a7b2c11'}>
+          <Link href={'/course?category=65b7dad8e838e88e3a7b2c11'}>
             <div
               data-aos="zoom-out"
               className="mt-6 w-80 self-center rounded-3xl border-2 border-primary p-1"
