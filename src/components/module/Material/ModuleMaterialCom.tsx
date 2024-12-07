@@ -11,7 +11,6 @@ import { useGetSingleModuleQuery } from '@/redux/api/adminApi/moduleApi';
 export default function ModuleMaterialCom({ moduleId }: { moduleId: string }) {
   const { userInfo } = useGlobalContext();
   const { data, isLoading } = useGetSingleModuleQuery(moduleId);
-  console.log('🚀 ~ ModuleMaterialCom ~ data:', data);
 
   if (isLoading) {
     return <LoadingSkeleton />;
@@ -71,7 +70,9 @@ export default function ModuleMaterialCom({ moduleId }: { moduleId: string }) {
   return (
     <div>
       {/* <CourseCardMaterial course={data} /> */}
-      <div></div>
+      <div>
+        <h1 className="text-center">Lesson title: {data?.title}</h1>
+      </div>
       <Tabs centered defaultActiveKey="1" items={items} />
     </div>
   );
