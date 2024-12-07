@@ -8,11 +8,13 @@ const TextEditorNotSetValue = ({
   defaultTextEditorValue = '',
   name = 'details',
   height,
+  isReset = false,
 }: {
   textEditorValue?: string;
   defaultTextEditorValue?: string;
   name?: string;
   height?: number;
+  isReset?: boolean;
   setTextEditorValue: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const editor = useRef<any>(null);
@@ -34,7 +36,11 @@ const TextEditorNotSetValue = ({
     if (defaultTextEditorValue && !content) {
       setContent(defaultTextEditorValue);
     }
-  }, [defaultTextEditorValue]);
+    if (isReset) {
+      setContent('');
+      setTextEditorValue('');
+    }
+  }, [defaultTextEditorValue, isReset]);
 
   return (
     <>

@@ -14,6 +14,7 @@ import { Error_model_hook, Success_model } from '@/utils/modalHook';
 import { ENUM_MIMETYPE, ENUM_STATUS, ENUM_YN } from '@/constants/globalEnums';
 import { USER_ROLE } from '@/constants/role';
 import { removeNullUndefinedAndFalsey } from '@/hooks/removeNullUndefinedAndFalsey';
+import { IFileAfterUpload } from '@/types/globalType';
 import { multipleFilesUploaderS3 } from '@/utils/handelFileUploderS3';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import {
@@ -27,21 +28,22 @@ import {
   Select,
   Upload,
 } from 'antd';
+import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { useGlobalContext } from '../ContextApi/GlobalContextApi';
-import { IFileAfterUpload } from '@/types/globalType';
-// const TextEditor = dynamic(
-//   () => import('@/components/shared/TextEditor/TextEditor'),
-//   {
-//     ssr: false,
-//   },
-// );
+const TextEditorNotSetForm = dynamic(
+  () => import('@/components/shared/TextEditor/TextEditorNotSetForm'),
+  {
+    ssr: false,
+  },
+);
 interface Video {
   platform: 'youtube' | 'vimeo';
   link: string;
 }
 const { Option } = Select;
 const CreateLesson = () => {
+  const [textEditorValue, setTextEditorValue] = useState('');
   const [form] = Form.useForm();
   const { userInfo, userInfoLoading } = useGlobalContext();
   const [videos, setVideos] = useState<Video[]>([{ platform: 'vimeo', link: '' }]);
@@ -78,6 +80,9 @@ const CreateLesson = () => {
       return;
     }
     setLoading(true);
+    if (textEditorValue) {
+      values.details = textEditorValue;
+    }
     let files: IFileAfterUpload[] = [];
     if (values?.files?.length) {
       // const res = await multipleFilesUploaderS3(images);
@@ -300,9 +305,21 @@ const CreateLesson = () => {
               </Upload>
             </Form.Item>
 
-            <Form.Item label="Short Description" name="shortDescription">
-              <Input.TextArea placeholder="Please enter short description" />
-            </Form.Item>
+            <Col xs={24}>
+              <div
+                style={{
+                  borderTopWidth: '2px',
+                }} /* className=" border-t-2" */
+              >
+                <p className="my-3 text-center text-xl font-bold">
+                  Description (optional)
+                </p>
+                <TextEditorNotSetForm
+                  textEditorValue={textEditorValue}
+                  setTextEditorValue={setTextEditorValue}
+                />
+              </div>
+            </Col>
             <Button
               disabled={GetLessionLoading || isLoading}
               type="primary"

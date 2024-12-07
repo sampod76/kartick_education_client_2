@@ -61,28 +61,23 @@ export default function LessonList({
       index == 0
       // || index === 0//! for first open video
     ) {
-      return (
-        // <ModalInComponent
-        //   button={
-        //     <div className="flex items-center justify-center">
-        //       <Button type="primary">Click To Open</Button>
-        //     </div>
-        //   }
-        // >
-        //   <LessonContainShow lesson={lesson} />
-        // </ModalInComponent>
-        <ModalComponent
-          button={
-            <div className="flex items-center justify-center">
-              <Button type="primary">Click To Open</Button>
-            </div>
-          }
-          width={1200}
-          maskClosable={false}
-        >
-          <LessonContainShow lesson={lesson} />
-        </ModalComponent>
-      );
+      if (lesson?.videos?.length || lesson?.files?.length) {
+        return (
+          <ModalComponent
+            button={
+              <div className="flex items-center justify-center">
+                <Button type="primary">Click To Open</Button>
+              </div>
+            }
+            width={1200}
+            maskClosable={false}
+          >
+            <LessonContainShow lesson={lesson} />
+          </ModalComponent>
+        );
+      } else {
+        return <div className="text-start text-base font-medium  lg:text-lg">N/A</div>;
+      }
     } else {
       return (
         <div className="text-start text-base font-medium text-red-500 lg:text-lg">
@@ -120,11 +115,8 @@ export default function LessonList({
               <div className="relative my-1 flex items-center justify-center">
                 {playerVideoFunc(lesson, index)}
               </div>
-              {/* {lesson?.details && CutText(lesson?.details, 200)} */}
-              {/* <EllipsisMiddle suffixCount={3} maxLength={300}>
-                  {IsExistCategoryOrCourse && lesson?.short_description}
-                </EllipsisMiddle>
-                {lesson?.details && parse(lesson?.details)} */}
+
+              {lesson?.details && parse(lesson?.details)}
             </div>
 
             {IsExistPremonitionCourse &&
