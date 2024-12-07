@@ -1,7 +1,7 @@
 import { tagTypes } from '@/redux/tag-types';
 import { IMeta } from '@/types';
-import { baseApi } from '../baseApi';
 import { ILessonData } from '@/types/lessonType';
+import { baseApi } from '../baseApi';
 
 const LESSON_URL = '/lesson';
 
@@ -56,6 +56,16 @@ export const lessonApi = baseApi.injectEndpoints({
       },
       invalidatesTags: [tagTypes.lesson, tagTypes.categoryChildren],
     }),
+    updateLessonSerialNumber: build.mutation({
+      query: ({ data }) => {
+        return {
+          url: `${LESSON_URL}/serialnumber-update`,
+          method: 'PATCH',
+          data: data,
+        };
+      },
+      invalidatesTags: [tagTypes.milestone],
+    }),
 
     // delete ac department
     deleteLesson: build.mutation({
@@ -75,4 +85,6 @@ export const {
   useGetAllLessonQuery,
   useGetSingleLessonQuery,
   useUpdateLessonMutation,
+  //
+  useUpdateLessonSerialNumberMutation,
 } = lessonApi;

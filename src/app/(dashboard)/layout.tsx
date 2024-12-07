@@ -20,7 +20,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const screens = useBreakpoint();
 
   useEffect(() => {
-    if (!userInfo?.role) {
+    if (!userInfo?.role || userInfo?.role !== 'admin') {
       router.push(`/login`);
     }
     setIsLoading(false);

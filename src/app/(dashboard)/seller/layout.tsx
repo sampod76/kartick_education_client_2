@@ -1,8 +1,8 @@
 'use client';
 
 import { USER_ROLE } from '@/constants/role';
-import { getUserInfo, isLoggedIn } from '@/services/auth.service';
-import { Drawer, Layout, Menu, Row, Space, Spin } from 'antd';
+import { getUserInfo } from '@/services/auth.service';
+import { Row, Space, Spin } from 'antd';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -17,7 +17,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     setIsLoading(true);
-    if (!userInfo?.role) {
+    if (!userInfo?.role && userInfo?.role !== USER_ROLE.SELLER) {
       router.push('/login');
     } else if (userInfo?.role !== USER_ROLE.SELLER) {
       router.back();
