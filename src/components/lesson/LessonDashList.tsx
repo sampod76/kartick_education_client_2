@@ -30,7 +30,7 @@ import AssignmentUpload from '../assignment/Assignment';
 export default function LessonDashList({
   queryObject,
 }: {
-  queryObject: { module: string; sortOrder: string; sortBy: string };
+  queryObject?: { module: string; sortOrder: string; sortBy: string };
 }) {
   const { userInfo, userInfoLoading } = useGlobalContext();
   //
