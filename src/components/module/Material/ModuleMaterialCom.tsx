@@ -71,7 +71,7 @@ export default function ModuleMaterialCom({ moduleId }: { moduleId: string }) {
     <div>
       {/* <CourseCardMaterial course={data} /> */}
       <div>
-        <h1 className="text-center">Lesson title: {data?.title}</h1>
+        <h1 className="text-center">Module title: {data?.title}</h1>
       </div>
       <Tabs centered defaultActiveKey="1" items={items} />
     </div>

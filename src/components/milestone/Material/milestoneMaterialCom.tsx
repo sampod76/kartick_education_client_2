@@ -70,7 +70,9 @@ export default function MilestoneMaterialCom({ milestoneId }: { milestoneId: str
   return (
     <div>
       {/* <CourseCardMaterial course={data} /> */}
-      <div></div>
+      <div>
+        <h1 className="text-center">Milestone title: {data?.title}</h1>
+      </div>
       <Tabs centered defaultActiveKey="1" items={items} />
     </div>
   );
