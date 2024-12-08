@@ -7,7 +7,7 @@ import {
   useGetAllAnnouncementQuery,
 } from '@/redux/api/adminApi/announcementApi';
 import { confirm_modal, Error_model_hook, Success_model } from '@/utils/modalHook';
-import { Button, Pagination, PaginationProps } from 'antd';
+import { Button, Empty, Pagination, PaginationProps } from 'antd';
 import Link from 'next/link';
 import { useState } from 'react';
 import AnnouncementForm from './CreateAnnouncement';
@@ -225,6 +225,7 @@ export default function Announcement({ courseId }: { courseId: string }) {
           </div>
         </div> */}
       </div>
+      {!allData.length && <Empty />}
       <div className="mt-4">
         <Pagination
           showSizeChanger
