@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 const { Content } = Layout;
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
-  const userInfo = getUserInfo() as any;
+  const { userInfo } = useGlobalContext();
 
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -20,7 +20,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const screens = useBreakpoint();
 
   useEffect(() => {
-    if (!userInfo?.role || userInfo?.role !== 'admin') {
+    if (!userInfo?.role) {
       router.push(`/login`);
     }
     setIsLoading(false);

@@ -7,9 +7,9 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import dynamic from 'next/dynamic';
+import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
-  const userInfo: any = getUserInfo();
   //
   //
   const router = useRouter();
