@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 'use client';
+import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
 import DashboardNavBar from '@/components/shared/DashBoard/DashboardNavbar';
 import DashboardSidebar from '@/components/shared/DashBoard/DashboardSidebar';
 import { dashboardItems } from '@/constants/dashBoardItems';
-import { getUserInfo } from '@/services/auth.service';
 import { CloseOutlined } from '@ant-design/icons';
 import { Drawer, Layout, Menu, Row, Space, Spin } from 'antd';
 import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
@@ -63,7 +64,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
             style={{ backgroundColor: '#', color: 'white' }}
             defaultSelectedKeys={['1']}
             mode="inline"
-            items={dashboardItems(userInfo?.role, setCollapsed)}
+            items={dashboardItems(userInfo?.role!, setCollapsed)}
           />
         </Drawer>
       ) : (
