@@ -2,7 +2,7 @@
 
 import LoadingSkeleton from '@/components/ui/Loading/LoadingSkeleton';
 import { useGetSingleCourseQuery } from '@/redux/api/adminApi/courseApi';
-import { Empty, Tabs } from 'antd';
+import { Tabs } from 'antd';
 
 import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
 import MileStoneList from '@/components/milestone/MilestoneDashList';
@@ -30,7 +30,22 @@ export default function CourseMaterialCom({ courseId }: { courseId: string }) {
     //   label: 'Additional courses',
     //   children: <AdditionalCourseCard additional_courses={data.additional_courses} />,
     // },
-    {
+
+    // {
+    //   key: '4',
+    //   label: 'Tab 4',
+    //   children: <Empty />,
+    // },
+  ];
+  if (userInfo?.role === 'seller' || userInfo?.role === 'admin') {
+    items.splice(1, 0, {
+      key: '2',
+      label: 'Additional courses',
+      children: <AdditionalCourseCard additional_courses={data.additional_courses} />,
+    });
+  }
+  if (userInfo?.role === 'admin') {
+    items.splice(2, 0, {
       key: '3',
       label: 'Milestone',
       children: (
@@ -66,18 +81,6 @@ export default function CourseMaterialCom({ courseId }: { courseId: string }) {
           />
         </div>
       ),
-    },
-    {
-      key: '4',
-      label: 'Tab 4',
-      children: <Empty />,
-    },
-  ];
-  if (userInfo?.role === 'seller' || userInfo?.role === 'admin') {
-    items.splice(1, 0, {
-      key: '2',
-      label: 'Additional courses',
-      children: <AdditionalCourseCard additional_courses={data.additional_courses} />,
     });
   }
 
