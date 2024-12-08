@@ -1,15 +1,15 @@
 'use client';
 
 import { USER_ROLE } from '@/constants/role';
-import { getUserInfo } from '@/services/auth.service';
 import { Row, Space, Spin } from 'antd';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import dynamic from 'next/dynamic';
 import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
+import dynamic from 'next/dynamic';
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
+  const { userInfo } = useGlobalContext();
   //
   //
   const router = useRouter();
@@ -17,10 +17,8 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     setIsLoading(true);
-    if (!userInfo?.role && userInfo?.role !== USER_ROLE.SELLER) {
+    if (!userInfo?.role || userInfo?.role !== USER_ROLE.SELLER) {
       router.push('/login');
-    } else if (userInfo?.role !== USER_ROLE.SELLER) {
-      router.back();
     }
     setIsLoading(false);
   }, [router, isLoading, userInfo?.role]);
