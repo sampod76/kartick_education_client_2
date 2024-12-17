@@ -8,7 +8,6 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 import UMModal from '@/components/ui/UMModal';
-import dayjs from 'dayjs';
 
 import { Error_model_hook, Success_model, confirm_modal } from '@/utils/modalHook';
 import Image from 'next/image';
@@ -153,14 +152,17 @@ export default function ModuleDashList({
       title: 'Name',
       dataIndex: 'title',
       // ellipsis: true,
+      render: function (data: any) {
+        return <p className="line-clamp-2">{data}</p>;
+      },
     },
+    // {
+    //   title: 'Description',
+    //   dataIndex: 'short_description',
+    //   ellipsis: true,
+    // },
     {
-      title: 'Description',
-      dataIndex: 'short_description',
-      ellipsis: true,
-    },
-    {
-      title: 'Module Number',
+      title: 'S/N',
       dataIndex: 'module_number',
       ellipsis: true,
       width: 100,
@@ -169,19 +171,19 @@ export default function ModuleDashList({
     {
       title: 'Milestone',
       dataIndex: 'milestone',
-      ellipsis: true,
+      // ellipsis: true,
       render: function (data: any) {
-        return <>{data?.title}</>;
+        return <p className="line-clamp-2">{data?.title}</p>;
       },
     },
-    {
-      title: 'Created at',
-      dataIndex: 'createdAt',
-      render: function (data: any) {
-        return data && dayjs(data).format('MMM D, YYYY hh:mm A');
-      },
-      sorter: true,
-    },
+    // {
+    //   title: 'Created at',
+    //   dataIndex: 'createdAt',
+    //   render: function (data: any) {
+    //     return data && dayjs(data).format('MMM D, YYYY hh:mm A');
+    //   },
+    //   sorter: true,
+    // },
     {
       title: 'Status',
       dataIndex: 'status',

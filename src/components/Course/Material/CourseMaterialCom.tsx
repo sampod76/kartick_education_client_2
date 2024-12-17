@@ -10,6 +10,7 @@ import MilestoneSerialUpdate from '@/components/milestone/MilestoneSerialUpdate'
 import AdditionalCourseCard from './AdditionalCourse/AdditionalCourseCard';
 import Announcement from './Announcement/AnnouncementDistList';
 import CourseCardMaterial from './CourseCardMaterial';
+import MilestoneToModuleTransfer from '@/components/milestone/MilestoneToModuleTransfer';
 
 export default function CourseMaterialCom({ courseId }: { courseId: string }) {
   const { userInfo } = useGlobalContext();
@@ -73,6 +74,15 @@ export default function CourseMaterialCom({ courseId }: { courseId: string }) {
                 label: 'Milestone Position Update',
                 children: (
                   <MilestoneSerialUpdate
+                    queryObject={{ course: courseId, category: data.category?._id }}
+                  />
+                ),
+              },
+              {
+                key: '3',
+                label: 'Module Transfer',
+                children: (
+                  <MilestoneToModuleTransfer
                     queryObject={{ course: courseId, category: data.category?._id }}
                   />
                 ),

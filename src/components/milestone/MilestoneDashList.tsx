@@ -8,7 +8,6 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 import UMModal from '@/components/ui/UMModal';
-import dayjs from 'dayjs';
 
 import { Error_model_hook, Success_model, confirm_modal } from '@/utils/modalHook';
 import Image from 'next/image';
@@ -146,19 +145,22 @@ const MileStoneList = ({
     {
       title: 'Name',
       dataIndex: 'title',
-      ellipsis: true,
-      sorter: true,
+      // ellipsis: true,
+      // sorter: true,
+      render: function (data: any) {
+        return <p className="line-clamp-2">{data}</p>;
+      },
     },
+    // {
+    //   title: 'Description',
+    //   dataIndex: 'short_description',
+    //   ellipsis: true,
+    // },
     {
-      title: 'Description',
-      dataIndex: 'short_description',
-      ellipsis: true,
-    },
-    {
-      title: 'Milestone Number',
+      title: 'S/N',
       dataIndex: 'milestone_number',
       ellipsis: true,
-      width: 100,
+      width: 120,
     },
     {
       title: 'course',
@@ -168,15 +170,15 @@ const MileStoneList = ({
       //   return <>{data?.title}</>;
       // },
     },
-    {
-      title: 'Created at',
-      dataIndex: 'createdAt',
-      width: 150,
-      render: function (data: any) {
-        return data && dayjs(data).format('MMM D, YYYY hh:mm A');
-      },
-      sorter: true,
-    },
+    // {
+    //   title: 'Created at',
+    //   dataIndex: 'createdAt',
+    //   width: 150,
+    //   render: function (data: any) {
+    //     return data && dayjs(data).format('MMM D, YYYY hh:mm A');
+    //   },
+    //   sorter: true,
+    // },
     {
       title: 'Action',
       // fixed: "right",

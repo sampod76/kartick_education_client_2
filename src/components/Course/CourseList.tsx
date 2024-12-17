@@ -14,7 +14,6 @@ import { useAppSelector, useDebounced } from '@/redux/hooks';
 import { Error_model_hook, Success_model, confirm_modal } from '@/utils/modalHook';
 import { ReloadOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Input, Menu, Space } from 'antd';
-import dayjs from 'dayjs';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -118,8 +117,11 @@ const CourseList = () => {
       title: 'Name',
       // fixed:"left",
       dataIndex: 'title',
-      ellipsis: true,
+      // ellipsis: true,
       // responsive: ['md','sm']
+      render: function (data: any) {
+        return <p className="line-clamp-2">{data}</p>;
+      },
     },
     {
       title: 'price',
@@ -162,26 +164,28 @@ const CourseList = () => {
       render: function (data: any) {
         return data.title;
       },
-      ellipsis: true,
+      // ellipsis: true,
       // width: 120,
     },
 
     {
       title: 'Total Lessons',
       dataIndex: 'totalLessonSize',
+      width: 120,
     },
     {
       title: 'Total Modules',
       dataIndex: 'totalModuleSize',
+      width: 120,
     },
-    {
-      title: 'Created at',
-      dataIndex: 'createdAt',
-      render: function (data: any) {
-        return data && dayjs(data).format('MMM D, YYYY hh:mm A');
-      },
-      sorter: true,
-    },
+    // {
+    //   title: 'Created at',
+    //   dataIndex: 'createdAt',
+    //   render: function (data: any) {
+    //     return data && dayjs(data).format('MMM D, YYYY hh:mm A');
+    //   },
+    //   sorter: true,
+    // },
 
     {
       title: 'Status',
