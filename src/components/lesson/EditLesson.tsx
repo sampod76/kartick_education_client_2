@@ -84,8 +84,8 @@ export default function EditLesson({ lessonId }: { lessonId: string }) {
       //   files?.map((re: any) => re.originFileObj),
       //   'files',
       // );
-      const convirt = files.length ? files?.map((re: any) => re.originFileObj) : [];
-      files = convirt.length ? await multipleFilesUploaderS3(convirt) : [];
+      const convirt = files?.map((re: any) => re.originFileObj);
+      files = await multipleFilesUploaderS3(convirt);
       // console.log('🚀 ~ onSubmit ~ files:', files);
 
       delete values?.files; // !after all error req to large
