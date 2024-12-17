@@ -47,6 +47,9 @@ export const getS3PreUrlToken = async (data: Record<string, IPreUrlParams[]>) =>
 export const multipleFilesUploaderS3 = async (
   files: any[],
 ): Promise<IFileAfterUpload[]> => {
+  if (!files.length) {
+    return [];
+  }
   // console.log('🚀 ~ multipleFilesUploaderS3 ~ files:', files);
   try {
     const filesModifyServerFormate = files.map((file, index) => {
