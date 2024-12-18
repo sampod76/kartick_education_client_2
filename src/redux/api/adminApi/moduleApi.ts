@@ -66,6 +66,25 @@ export const moduleApi = baseApi.injectEndpoints({
       },
       invalidatesTags: [tagTypes.module],
     }),
+    updateModuleTransfer: build.mutation({
+      query: ({ data }: { data: Record<string, any> }) => {
+        return {
+          url: `${MODULE_URL}/module-transfer`,
+          method: 'PATCH',
+          data: data,
+        };
+      },
+      invalidatesTags: [
+        tagTypes.module,
+        tagTypes.categoryChildren,
+        tagTypes.course,
+        tagTypes.milestone,
+        tagTypes.lesson,
+        tagTypes.quiz,
+        tagTypes.submitQuiz,
+        tagTypes.assignment,
+      ],
+    }),
 
     // delete ac department
     deleteModule: build.mutation({
@@ -87,4 +106,5 @@ export const {
   useUpdateModuleMutation,
   //
   useUpdateModuleSerialNumberMutation,
+  useUpdateModuleTransferMutation,
 } = moduleApi;
