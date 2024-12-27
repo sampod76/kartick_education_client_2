@@ -7,8 +7,14 @@ import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
 import LessonDashList from '@/components/lesson/LessonDashList';
 import LessonSerialUpdate from '@/components/lesson/LessonSerialUpdate';
 import { useGetSingleModuleQuery } from '@/redux/api/adminApi/moduleApi';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 export default function ModuleMaterialCom({ moduleId }: { moduleId: string }) {
+  const router = useRouter();
+  const path = usePathname();
+  const searchQuery = useSearchParams();
+  const mainTab = searchQuery.get('mainTab');
+  const secondTab = searchQuery.get('secondTab');
   const { userInfo } = useGlobalContext();
   const { data, isLoading } = useGetSingleModuleQuery(moduleId);
 
@@ -66,14 +72,24 @@ export default function ModuleMaterialCom({ moduleId }: { moduleId: string }) {
       ),
     },
   ];
-
+  const handleMainTabChange = (activeKey: string) => {
+    const currentParams = new URLSearchParams(searchQuery.toString());
+    currentParams.set('mainTab', activeKey);
+    router.replace(`${path}?${currentParams.toString()}`);
+  };
   return (
     <div>
       {/* <CourseCardMaterial course={data} /> */}
       <div>
         <h1 className="text-center">Module title: {data?.title}</h1>
       </div>
-      <Tabs centered defaultActiveKey="1" items={items} />
+      <Tabs
+        onChange={handleMainTabChange}
+        centered
+        activeKey={mainTab || '1'}
+        defaultActiveKey="1"
+        items={items}
+      />
     </div>
   );
 }

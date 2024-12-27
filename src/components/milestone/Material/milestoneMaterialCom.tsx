@@ -7,11 +7,15 @@ import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
 import ModuleDashList from '@/components/module/ModuleDashList';
 import ModuleSerialUpdate from '@/components/module/ModulSerialUpdate';
 import { useGetSingleMilestoneQuery } from '@/redux/api/adminApi/milestoneApi';
-
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 export default function MilestoneMaterialCom({ milestoneId }: { milestoneId: string }) {
+  const router = useRouter();
+  const path = usePathname();
+  const searchQuery = useSearchParams();
+  const mainTab = searchQuery.get('mainTab');
+  const secondTab = searchQuery.get('secondTab');
   const { userInfo } = useGlobalContext();
   const { data, isLoading } = useGetSingleMilestoneQuery(milestoneId);
-  console.log('🚀 ~ MilestoneMaterialCom ~ data:', data);
 
   if (isLoading) {
     return <LoadingSkeleton />;
@@ -66,14 +70,24 @@ export default function MilestoneMaterialCom({ milestoneId }: { milestoneId: str
       ),
     },
   ];
-
+  const handleMainTabChange = (activeKey: string) => {
+    const currentParams = new URLSearchParams(searchQuery.toString());
+    currentParams.set('mainTab', activeKey);
+    router.replace(`${path}?${currentParams.toString()}`);
+  };
   return (
     <div>
       {/* <CourseCardMaterial course={data} /> */}
       <div>
         <h1 className="text-center">Milestone title: {data?.title}</h1>
       </div>
-      <Tabs centered defaultActiveKey="1" items={items} />
+      <Tabs
+        onChange={handleMainTabChange}
+        centered
+        activeKey={mainTab || '1'}
+        defaultActiveKey="1"
+        items={items}
+      />
     </div>
   );
 }
