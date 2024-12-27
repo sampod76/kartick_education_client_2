@@ -75,6 +75,7 @@ export default function ImageListShow({
         return data && dayjs(data).format('MMM D, YYYY hh:mm A');
       },
       sorter: true,
+      width: 200,
     },
     {
       title: 'Status',
@@ -82,11 +83,11 @@ export default function ImageListShow({
     },
     {
       title: 'Action',
-      dataIndex: '_id',
+      // dataIndex: '_id',
       width: 130,
       render: function (file: any) {
         return (
-          <>
+          <div className="flex  gap-1">
             {/* <Link href={`/${userInfo?.data?.role}/blog/details/${data}`}>
               <Button type="primary">
                 <EyeOutlined />
@@ -117,11 +118,11 @@ export default function ImageListShow({
               <MdContentCopy />
             </p>
             <div>
-              <ModalComponent button={<p>{<FaEye />}</p>}>
+              <ModalComponent width={1200} button={<p>{<FaEye />}</p>}>
                 <FileContainShow files={[file]} />
               </ModalComponent>
             </div>
-          </>
+          </div>
         );
       },
     },
