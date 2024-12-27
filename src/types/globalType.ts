@@ -15,7 +15,7 @@ export type IFileAfterUpload = {
   server_url?: string;
   filename?: string;
   path?: string;
-  url?: string;
+  url: string;
   durl?: string;
   uid?: string;
   platform: IImagePlatform;
