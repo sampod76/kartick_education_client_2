@@ -1,4 +1,7 @@
 'use client';
+import ModalComponent from '@/components/Modal/ModalComponents';
+import ImageListInServer from '@/components/ui/ImageListModal/ImageListCom';
+import { Button } from 'antd';
 import JoditEditor from 'jodit-react';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
@@ -45,11 +48,11 @@ const TextEditor = ({
 
   return (
     <div>
-      {/* <h2></h2> */}
-      {/* <Switch checkedChildren="Open" unCheckedChildren='Close'  onChange={onChange} style={{
-        background: openTextEditor ? "blue" : "#4D545A",
-        marginBlock: "10px"
-      }} /> */}
+      <div className="flex justify-end my-1">
+        <ModalComponent button={<Button type="primary">Open file list</Button>}>
+          <ImageListInServer addedImages={[]} selectMultiple setAddedImages={() => {}} />
+        </ModalComponent>
+      </div>
       {openTextEditor && (
         <JoditEditor
           ref={editor}

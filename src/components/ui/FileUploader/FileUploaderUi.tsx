@@ -1,14 +1,17 @@
+import { ENUM_MIMETYPE } from '@/constants/globalEnums';
 import { useAddMultipleFileListMutation } from '@/redux/api/AllApi/fileListApi';
 import { FilProgressMultipleFilesUploaderS3 } from '@/utils/handleFileUploderFileProgress';
 import { ErrorModal, Success_model } from '@/utils/modalHook';
 import { UploadOutlined } from '@ant-design/icons';
-import { Button, Form, Progress, Upload } from 'antd';
+import { Button, Form, message, Progress, Upload } from 'antd';
 import { useState } from 'react';
+import { MdContentCopy } from 'react-icons/md';
 interface FileProgress {
   uid: string;
   name: string;
   progress: number;
   status: 'uploading' | 'done' | 'error';
+  url?: string;
 }
 
 export const FileUploaderUi = () => {
@@ -38,6 +41,7 @@ export const FileUploaderUi = () => {
       name: file.name,
       progress: 0,
       status: 'uploading',
+      url: '',
     }));
     setFileList(info.fileList);
     setFileProgressList(newFiles);
@@ -55,6 +59,9 @@ export const FileUploaderUi = () => {
           <Upload
             multiple={true}
             listType="picture"
+            accept={
+              Object.values(ENUM_MIMETYPE).join(',') + ',' + 'image/*' + ',' + 'video/*'
+            }
             beforeUpload={() => false}
             onChange={handleFileChange}
           >
@@ -65,16 +72,31 @@ export const FileUploaderUi = () => {
           {fileProgressList.map((file) => (
             <div key={file.uid} style={{ marginBottom: 16 }}>
               <div>{file.name}</div>
-              <Progress
-                percent={file.progress}
-                status={
-                  file.status === 'uploading'
-                    ? 'active'
-                    : file.status === 'done'
-                      ? 'success'
-                      : 'exception'
-                }
-              />
+              <div className="flex justify-between items-center gap-1">
+                <Progress
+                  percent={file.progress}
+                  status={
+                    file.status === 'uploading'
+                      ? 'active'
+                      : file.status === 'done'
+                        ? 'success'
+                        : 'exception'
+                  }
+                />
+                {file.url && (
+                  <p
+                    className="cursor-pointer"
+                    onClick={() => {
+                      if (file.url) {
+                        navigator.clipboard.writeText(file.url);
+                      }
+                      message.success('Link Copy Success');
+                    }}
+                  >
+                    <MdContentCopy />
+                  </p>
+                )}
+              </div>
             </div>
           ))}
         </div>

@@ -3,6 +3,7 @@ import { getBaseUrl } from '@/helpers/config/envConfig';
 import axios, { AxiosProgressEvent } from 'axios';
 import Resizer from 'react-image-file-resizer';
 import { IFileAfterUpload } from '../types/globalType';
+import fileObjectToLink from './fileObjectToLink';
 const url = `${getBaseUrl()}/aws/create-aws-upload-files-token`;
 const singleFileUploaderInS3 = async (
   fileData: { pre_url: any; uid: string; mimetype: string },
@@ -14,7 +15,12 @@ const singleFileUploaderInS3 = async (
       setFileProgressList((prev: any) =>
         prev.map((item: any) =>
           item.uid === fileData.uid
-            ? { ...item, progress, status: progress === 100 ? 'done' : 'uploading' }
+            ? {
+                ...item,
+                progress,
+                status: progress === 100 ? 'done' : 'uploading',
+                url: progress === 100 && fileObjectToLink(fileData as any),
+              }
             : item,
         ),
       );
