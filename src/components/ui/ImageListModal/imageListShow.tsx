@@ -1,11 +1,19 @@
 import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
+import FileContainShow from '@/components/Course/FileContaintShow';
+import ModalComponent from '@/components/Modal/ModalComponents';
 import LoadingForDataFetch from '@/components/Utlis/LoadingForDataFetch';
 import { useGetAllFileListesQuery } from '@/redux/api/AllApi/fileListApi';
 import { useDebounced } from '@/redux/hooks';
 import { IFileAfterUpload } from '@/types/globalType';
-import { Button, Pagination, Tooltip } from 'antd';
+import fileObjectToLink from '@/utils/fileObjectToLink';
+import { ReloadOutlined } from '@ant-design/icons';
+import { Button, Input, message, Pagination, Select, Tooltip } from 'antd';
+import dayjs from 'dayjs';
 import React, { useState } from 'react';
+import { FaEye } from 'react-icons/fa';
+import { MdContentCopy } from 'react-icons/md';
 import CustomImageTag from '../CustomTag/CustomImageTag';
+import UMTable from '../UMTable';
 interface ImageModalProps {
   addedImages: IFileAfterUpload[];
   setAddedImages: React.Dispatch<React.SetStateAction<IFileAfterUpload[]>>;
@@ -17,17 +25,18 @@ export default function ImageListShow({
   selectMultiple,
 }: ImageModalProps) {
   const { userInfo } = useGlobalContext();
-  // console.log('🚀 ~ userInfo:', userInfo);
   const query: Record<string, any> = {};
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
   const [sortBy, setSortBy] = useState<string>('');
   const [sortOrder, setSortOrder] = useState<string>('');
+  const [fileType, setFileType] = useState<string>('image');
   const [searchTerm, setSearchTerm] = useState<string>('');
   query['limit'] = limit;
   query['page'] = page;
   query['sortBy'] = sortBy;
   query['sortOrder'] = sortOrder;
+  query['fileType'] = fileType;
   if (userInfo?.userId) {
     query['author.userId'] = userInfo?.userId;
   }
@@ -43,7 +52,6 @@ export default function ImageListShow({
     return <LoadingForDataFetch />;
   }
   const allFiles = data?.data;
-  // console.log('🚀 ~ allFiles:', allFiles);
   const meta = data?.meta;
   // Calculate the index of the first and last profile to be displayed on the current page
   const onShowSizeChange = (current: number, pageSize: number) => {
@@ -53,48 +61,189 @@ export default function ImageListShow({
   const onChange = (page: number) => {
     setPage(page);
   };
+  const columns = [
+    {
+      title: 'Title',
+      dataIndex: 'filename',
+      ellipsis: true,
+    },
+
+    {
+      title: 'Created at',
+      dataIndex: 'createdAt',
+      render: function (data: any) {
+        return data && dayjs(data).format('MMM D, YYYY hh:mm A');
+      },
+      sorter: true,
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+    },
+    {
+      title: 'Action',
+      dataIndex: '_id',
+      width: 130,
+      render: function (file: any) {
+        return (
+          <>
+            {/* <Link href={`/${userInfo?.data?.role}/blog/details/${data}`}>
+              <Button type="primary">
+                <EyeOutlined />
+              </Button>
+            </Link>
+            <Link href={`/${userInfo?.data?.role}/blog/edit/${data}`}>
+              <Button
+                style={{
+                  margin: '0px 5px',
+                }}
+                type="default"
+              >
+                <EditOutlined />
+              </Button>
+            </Link>
+            <Button onClick={() => handleDelete(data)} type="default" danger>
+              <DeleteOutlined />
+            </Button> */}
+            <p
+              className="cursor-pointer"
+              onClick={() => {
+                if (file.url) {
+                  navigator.clipboard.writeText(fileObjectToLink(file));
+                }
+                message.success('Link Copy Success');
+              }}
+            >
+              <MdContentCopy />
+            </p>
+            <div>
+              <ModalComponent button={<p>{<FaEye />}</p>}>
+                <FileContainShow files={[file]} />
+              </ModalComponent>
+            </div>
+          </>
+        );
+      },
+    },
+  ];
+  const onPaginationChange = (page: number, pageSize: number) => {
+    setPage(page);
+    setLimit(pageSize);
+  };
+  const onTableChange = (pagination: any, filter: any, sorter: any) => {
+    const { order, field } = sorter;
+
+    setSortBy(field as string);
+    setSortOrder(order === 'ascend' ? 'asc' : 'desc');
+  };
+
+  const resetFilters = () => {
+    setSortBy('');
+    setSortOrder('');
+    setSearchTerm('');
+  };
+  const fileTypes = [
+    { label: 'Image', value: 'image' },
+    { label: 'PDF', value: 'pdf' },
+    { label: 'Document', value: 'doc' },
+    { label: 'Audio', value: 'audio' },
+    { label: 'Video', value: 'video' },
+    { label: 'Excel', value: 'xlsx' },
+    { label: 'Other', value: 'other' },
+  ];
   return (
     <div>
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2">
-        {allFiles?.map((file) => {
-          return (
-            <div key={file._id}>
-              <Tooltip title={file.filename}>
-                <div className="rounded-md border">
-                  <CustomImageTag
-                    src={file}
-                    width={300}
-                    height={300}
-                    className="w-full h-28 cursor-pointer rounded-md"
-                  />
-                  {/* <p>Copy link</p> */}
-                </div>
-              </Tooltip>
-            </div>
-          );
-        })}
-      </div>
-      <div style={{ marginTop: 16 }}>
-        <Button
-          type="primary"
-          onClick={() => {
-            setAddedImages([]);
+      <div className="-mt-3 mb-1 flex  gap-2 justify-between">
+        <Input
+          size="large"
+          placeholder="Search"
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{
+            width: '100%',
           }}
-        >
-          Add Files
-        </Button>
-      </div>
-      <div className="flex items-end justify-end mt-10 text-2xl ">
-        <Pagination
-          showSizeChanger
-          current={page}
-          onChange={onChange}
-          showQuickJumper
-          onShowSizeChange={onShowSizeChange}
-          defaultCurrent={1}
-          total={meta?.total}
-          pageSizeOptions={[10, 20, 50]}
+          allowClear
         />
+        <Select
+          value={fileType}
+          onChange={(value: string) => {
+            setFileType(value);
+            console.log('Selected file type:', value);
+          }}
+          style={{ width: 200, height: 40 }}
+          placeholder="Select file type"
+          options={fileTypes}
+        />
+        <div>
+          {(!!sortBy || !!sortOrder || !!searchTerm) && (
+            <Button style={{ margin: '0px 5px' }} type="default" onClick={resetFilters}>
+              <ReloadOutlined />
+            </Button>
+          )}
+        </div>
+      </div>
+      <div>
+        {fileType === 'image' && (
+          <div>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2">
+              {allFiles?.map((file) => {
+                return (
+                  <div key={file._id}>
+                    <Tooltip title={file.filename}>
+                      <div className="rounded-md border">
+                        <CustomImageTag
+                          src={file}
+                          width={300}
+                          height={300}
+                          className="w-full h-28 cursor-pointer rounded-md"
+                        />
+                        {/* <p>Copy link</p> */}
+                      </div>
+                    </Tooltip>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex items-end justify-end mt-10 text-2xl ">
+              <Pagination
+                showSizeChanger
+                current={page}
+                onChange={onChange}
+                showQuickJumper
+                onShowSizeChange={onShowSizeChange}
+                defaultCurrent={1}
+                total={meta?.total}
+                pageSizeOptions={[10, 20, 50]}
+              />
+            </div>
+          </div>
+        )}
+        {fileType === 'pdf' && (
+          <div>
+            <UMTable
+              loading={isLoading}
+              columns={columns}
+              dataSource={allFiles}
+              pageSize={limit}
+              totalPages={meta?.total}
+              showSizeChanger={true}
+              onPaginationChange={onPaginationChange}
+              onTableChange={onTableChange}
+              showPagination={true}
+            />
+          </div>
+        )}
+      </div>
+      <div className="flex justify-center mt-2 items-center border p-1 rounded-md">
+        <div className="">
+          <Button
+            type="primary"
+            onClick={() => {
+              setAddedImages([]);
+            }}
+          >
+            Add Files
+          </Button>
+        </div>
       </div>
     </div>
   );
