@@ -10,13 +10,13 @@ interface FileProgress {
   status: 'uploading' | 'done' | 'error';
 }
 
-export const VideoAddFormModal = () => {
+export const FileUploaderUi = () => {
   const [fileProgressList, setFileProgressList] = useState<FileProgress[]>([]);
   const [fileList, setFileList] = useState<any[]>([]);
   const handleUpload = async () => {
     try {
       const data = await FilProgressMultipleFilesUploaderS3(
-        fileList.map((file) => file.originFileObj),
+        fileList,
         setFileProgressList,
       );
       console.log(data);
@@ -71,11 +71,22 @@ export const VideoAddFormModal = () => {
           </div>
         ))}
       </div>
-      <Form.Item>
-        <Button type="primary" htmlType="submit" disabled={fileProgressList.length === 0}>
-          Upload All
-        </Button>
-      </Form.Item>
+      <div className="flex items-center gap-2">
+        <Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            disabled={fileProgressList.some((file) => file.status === 'done')}
+          >
+            Upload All
+          </Button>
+        </Form.Item>
+        <Form.Item>
+          <Button type="dashed" onClick={() => setFileProgressList([])} htmlType="reset">
+            Reset
+          </Button>
+        </Form.Item>
+      </div>
     </Form>
   );
 };

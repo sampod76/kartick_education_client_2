@@ -71,9 +71,10 @@ export const multipleFilesUploaderS3 = async (
     //----------------------------------------------------------------
     files?.forEach((file) => {
       const serverObject = serverResponseObjects?.find(
-        (serverFile: { uid: any }) => serverFile?.uid === file?.uid, //!when use ant-d uploader then file.originFileObj in have --> default uid . when use custom uploader then add uid custom
+        (serverFile: { uid: any }) => serverFile?.uid === file?.uid,
       );
-      const fileUpload = singleFileUploaderInS3(serverObject, file);
+      const mainUploadFile = file.originFileObj ? file.originFileObj : file;
+      const fileUpload = singleFileUploaderInS3(serverObject, mainUploadFile);
       promises.push(fileUpload);
     });
     const result = await Promise.all(promises);

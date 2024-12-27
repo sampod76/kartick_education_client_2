@@ -1,6 +1,7 @@
 import { instance as axiosInstance } from '@/helpers/axios/axiosInstance';
 import { getBaseUrl } from '@/helpers/config/envConfig';
 import axios, { AxiosProgressEvent } from 'axios';
+import Resizer from 'react-image-file-resizer';
 import { IFileAfterUpload } from '../types/globalType';
 const url = `${getBaseUrl()}/aws/create-aws-upload-files-token`;
 const singleFileUploaderInS3 = async (
@@ -9,10 +10,7 @@ const singleFileUploaderInS3 = async (
   setFileProgressList: any,
 ) => {
   try {
-    console.log('fileData', fileData);
-    console.log('uploadFile', uploadFile);
     const updateFileProgress = (progress: number) => {
-      console.log('🚀 ~ updateFileProgress ~ progress:', progress);
       setFileProgressList((prev: any) =>
         prev.map((item: any) =>
           item.uid === fileData.uid
@@ -21,10 +19,37 @@ const singleFileUploaderInS3 = async (
         ),
       );
     };
+    let resizedImageFile;
+    const resizeImage = (file: File) => {
+      return new Promise<File>((resolve) => {
+        Resizer.imageFileResizer(
+          file,
+          1900,
+          1500,
+          'JPEG',
+          100,
+          0,
+          (uri) => {
+            const compressedImage = new File([uri as BlobPart], file.name, {
+              type: file.type,
+              lastModified: file.lastModified,
+            });
+            resolve(compressedImage);
+          },
+          'file',
+        );
+      });
+    };
+    if (fileData.mimetype.includes('image')) {
+      resizedImageFile = await resizeImage(uploadFile);
+    } else {
+      resizedImageFile = uploadFile;
+    }
+
     const response = await axios({
       url: fileData.pre_url,
       method: 'PUT',
-      data: uploadFile,
+      data: resizedImageFile,
       //   headers: { 'Content-Type': fileData.mimetype },
       onUploadProgress: (progressEvent: AxiosProgressEvent) => {
         if (progressEvent.total) {
@@ -35,12 +60,6 @@ const singleFileUploaderInS3 = async (
         }
       },
     });
-    // const response = await axiosInstance({
-    //   url: fileData.pre_url,
-    //   method: "PUT",
-    //   data: uploadFile,
-    //   withCredentials: true,
-    // });
 
     return fileData;
   } catch (error: any) {
@@ -91,15 +110,20 @@ export const FilProgressMultipleFilesUploaderS3 = async (
     //-----------------------get pre-url-----------------------------
     const promises: any[] = [];
     const getFilesToken = await getS3PreUrlToken({
-      documents: filesModifyServerFormate,
+      files: filesModifyServerFormate,
     });
-    const serverResponseObjects = getFilesToken?.documents || [];
+    const serverResponseObjects = getFilesToken?.files || [];
     //----------------------------------------------------------------
     files?.forEach((file) => {
       const serverObject = serverResponseObjects?.find(
-        (serverFile: { uid: any }) => serverFile?.uid === file?.uid, //!when use ant-d uploader then file.originFileObj in have --> default uid . when use custom uploader then add uid custom
+        (serverFile: { uid: any }) => serverFile?.uid === file?.uid,
       );
-      const fileUpload = singleFileUploaderInS3(serverObject, file, setFileProgressList);
+      const mainUploadFile = file.originFileObj ? file.originFileObj : file;
+      const fileUpload = singleFileUploaderInS3(
+        serverObject,
+        mainUploadFile,
+        setFileProgressList,
+      );
       promises.push(fileUpload);
     });
     const result = await Promise.all(promises);
