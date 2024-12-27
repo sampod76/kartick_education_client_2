@@ -1,4 +1,6 @@
 'use client';
+import ModalComponent from '@/components/Modal/ModalComponents';
+import ImageListInServer from '@/components/ui/ImageListModal/ImageList';
 import JoditEditor from 'jodit-react';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
@@ -44,6 +46,11 @@ const TextEditorNotSetValue = ({
 
   return (
     <>
+      <div className="flex justify-end">
+        <ModalComponent>
+          <ImageListInServer addedImages={[]} selectOnlyOne setAddedImages={() => {}} />
+        </ModalComponent>
+      </div>
       {openTextEditor && (
         <JoditEditor
           ref={editor}
