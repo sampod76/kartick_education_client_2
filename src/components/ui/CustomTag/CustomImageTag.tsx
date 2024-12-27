@@ -18,7 +18,7 @@ export default function CustomImageTag({
   width,
   height,
   alt = 'Image',
-  preview,
+  preview = true,
   className,
   ...props
 }: ImageTagProps) {
@@ -115,7 +115,7 @@ export default function CustomImageTag({
                 navigator.clipboard.writeText(imageSrc);
                 message.success('Link Copy Success');
               }}
-              className="p-3 text-xl text-[#fff] duration-200 hover:opacity-60"
+              className="p-3 text-xl text-[#fff] duration-200 hover:opacity-60 cursor-pointer"
             >
               <svg
                 className="mr-1 inline-block w-5"

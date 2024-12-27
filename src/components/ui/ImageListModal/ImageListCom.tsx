@@ -1,8 +1,9 @@
 import { IFileAfterUpload } from '@/types/globalType';
-import { Button, Select, Tabs } from 'antd';
+import { Select, Tabs } from 'antd';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
 import { FileUploaderUi } from '../FileUploader/FileUploaderUi';
+import ImageListShow from './imageListShow';
 const { Option } = Select;
 
 interface ImageModalProps {
@@ -36,7 +37,13 @@ const ImageListInServer: React.FC<ImageModalProps> = ({
     {
       key: '1',
       label: 'Select Files',
-      children: <FileUploaderUi />,
+      children: (
+        <ImageListShow
+          addedImages={addedImages}
+          selectMultiple={selectMultiple}
+          setAddedImages={setAddedImages}
+        />
+      ),
     },
     {
       key: '2',
@@ -46,18 +53,6 @@ const ImageListInServer: React.FC<ImageModalProps> = ({
   ];
   return (
     <div>
-      <>
-        <div style={{ marginTop: 16 }}>
-          <Button
-            type="primary"
-            onClick={() => {
-              setAddedImages([]);
-            }}
-          >
-            Add Files
-          </Button>
-        </div>
-      </>
       <Tabs
         onChange={handleMainTabChange}
         centered

@@ -8,19 +8,20 @@ export type IUploadFile = {
   path: string;
   size: number;
 };
+export type IImagePlatform = 'imgbb' | 'cloudinary' | 'server' | 'aws' | string;
+export const I_IMAGE_PLATFORM_ARRAY = ['imgbb', 'cloudinary', 'server', 'aws'];
 export type IFileAfterUpload = {
-  server_url?: string;
-  url: string;
-  path: string;
   mimetype: string;
-  filename: string;
-  cdn?: string;
-  platform: string;
-  createdAt?: string;
-  updatedAt?: string;
+  server_url?: string;
+  filename?: string;
+  path?: string;
+  url?: string;
+  durl?: string;
+  uid?: string;
+  platform: IImagePlatform;
+  cdn?: string; //https://www.youtube.com/watch?v=kbI7kRWAU-w
   // fileId: Types.ObjectId | string | IFileUploade;
 };
-
 /* 
   {
   fieldname: 'image',
