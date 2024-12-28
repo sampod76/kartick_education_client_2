@@ -23,11 +23,7 @@ export default function LessonContainShow({ lesson }: { lesson: any }) {
 
   if (lesson?.videos?.length) {
     lesson?.videos.forEach((element: any, index: number) => {
-      console.log('🚀 ~ lesson?.videos.forEach ~ element:', element);
-
       const result = urlChecker(element.link);
-      console.log('🚀 ~ divProifel ~ result:', result);
-
       items?.push({
         key: index.toString() + 84,
         label: `Video ${index + 1}`,
