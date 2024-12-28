@@ -25,7 +25,7 @@ export default function LessonContainShow({ lesson }: { lesson: any }) {
     lesson?.videos.forEach((element: any, index: number) => {
       const result = urlChecker(element.link);
       items?.push({
-        key: index.toString() + 84,
+        key: index.toString(),
         label: `Video ${index + 1}`,
         children: (
           <div className="my-3 flex items-center justify-center border">
@@ -57,7 +57,7 @@ export default function LessonContainShow({ lesson }: { lesson: any }) {
     ]);
 
     return {
-      key: index.toString(),
+      key: (items.length + index + 1).toString(),
       label: <Tooltip title={file.filename}>File {index + 1}</Tooltip>,
       children: (
         <div className="my-3 flex items-center justify-center border">
