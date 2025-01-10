@@ -2,6 +2,8 @@ import { AllImage } from '@/assets/AllImge';
 import { Col, Row } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
+import ModalComponent from '../Modal/ModalComponents';
+import EmailCollect from './emailCollect';
 
 export default function WelcomeMissionStatement() {
   return (
@@ -199,23 +201,34 @@ export default function WelcomeMissionStatement() {
             <h4 className="mt-2 text-3xl font-medium text-white">F&Q</h4>
           </div>
         </Link>
-        <Link href={'/faq'}>
+        <ModalComponent
+          button={
+            <div
+              data-aos="fade-left"
+              className="flex h-[9rem] flex-col items-center justify-center rounded-2xl border bg-[#2a63ff] cursor-pointer"
+            >
+              <Image
+                src={
+                  'https://iblossomlearn.s3.us-east-2.amazonaws.com/upload/images/icosn-1736541604413.png'
+                }
+                alt=""
+                width={200}
+                height={200}
+                className="h-16 w-28 rounded-full"
+              />
+              <h4 className="mt-2 text-3xl font-medium text-white">Subscriber</h4>
+            </div>
+          }
+          width={500}
+        >
           <div
             data-aos="fade-left"
-            className="flex h-[9rem] flex-col items-center justify-center rounded-2xl border bg-[#2a63ff]"
+            className="grid-cols-1 text-center bg-[#5373fe] rounded-lg p-2"
           >
-            <Image
-              src={
-                'https://iblossomlearn.s3.us-east-2.amazonaws.com/upload/images/icosn-1736541604413.png'
-              }
-              alt=""
-              width={200}
-              height={200}
-              className="h-16 w-28 rounded-full"
-            />
-            <h4 className="mt-2 text-3xl font-medium text-white">Subscriber</h4>
+            <h2 className="text-3xl font-bold my-6 text-white">Submit Your Email</h2>
+            <EmailCollect />
           </div>
-        </Link>
+        </ModalComponent>
       </div>
     </div>
   );
