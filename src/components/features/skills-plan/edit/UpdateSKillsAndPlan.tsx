@@ -54,6 +54,7 @@ export default function EditSKillsAndPlan({ planId }: { planId: string }) {
     const skillsPlanData: Partial<ISkillsPlanData> = {
       title: values.title || defaultSkillPlanData?.title,
       imgTitle: values.imgTitle || defaultSkillPlanData?.imgTitle,
+      //@ts-ignore
       imgs: [values?.imgs] || [...defaultSkillPlanData?.imgs],
       page: values.page || defaultSkillPlanData?.page || 'home',
       details: textEditorValue || defaultSkillPlanData?.details,

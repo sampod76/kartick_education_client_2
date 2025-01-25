@@ -1,28 +1,26 @@
 'use client';
 
-import FormInput from '@/components/Forms/FormInput';
-import FormSelectField from '@/components/Forms/FormSelectField';
-import FormTextArea from '@/components/Forms/FormTextArea';
 // import TextEditor from "@/components/shared/TextEditor/TextEditor";
-import ButtonSubmitUI from '@/components/ui/ButtonSubmitUI';
 import LoadingSkeleton from '@/components/ui/Loading/LoadingSkeleton';
-import UploadMultipalImage from '@/components/ui/UploadMultipalImage';
-import TagsSelectUI from '@/components/ui/dashboardUI/TagsSelectUI';
 import { courseStatusOptions } from '@/constants/global';
 import { removeNullUndefinedAndFalsey } from '@/hooks/removeNullUndefinedAndFalsey';
 import {
   useGetSingleModuleQuery,
   useUpdateModuleMutation,
 } from '@/redux/api/adminApi/moduleApi';
-import { useGetAllCategoryChildrenQuery } from '@/redux/api/categoryChildrenApi';
 import { Error_model_hook, Success_model } from '@/utils/modalHook';
-import { Button, Col, Form, Input, Row, Select, Spin } from 'antd';
+import { Button, Col, Form, Input, Row, Select } from 'antd';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 const TextEditorNotSetForm = dynamic(
   () => import('@/components/shared/TextEditor/TextEditorNotSetForm'),
   {
     ssr: false,
+    loading: () => (
+      <div className="flex items-center justify-center h-32">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-600"></div>
+      </div>
+    ),
   },
 );
 
