@@ -27,7 +27,7 @@ export default function CustomImageTag({
   const imageSrc = fileObjectToLink(src);
 
   return (
-    <div className="">
+    <div className="z-50">
       <Image
         src={imageSrc}
         width={width || 750}
@@ -42,7 +42,7 @@ export default function CustomImageTag({
 
       <div
         onClick={() => setOpenModal(false)}
-        className={`fixed z-[100] flex items-center justify-center ${
+        className={`fixed z-50 flex items-center justify-center ${
           openModal ? 'opacity-1 visible' : 'invisible opacity-0'
         } inset-0 h-full w-full bg-black/70 duration-100`}
       >
