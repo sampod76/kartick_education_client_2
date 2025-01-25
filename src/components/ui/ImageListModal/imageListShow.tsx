@@ -6,13 +6,21 @@ import { useGetAllFileListesQuery } from '@/redux/api/AllApi/fileListApi';
 import { useDebounced } from '@/redux/hooks';
 import { IFileAfterUpload } from '@/types/globalType';
 import fileObjectToLink from '@/utils/fileObjectToLink';
-import { ReloadOutlined } from '@ant-design/icons';
+import {
+  CopyOutlined,
+  DownloadOutlined,
+  EyeOutlined,
+  ReloadOutlined,
+} from '@ant-design/icons';
 import { Button, Input, message, Pagination, Select, Tooltip } from 'antd';
+import { saveAs } from 'file-saver';
+
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import { FaEye } from 'react-icons/fa';
 import { MdContentCopy } from 'react-icons/md';
 import CustomImageTag from '../CustomTag/CustomImageTag';
+
 import UMTable from '../UMTable';
 interface ImageModalProps {
   addedImages: IFileAfterUpload[];
@@ -190,13 +198,43 @@ export default function ImageListShow({
                 return (
                   <div key={file._id}>
                     <Tooltip title={file.filename}>
-                      <div className="rounded-md border">
+                      <div className="relative rounded-md border group">
                         <CustomImageTag
                           src={file}
                           width={300}
                           height={300}
                           className="w-full h-28 cursor-pointer rounded-md"
                         />
+                        <div className="absolute inset-0 bg-black bg-opacity-50 hidden group-hover:flex items-center justify-center space-x-6">
+                          {/* Icon for Viewing */}
+                          <div className="flex justify-center items-center gap-2">
+                            <div className="flex flex-col items-center text-white transition-transform cursor-pointer transform hover:scale-110">
+                              <EyeOutlined style={{ fontSize: 24 }} />
+                            </div>
+
+                            {/* Icon for Copying */}
+                            <div
+                              onClick={() => {
+                                navigator.clipboard.writeText(fileObjectToLink(file));
+                                message.success('Link Copy Success');
+                              }}
+                              className="flex flex-col items-center text-white transition-transform cursor-pointer transform hover:scale-110"
+                            >
+                              <CopyOutlined style={{ fontSize: 24 }} />
+                            </div>
+
+                            {/* Icon for Downloading */}
+                            <div
+                              onClick={() =>
+                                typeof fileObjectToLink(file) === 'string' &&
+                                saveAs(fileObjectToLink(file), file.filename)
+                              }
+                              className="flex flex-col items-center text-white transition-transform cursor-pointer transform hover:scale-110"
+                            >
+                              <DownloadOutlined style={{ fontSize: 24 }} />
+                            </div>
+                          </div>
+                        </div>
                         {/* <p>Copy link</p> */}
                       </div>
                     </Tooltip>
