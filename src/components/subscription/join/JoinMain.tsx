@@ -10,7 +10,7 @@ export type IPlan = 'monthly' | 'yearly' | 'biannual';
 export default function JoinMain() {
   const searchParams = useSearchParams();
   const packName = searchParams.get('pack') as string;
-  console.log(packName, 'packName');
+
   const [plan, setPlan] = useState<IPlan>('monthly');
   const [quantity, setQuantity] = useState<number>(
     packName === 'family_personal' ? 1 : 11,

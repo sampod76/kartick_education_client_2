@@ -15,7 +15,6 @@ export const getFromLocalStorage = (key: string) => {
   return localStorage.getItem(key);
 };
 export const getRefreshToken = async () => {
-  // console.log("rrrrrrrrrrr");
   return await instance({
     url: `${getBaseUrl()}/auth/refresh-token`,
     method: 'POST',

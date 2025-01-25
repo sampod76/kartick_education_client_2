@@ -76,11 +76,10 @@ export default function ShortOverview() {
     query['searchTerm'] = debouncedSearchTerm;
   }
   const { data, isLoading } = useGetAllShortOverViewQuery({ ...query });
-  // console.log("🚀 ~ file: page.tsx:68 ~ skillsPlanData ~ data:", data);
 
   //@ts-ignore
   const shortOverviewData = data?.data || [];
-  // console.log(skillsPlanData, 'skillsPlanData')
+
   //@ts-ignore
   const meta = data?.meta;
 
@@ -88,11 +87,8 @@ export default function ShortOverview() {
     confirm_modal(`Are you sure you want to delete`).then(async (res) => {
       if (res.isConfirmed) {
         try {
-          console.log(id);
-
           const res = await deleteShortOverView(id).unwrap();
 
-          console.log(res, 'response for delete SKillsPlan');
           if (res?.success == false) {
             // message.success("Admin Successfully Deleted!");
             // setOpen(false);
@@ -146,7 +142,6 @@ export default function ShortOverview() {
       // fixed: "right",
       width: 130,
       render: (record: any) => (
-        // console.log(object);
         <>
           <Space size="middle">
             <Dropdown
@@ -187,13 +182,12 @@ export default function ShortOverview() {
     },
   ];
   const onPaginationChange = (page: number, pageSize: number) => {
-    //  // console.log("Page:", page, "PageSize:", pageSize);
     setPage(page);
     setSize(pageSize);
   };
   const onTableChange = (pagination: any, filter: any, sorter: any) => {
     const { order, field } = sorter;
-    // console.log(order, field);
+
     setSortBy(field as string);
     setSortOrder(order === 'ascend' ? 'asc' : 'desc');
   };
@@ -205,7 +199,6 @@ export default function ShortOverview() {
   };
 
   const deleteAdminHandler = async (id: string) => {
-    // console.log(id);
     try {
       const res = await deleteShortOverView(id);
       if (res) {

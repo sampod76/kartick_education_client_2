@@ -7,11 +7,6 @@ import { CutText } from '@/utils/CutText';
 import VimeoPlayer from '@/utils/vimoPlayer';
 import { ENUM_VIDEO_PLATFORM } from '@/constants/globalEnums';
 const CourseDetailsTop = ({ courseData }: { courseData: any }) => {
-  // console.log(
-  //   "🚀 ~ file: CourseDetailsTop.tsx:6 ~ CourseDetailsTop ~ courseData:",
-  //   courseData
-  // );
-
   return (
     <div className="bg-[#333333] block lg:flex gap-3">
       <div className="w-full lg:w-[40%]">

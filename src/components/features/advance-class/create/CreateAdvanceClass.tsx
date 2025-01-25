@@ -34,7 +34,6 @@ export default function CreateAdvanceClass() {
 
   const [ClassData, setClassData] = useState<any>([]);
 
-  console.log(ClassData, 'ClassData');
   const [addShowAdvance, { isLoading: ShowAdvanceLoading }] =
     useAddShowAdvanceClassesMutation();
 
@@ -42,8 +41,6 @@ export default function CreateAdvanceClass() {
 
   // console.log(course, "course");
   const onFinish = async (values: any) => {
-    console.log('🚀 ~ file: CreateAdvanceClass.tsx:55 ~ onFinish ~ values:', values);
-
     const advancePlanData = {
       ...values,
       classes: ClassData,
@@ -64,8 +61,6 @@ export default function CreateAdvanceClass() {
         setTextEditorValue('');
         setIsReset(true);
       }
-
-      // console.log(res);
     } catch (error: any) {
       Error_model_hook(error?.message);
       console.log(error);

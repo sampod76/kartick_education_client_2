@@ -11,7 +11,6 @@ const CourseDetailsTab = ({ CourseData }: { CourseData: ICourseData }) => {
   const [activeTabKey, setActiveTabKey] = useState('1');
   const handleTabClick = (key: any) => {
     setActiveTabKey(key);
-    // console.log(key);
   };
 
   const activeClass =

@@ -25,7 +25,6 @@ const AssignmentUpload = ({
   defaultData?: any;
   readonly?: boolean;
 }) => {
-  console.log(defaultData);
   const [addAssignment, { isLoading }] = useAddAssignmentMutation();
   const [updateAssignment, { isLoading: AssignmentLoading }] =
     useUpdateAssignmentMutation();
@@ -53,11 +52,10 @@ const AssignmentUpload = ({
   };
 
   const onFinish = async (values: any) => {
-    console.log('🚀 ~ onFinish ~ values:', values);
     try {
       if (values.pdfs) {
         const pdfResult = await handleUpload(values.pdfs);
-        console.log('🚀 ~ onFinish ~ pdfResult:', pdfResult);
+
         values.pdfs = pdfResult;
       }
       let document;
@@ -83,7 +81,6 @@ const AssignmentUpload = ({
       if (lessonData) {
         assignment = await addAssignment(document).unwrap();
       } else {
-        console.log(document);
         assignment = await updateAssignment({
           id: defaultData?._id,
           data: document,
@@ -95,7 +92,6 @@ const AssignmentUpload = ({
         );
         form.resetFields();
       }
-      console.log(assignment);
     } catch (error) {
       console.log('🚀 ~ onFinish ~ error:', error);
     }

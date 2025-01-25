@@ -176,7 +176,6 @@ export default function ImageListShow({
           value={fileType}
           onChange={(value: string) => {
             setFileType(value);
-            console.log('Selected file type:', value);
           }}
           style={{ width: 200, height: 40 }}
           placeholder="Select file type"

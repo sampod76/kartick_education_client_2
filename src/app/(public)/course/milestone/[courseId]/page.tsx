@@ -6,8 +6,6 @@ import SupportHero from '@/components/Home/Banner&hero/SupportHero';
 import React from 'react';
 const MilestoneList = React.lazy(() => import('@/components/Course/MilestoneHomeList'));
 const MilestonePage = ({ params: { courseId } }: { params: { courseId: string } }) => {
-  // console.log(courseId);
-
   return (
     <div>
       <CourseMilestoneDetails courseId={courseId} />

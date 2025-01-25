@@ -26,8 +26,6 @@ export const QuizApi = baseApi.injectEndpoints({
     // get single academic department
     getSingleQuiz: build.query({
       query: (id: string | string[] | undefined) => {
-        //// console.log(id);
-
         return {
           url: `${QUIZ_URL}/${id}`,
           method: 'GET',

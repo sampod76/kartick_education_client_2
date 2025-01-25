@@ -28,8 +28,6 @@ export default function ContactPage() {
   const [addContact, { isLoading }] = useAddContactMutation();
 
   const onSubmit = async (values: any) => {
-    // console.log(values);
-
     // message.success("sent message");
 
     if (userInfo?.email) {
@@ -43,14 +41,13 @@ export default function ContactPage() {
 
     try {
       const res = await addContact(values).unwrap();
-      // console.log(res);
+
       if (res?.success == false) {
         Error_model_hook(res?.message);
       } else {
         Success_model('Successfully sent your Message');
         setIsReset(true);
       }
-      // console.log(res);
     } catch (error: any) {
       Error_model_hook(error?.message);
       console.log(error);

@@ -45,7 +45,6 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({
       };
       delete formattedValues.dateRange;
       if (initialValues?._id) {
-        console.log(formattedValues);
         await updateAnnouncement({
           data: { ...formattedValues },
           id: initialValues._id,

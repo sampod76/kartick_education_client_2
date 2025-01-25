@@ -17,7 +17,6 @@ const TextEditorNotSetValue = dynamic(
   },
 );
 const CreateFaqCom = ({ value }: { value?: any }) => {
-  console.log('🚀 ~ CreateFaqCom ~ value:', value);
   const [form] = Form.useForm();
   const [textEditorValue, setTextEditorValue] = useState('');
   const [addFaq, { isLoading: blogLoading }] = useAddFaqMutation();

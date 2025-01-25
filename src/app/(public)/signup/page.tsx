@@ -42,7 +42,6 @@ const SignUpTeacherAndStudent = ({ setOpen }: any) => {
   }
 
   const onSubmit = async (values: any) => {
-    console.log('🚀 ~ onSubmit ~ values:', values);
     removeNullUndefinedAndFalsey(values);
 
     try {
@@ -57,7 +56,6 @@ const SignUpTeacherAndStudent = ({ setOpen }: any) => {
         values.image = imageUrl[0];
       }
       let res;
-      console.log('🚀 ~ onSubmit ~ values:', values);
 
       if (values?.role === USER_ROLE.STUDENT) {
         const { password, ...allValue } = values;
@@ -101,7 +99,6 @@ const SignUpTeacherAndStudent = ({ setOpen }: any) => {
           }
         } catch (err: any) {
           Error_model_hook(err?.data || err?.message);
-          console.log(err);
         }
         // router.push('/login');
       }

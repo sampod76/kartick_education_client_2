@@ -49,7 +49,6 @@ export default function UploadMultipalDragAndDropImge({
       const { status } = info.file;
       if (status === 'uploading') {
         setImageLoading(true);
-        console.log(info.file, info.fileList);
       }
       if (status === 'done') {
         message.success(`${info.file.name} file uploaded successfully.`);
@@ -60,9 +59,7 @@ export default function UploadMultipalDragAndDropImge({
         Error_model_hook(`${info.file.name} file upload failed.`);
       }
     },
-    onDrop(e) {
-      console.log('Dropped files', e.dataTransfer.files);
-    },
+    onDrop(e) {},
     onRemove(file) {
       if (formSubmitted) {
         const updatedImages = images.filter((image) => image !== file.url);

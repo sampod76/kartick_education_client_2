@@ -24,7 +24,6 @@ import { IShow_advance_classes } from '@/types/features/showAdvanceClassType';
 import LoadingSkeleton from '@/components/ui/Loading/LoadingSkeleton';
 
 export default function EditAdvanceClass({ classId }: { classId: string }) {
-  // console.log("🚀 ~ file: EditPackage.tsx:24 ~ UpdatePackage ~ classId:", classId)
   const { data = {}, isLoading: defaultLoading } = useGetSingleShowAdvanceClassesQuery(
     classId,
     {
@@ -32,8 +31,6 @@ export default function EditAdvanceClass({ classId }: { classId: string }) {
     },
   );
   const defaultAdvanceClassData: IShow_advance_classes = data;
-
-  // console.log(defaultAdvanceClassData, 'defaultAdvanceClassDatadefaultAdvanceClassData')
 
   const [UpdateShowAdvanceClasses, { isLoading: UpdatePackageLoading }] =
     useUpdateShowAdvanceClassesMutation();
@@ -68,22 +65,20 @@ export default function EditAdvanceClass({ classId }: { classId: string }) {
       classes: ClassData || defaultAdvanceClassData?.classes,
       details: textEditorValue,
     };
-    // console.log("Received values of form:", values);
-    // console.log("🚀 ~ onFinish ~ skillsPlanData:", skillsPlanData);
+
     // return
     try {
       const res = await UpdateShowAdvanceClasses({
         id: classId,
         data: skillsPlanData,
       }).unwrap();
-      // console.log(res);
+
       if (res?.success == false) {
         Error_model_hook(res?.message);
       } else {
         Success_model('Successfully Updated AdvanceClass');
         // form.resetFields();
       }
-      // console.log(res);
     } catch (error: any) {
       Error_model_hook(error?.message);
       console.log(error);
@@ -98,9 +93,6 @@ export default function EditAdvanceClass({ classId }: { classId: string }) {
     buttonLink: defaultAdvanceClassData?.buttonLink,
   };
 
-  console.log(ClassData, 'classData');
-  // console.log(initialAdvanceClassFormData, 'initialAdvanceClassFormData..........')
-  // console.log('defaultCategory7', defaultCategory[1].value)
   return (
     <div className="bg-white shadow-lg p-5 rounded-xl">
       <h1 className="text-xl text-center font-bold border-b-2 border-spacing-4 mb-2  ">

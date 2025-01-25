@@ -156,7 +156,6 @@ export default function CreateSkillsPlan() {
               // };
 
               const handleRemove = (value: any) => {
-                console.log(value, 'handleRemove');
                 remove(value);
               };
 

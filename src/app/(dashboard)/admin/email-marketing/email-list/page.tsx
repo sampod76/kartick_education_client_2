@@ -34,7 +34,7 @@ export default function EmailListMarketing() {
   const { data, isLoading } = useGetAllEmailMarketingQuery(query);
   //@ts-ignore
   const courseData = data?.data || [];
-  // console.log('🚀 ~ CourseList ~ courseData:', courseData);
+
   //
   //@ts-ignore
   const meta = data?.meta;

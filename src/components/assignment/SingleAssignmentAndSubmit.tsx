@@ -13,7 +13,7 @@ import LoadingSkeleton from '../ui/Loading/LoadingSkeleton';
 
 export default function SingleAssignmentAndSubmit({ id }: { id: string }) {
   const { userInfo, userInfoLoading } = useGlobalContext();
-  console.log('🚀 ~ SingleAssignmentAndSubmit ~ userInfo:', userInfo);
+
   const { data: getSingleAssignment, isLoading } = useGetSingleAssignmentQuery(id);
 
   const { data: getSubmitAssignment, isLoading: SubmitLoading } =
@@ -21,11 +21,6 @@ export default function SingleAssignmentAndSubmit({ id }: { id: string }) {
       assignment: id,
       author: userInfo?.id,
     });
-
-  // console.log(
-  //   "🚀 ~ SingleAssignmentAndSubmit ~ getSingleAssignment:",
-  //   getSubmitAssignment
-  // );
 
   const [submitAssignment, { isLoading: submitAssignmentLoading }] =
     useAddSubmitAssignmentMutation();
@@ -51,10 +46,9 @@ export default function SingleAssignmentAndSubmit({ id }: { id: string }) {
   };
 
   const onFinish = async (values: any) => {
-    console.log('🚀 ~ onFinish ~ values:', values);
     if (values.pdfs) {
       const pdfResult = await handleUpload(values.pdfs);
-      console.log('🚀 ~ onFinish ~ pdfResult:', pdfResult);
+
       values.pdfs = pdfResult;
     } else {
       message.error('Please upload at least one file');

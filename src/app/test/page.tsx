@@ -143,7 +143,7 @@ export default DocumentViewer;
 //   }, []);
 
 //   const handleDocumentChange = (doc: Document) => {
-//     console.log('Document changed:', doc);
+
 //   };
 
 //   return (

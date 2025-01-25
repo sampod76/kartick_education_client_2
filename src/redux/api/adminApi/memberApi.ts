@@ -26,7 +26,6 @@ export const memberApi = baseApi.injectEndpoints({
     // get single academic department
     getSingleMember: build.query({
       query: (id: string | string[] | undefined) => {
-        //// console.log(id);
         return {
           url: `${URL}/${id}`,
           method: 'GET',
@@ -38,8 +37,6 @@ export const memberApi = baseApi.injectEndpoints({
     // create a new academic department
     addMember: build.mutation({
       query: (data) => {
-        //// console.log(data, "cacccc");
-
         return {
           url: URL,
           method: 'POST',
@@ -52,7 +49,6 @@ export const memberApi = baseApi.injectEndpoints({
     // update ac department
     updateMember: build.mutation({
       query: ({ data, id }) => {
-        //// console.log(data, "Member data");
         return {
           url: `${URL}/${id}`,
           method: 'PATCH',

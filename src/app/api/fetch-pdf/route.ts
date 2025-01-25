@@ -3,7 +3,6 @@ import { NextResponse } from 'next/server';
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const pdfUrl = searchParams.get('url');
-  // console.log('🚀 ~ GET ~ pdfUrl:', pdfUrl);
 
   if (!pdfUrl) {
     return NextResponse.json({ error: 'No PDF URL provided' }, { status: 400 });

@@ -9,7 +9,7 @@ import Link from 'next/link';
 export default function LessonPage({ params }: { params: { moduleId: string } }) {
   const moduleId = params.moduleId;
   const { data: moduleData, isLoading } = useGetSingleModuleQuery(moduleId);
-  // console.log('🚀 ~ moduleData:', moduleData);
+
   const milestoneId = moduleData?.milestone?._id;
 
   if (isLoading) {

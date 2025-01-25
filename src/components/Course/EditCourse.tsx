@@ -54,7 +54,7 @@ const TextEditorNotSetForm = dynamic(
 );
 const UpdateCourse = ({ courseId }: { courseId: string }) => {
   const [allSyllabus, setSyllabusFiles] = useState<IFileAfterUpload[]>([]);
-  console.log('🚀 ~ EditLesson ~ allSyllabus:', allSyllabus);
+
   const { userInfo, userInfoLoading } = useGlobalContext();
   const id = userInfo?.roleBaseUserId;
   let disable = true;
@@ -233,7 +233,7 @@ const UpdateCourse = ({ courseId }: { courseId: string }) => {
     return <LoadingSkeleton />;
   }
   const fileData = { ...getCourse };
-  console.log('🚀 ~ UpdateCourse ~ fileData:', fileData);
+
   delete fileData?.syllabus;
   return (
     <div className="rounded-lg bg-white p-2 shadow-lg md:p-5">

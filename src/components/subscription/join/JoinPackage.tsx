@@ -74,7 +74,7 @@ export const JoinPackage = ({
   const packName = searchParams.get('pack') as string;
   // For select package
   const [selectPackage, setSelectPackage] = useState<any | null>({});
-  console.log('🚀 ~ selectPackage:', selectPackage);
+
   const [totalPriceByThePackage, setTotalPriceByThePackage] = useState(0);
   ///! for the multiple and single select package
   const [singleSelect, setSingleSelect] = useState<Record<string, any>>({});
@@ -191,7 +191,6 @@ export const JoinPackage = ({
           sessionId: result?.id,
         });
         if (redirectResult?.error) {
-          console.log(redirectResult?.error);
           //@ts-ignore
           Error_model_hook(redirectResult?.error?.message);
         }
