@@ -69,9 +69,9 @@ const Courses = ({
 
   useEffect(() => {
     if (query?.category) {
-      setCategory(query?.category);
+      setCategory(query?.category === 'all' ? '' : query?.category);
     } else if (categoryId) {
-      setCategory(categoryId);
+      setCategory(categoryId === 'all' ? '' : categoryId);
     } else {
       setCategory('');
     }
