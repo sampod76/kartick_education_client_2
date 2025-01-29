@@ -39,7 +39,7 @@ jobs:
       - name: Change Directory
         run: cd /home/sampod/actions-runner-client/_work/kartick_education_client_2/kartick_education_client_2
       - name: Install Dependencies
-        run: npm install --legacy-peer-deps
+        run: npm install --force
       - name: Build the Project
         run: npm run build
       - name: Start Application with PM2
