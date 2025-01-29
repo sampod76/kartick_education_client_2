@@ -23,11 +23,7 @@ export default function SUbscriptionForm() {
     };
   });
 
-  const onFinish = (value: any) => {
-
-    message.success('Joined SuccessFully');
-    return {};
-  };
+  const onFinish = (value: any) => {};
 
   return (
     <div
