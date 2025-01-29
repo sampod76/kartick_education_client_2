@@ -24,7 +24,7 @@ export default function SUbscriptionForm() {
   });
 
   const onFinish = (value: any) => {
-    console.log('🚀 ~ file: SUbscriptionForm.tsx:10 ~ onFinish ~ value:', value);
+
     message.success('Joined SuccessFully');
     return {};
   };

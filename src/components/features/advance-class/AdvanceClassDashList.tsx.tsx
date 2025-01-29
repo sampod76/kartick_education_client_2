@@ -89,11 +89,8 @@ export default function AdvanceClassList() {
     confirm_modal(`Are you sure you want to delete`).then(async (res) => {
       if (res.isConfirmed) {
         try {
-          console.log(id);
-
           const res = await deleteShowAdvanceClasses(id).unwrap();
 
-          console.log(res, 'response for delete Advance Class');
           if (res?.success == false) {
             // message.success("Admin Successfully Deleted!");
             // setOpen(false);

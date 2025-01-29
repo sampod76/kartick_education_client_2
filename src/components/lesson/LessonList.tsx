@@ -30,9 +30,7 @@ export default function LessonList({
   //! for purchased data of a user
   const categoryId = moduleData?.category || moduleData?.milestone?.course?.category?._id;
   const courseId = moduleData?.course || moduleData?.milestone?.course?._id;
-
   let IsExistPremonitionCourse: any = false;
-
   //! for Course options selection
   const lesson_query: Record<string, any> = {};
   lesson_query['limit'] = 999999;
@@ -46,23 +44,12 @@ export default function LessonList({
     module: moduleId,
     ...lesson_query,
   });
-  console.log(lessonData, 'lessonData');
   const { data: checkPurchase, isLoading: CheckPurchaseLoading } =
     useGetCoursePermissionQuery({ course: courseId });
-  // console.log("🚀 ~ checkPurchase:", checkPurchase);
-  if (checkPurchase?.data) {
-    IsExistPremonitionCourse = !!checkPurchase?.data;
+  // console.log('🚀 ~ checkPurchase:', checkPurchase?.data?.data);
+  if (checkPurchase?.data?.data) {
+    IsExistPremonitionCourse = !!checkPurchase?.data?.data;
   }
-  // const quiz_query: Record<string, any> = {};
-  // //! for Course options selection
-  // quiz_query['limit'] = 999999;
-  // quiz_query['isDelete'] = ENUM_YN.NO;
-  // const { data: QuizData, isLoading: quizLoading } = useGetAllQuizQuery({
-  //   status: 'active',
-  //   isDelete: ENUM_YN.NO,
-  //   module: moduleId,
-  //   ...quiz_query,
-  // });
 
   if (isLoading || CheckPurchaseLoading) {
     return <LoadingSkeleton />;
@@ -71,31 +58,26 @@ export default function LessonList({
   const playerVideoFunc = (lesson: any, index?: number) => {
     if (
       IsExistPremonitionCourse ||
-      lesson?.lesson_number == (0 || 1)
+      index == 0
       // || index === 0//! for first open video
     ) {
-      return (
-        // <ModalInComponent
-        //   button={
-        //     <div className="flex items-center justify-center">
-        //       <Button type="primary">Click To Open</Button>
-        //     </div>
-        //   }
-        // >
-        //   <LessonContainShow lesson={lesson} />
-        // </ModalInComponent>
-        <ModalComponent
-          button={
-            <div className="flex items-center justify-center">
-              <Button type="primary">Click To Open</Button>
-            </div>
-          }
-          width={1200}
-          maskClosable={false}
-        >
-          <LessonContainShow lesson={lesson} />
-        </ModalComponent>
-      );
+      if (lesson?.videos?.length || lesson?.files?.length) {
+        return (
+          <ModalComponent
+            button={
+              <div className="flex items-center justify-center">
+                <Button type="primary">Click To Open</Button>
+              </div>
+            }
+            width={1200}
+            maskClosable={false}
+          >
+            <LessonContainShow lesson={lesson} />
+          </ModalComponent>
+        );
+      } else {
+        return <div className="text-start text-base font-medium  lg:text-lg">N/A</div>;
+      }
     } else {
       return (
         <div className="text-start text-base font-medium text-red-500 lg:text-lg">
@@ -131,13 +113,10 @@ export default function LessonList({
           <div>
             <div className="">
               <div className="relative my-1 flex items-center justify-center">
-                {playerVideoFunc(lesson)}
+                {playerVideoFunc(lesson, index)}
               </div>
-              {/* {lesson?.details && CutText(lesson?.details, 200)} */}
-              {/* <EllipsisMiddle suffixCount={3} maxLength={300}>
-                  {IsExistCategoryOrCourse && lesson?.short_description}
-                </EllipsisMiddle>
-                {lesson?.details && parse(lesson?.details)} */}
+
+              {lesson?.details && parse(lesson?.details)}
             </div>
 
             {IsExistPremonitionCourse &&
@@ -203,7 +182,7 @@ export default function LessonList({
           <div>
             <div className="">
               <div className="my-2 flex items-center justify-center">
-                {playerVideoFunc(lesson)}
+                {playerVideoFunc(lesson, index)}
               </div>
 
               <div className="line-clamp-3">

@@ -1,10 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
-import CustomeHero from '@/components/widgets/CustomeHero';
 import SupportDonateHelpDesk from '@/components/widgets/SupportDonate';
 import Image from 'next/image';
-
-import Link from 'next/link';
-import React from 'react';
 
 const AboutUspage = () => {
   return (
@@ -65,9 +61,9 @@ const AboutUspage = () => {
               guided by expert professors.
             </li>
             <li data-aos="zoom-in">
-              <strong>iBlossom Cast:</strong> A unique platform where students access
-              reading materials through podcasts and create their own audio stories,
-              fostering creativity and enhancing communication skills.
+              <strong>Iblossomlearn P.D Institute:</strong> A unique platform where
+              students access reading materials through podcasts and create their own
+              audio stories, fostering creativity and enhancing communication skills.
             </li>
             <li data-aos="zoom-out">
               <strong>SEL for Homeschooling Families:</strong>A Social and Emotional

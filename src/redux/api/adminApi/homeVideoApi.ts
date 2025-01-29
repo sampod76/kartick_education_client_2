@@ -17,7 +17,6 @@ export const Home_Video_Api = baseApi.injectEndpoints({
         };
       },
       transformResponse: (response: ICourseLevelData[], meta: IMeta) => {
-        // console.log(response);
         return {
           data: response,
           meta,
@@ -28,7 +27,6 @@ export const Home_Video_Api = baseApi.injectEndpoints({
     // get single academic department
     getSingleVideo: build.query({
       query: (id: string | string[] | undefined) => {
-        console.log(id);
         return {
           url: `${COURSE_LEVEL_URL}/${id}`,
           method: 'GET',
@@ -40,8 +38,6 @@ export const Home_Video_Api = baseApi.injectEndpoints({
     // create a new academic department
     addHome_Video: build.mutation({
       query: (data: any) => {
-        // console.log(data, "cacccc");
-
         return {
           url: COURSE_LEVEL_URL,
           method: 'POST',
@@ -54,7 +50,6 @@ export const Home_Video_Api = baseApi.injectEndpoints({
     // update ac department
     updateCourse_label: build.mutation({
       query: ({ data, id }) => {
-        // console.log(data, "Course_label data");
         return {
           url: `${COURSE_LEVEL_URL}/${id}`,
           method: 'PATCH',

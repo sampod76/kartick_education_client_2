@@ -40,7 +40,6 @@ export default function CreatePackage() {
   }));
 
   const [addPackage, { isLoading: AddPackageLoading }] = useAddPackageMutation();
-  console.log('🚀 ~ CreatePackage ~ AddPackageLoading:', AddPackageLoading);
 
   // const [imgUrl, setImgUrl] = useState(null);
   // const handleChange = async (info) => {

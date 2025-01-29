@@ -33,7 +33,7 @@ export const courseApi = baseApi.injectEndpoints({
           params: arg,
         };
       },
-      transformResponse: (response: ICourseData[], meta: IMeta) => {
+      transformResponse: (response: ICourseData | any, meta: IMeta) => {
         return {
           data: response,
           meta,

@@ -13,7 +13,7 @@ import SelectStatusCategoryFIeld from '../Forms/GeneralField/SelectStatusCategor
 
 const CreateCourse_label = () => {
   const [category, setCategoryValue] = useState();
-  // console.log('🚀 ~ category:', category);
+
   const query: Record<string, any> = {};
   query['limit'] = 1;
 
@@ -25,7 +25,6 @@ const CreateCourse_label = () => {
   const { data, isLoading: getLabelLoading } = useGetAllCourse_labelQuery(query, {
     skip: !Boolean(category),
   });
-  // console.log("🚀 ~ data:", data);
 
   const [isReset, setIsReset] = useState(false);
   const [addCourse_label, { isLoading: serviceLoading }] = useAddCourse_labelMutation();
@@ -38,14 +37,13 @@ const CreateCourse_label = () => {
     }
     try {
       const res = await addCourse_label({ category, ...values }).unwrap();
-      // console.log(res);
+
       if (res?.success == false) {
         Error_model_hook(res?.message);
       } else {
         Success_model('Successfully added Course label');
         setIsReset(true);
       }
-      // console.log(res);
     } catch (error: any) {
       Error_model_hook(error?.message);
       console.log(error);

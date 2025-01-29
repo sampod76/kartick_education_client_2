@@ -1,3 +1,4 @@
+'use client';
 import InternelError from '@/components/shared/Error/InternelError';
 import LoadingSkeleton from '@/components/ui/Loading/LoadingSkeleton';
 import NotFoundCourse from '@/components/ui/NotFound/NotFoundCourse';
@@ -6,6 +7,7 @@ import { useGetAllCourseQuery } from '@/redux/api/adminApi/courseApi';
 import { useDebounced } from '@/redux/hooks';
 import { ReloadOutlined } from '@ant-design/icons';
 import { Button, Input, Pagination, PaginationProps } from 'antd';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import SIngleCourse from './SIngleCourse';
 
@@ -23,8 +25,9 @@ const Courses = ({
   query: ICourseItemType;
   width?: string;
 }) => {
+  const searchParams = useSearchParams();
+  const categoryId = searchParams.get('category');
   const [searchTerm, setSearchTerm] = useState<string>('');
-
   const [current, setCurrent] = useState(1);
   const [pageCount, setPageCount] = useState(12);
   const [category, setCategory] = useState('');
@@ -40,7 +43,7 @@ const Courses = ({
   } else if (searchTerm === '') {
     query['searchTerm'] = '';
   }
-  console.log('🚀 ~ searchTerm:', query);
+  // console.log('🚀 ~ searchTerm:', query);
   // Fetch courses based on query parameters and pagination
   const { data, isLoading, isFetching, error } = useGetAllCourseQuery({
     status: ENUM_STATUS.ACTIVE,
@@ -66,7 +69,9 @@ const Courses = ({
 
   useEffect(() => {
     if (query?.category) {
-      setCategory(query?.category);
+      setCategory(query?.category === 'all' ? '' : query?.category);
+    } else if (categoryId) {
+      setCategory(categoryId === 'all' ? '' : categoryId);
     } else {
       setCategory('');
     }
@@ -89,7 +94,7 @@ const Courses = ({
   return (
     <div className="relative">
       <div
-        className={`container mx-auto flex items-center justify-end`}
+        className={`container mx-auto flex items-center justify-center `}
         title="blog List"
       >
         <Input
@@ -98,10 +103,10 @@ const Courses = ({
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           style={{
-            width: '250px',
+            // width: '250px',
             marginTop: '-8px',
           }}
-          className="!bg-opacity-45"
+          className="!bg-opacity-45 !w-[70%] ring-2 ring-cyan-800 "
         />
         <div>
           {!!searchTerm && (

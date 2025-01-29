@@ -28,7 +28,6 @@ const ContactList = () => {
 
   // const ADMIN = USER_ROLE.ADMIN;
   const userInfo = getUserInfo() as IDecodedInfo;
-  // console.log("🚀 ~ file: page.tsx:41 ~ ContactList ~ role:", role);
 
   const [deleteContact] = useDeleteContactMutation();
 
@@ -59,7 +58,6 @@ const ContactList = () => {
 
   //@ts-ignore
   const contactData = data?.data;
-  // console.log("🚀 ~ file: ContactDashList.tsx:66 ~ ContactList ~ contactData:", contactData)
 
   //@ts-ignore
   const meta = data?.meta;
@@ -69,7 +67,6 @@ const ContactList = () => {
       if (res.isConfirmed) {
         try {
           const res = await deleteContact(id).unwrap();
-          // console.log("🚀 ~ confirm_modal ~ res:", res)
 
           if (res?.success == false) {
             // message.success("Admin Successfully Deleted!");

@@ -1,21 +1,16 @@
 /* eslint-disable react/no-unescaped-entities */
-import BannerAbout from '@/components/Home/Banner&hero/BannerAbout';
-import BannerCourses from '@/components/Home/Banner&hero/BannerCourses';
-import React from 'react';
-import aboutHero from '@/assets/about/aboutGirl.png';
 import aboutOwner from '@/assets/about/about_Owner.jpeg';
 import aboutCourse1 from '@/assets/about/aboutCourse1.png';
 import aboutCourse2 from '@/assets/about/aboutCourse2.png';
 import aboutCourse3 from '@/assets/about/aboutCourse3.png';
-import Image from 'next/image';
+import CustomeHero from '@/components/widgets/CustomeHero';
 import {
   DollarOutlined,
-  FileDoneOutlined,
   FieldTimeOutlined,
+  FileDoneOutlined,
   SolutionOutlined,
 } from '@ant-design/icons';
-import { EllipsisMiddle } from '@/utils/CutTextElliples';
-import CustomeHero from '@/components/widgets/CustomeHero';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function AboutPage() {
@@ -315,12 +310,12 @@ export default function AboutPage() {
               homeschooling families. This curriculum aimed to help students not only
               excel academically but also develop essential life skills and emotional
               resilience. <br />
-              The introduction of iBlossom Cast marked another milestone in this journey.
-              This unique platform allowed students to access reading materials through
-              engaging podcasts, perfect for listening while commuting or multitasking. It
-              also provided a space for students to create and share their own audio
-              stories, fostering creativity and enhancing their communication skills.{' '}
-              <br />
+              The introduction of Iblossomlearn P.D Institute marked another milestone in
+              this journey. This unique platform allowed students to access reading
+              materials through engaging podcasts, perfect for listening while commuting
+              or multitasking. It also provided a space for students to create and share
+              their own audio stories, fostering creativity and enhancing their
+              communication skills. <br />
               Sabah's Grammar & Literacy program was crafted to integrate literacy into
               skill acquisition seamlessly, ensuring students could achieve their highest
               potential. Her passion for education and her effective literacy framework

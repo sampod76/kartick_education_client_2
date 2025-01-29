@@ -12,7 +12,17 @@ import { ENUM_MIMETYPE } from '@/constants/globalEnums';
 import { removeNullUndefinedAndFalsey } from '@/hooks/removeNullUndefinedAndFalsey';
 import { multipleFilesUploaderS3 } from '@/utils/handelFileUploderS3';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Divider, Form, Input, InputNumber, Select, Tooltip, Upload } from 'antd';
+import {
+  Button,
+  Col,
+  Divider,
+  Form,
+  Input,
+  InputNumber,
+  Select,
+  Tooltip,
+  Upload,
+} from 'antd';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import { IFileAfterUpload } from '../../types/globalType';
@@ -20,15 +30,24 @@ import { useGlobalContext } from '../ContextApi/GlobalContextApi';
 import ModalComponent from '../Modal/ModalComponents';
 import LessonContainShow from './LessonContainShow';
 const { Option } = Select;
-const TextEditor = dynamic(() => import('@/components/shared/TextEditor/TextEditor'), {
-  ssr: false,
-});
+const TextEditorNotSetForm = dynamic(
+  () => import('@/components/shared/TextEditor/TextEditorNotSetForm'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex items-center justify-center h-32">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-600"></div>
+      </div>
+    ),
+  },
+);
 
 export default function EditLesson({ lessonId }: { lessonId: string }) {
+  const [textEditorValue, setTextEditorValue] = useState('');
   const [videos, setVideos] = useState<any[]>([{ platform: 'vimeo', link: '' }]);
   const [loading, setLoading] = useState(false);
   const [allFIles, setFiles] = useState<IFileAfterUpload[]>([]);
-  console.log('🚀 ~ EditLesson ~ allFIles:', allFIles);
+  // console.log('🚀 ~ EditLesson ~ allFIles:', allFIles);
   const [form] = Form.useForm();
   const { userInfo, userInfoLoading } = useGlobalContext();
 
@@ -50,6 +69,9 @@ export default function EditLesson({ lessonId }: { lessonId: string }) {
       values['module'] = module?._id;
     }
     setLoading(true);
+    if (textEditorValue) {
+      values.details = textEditorValue;
+    }
 
     if (values?.files?.length) {
       let files: any[] = [];
@@ -79,7 +101,9 @@ export default function EditLesson({ lessonId }: { lessonId: string }) {
       const filesToUpload = allFIles
         .filter((file) => !file.path)
         .map((file: any) => file.originFileObj);
-      const uploadedFiles = await multipleFilesUploaderS3(filesToUpload);
+      const uploadedFiles = filesToUpload.length
+        ? await multipleFilesUploaderS3(filesToUpload)
+        : [];
       values['files'] = [...uploadedFiles, ...allFIles.filter((file) => file.path)];
     }
     const LessonData: any = {
@@ -346,9 +370,22 @@ export default function EditLesson({ lessonId }: { lessonId: string }) {
                 : null}
             </div>
 
-            <Form.Item label="Short Description" name="shortDescription">
-              <Input.TextArea placeholder="Please enter short description" />
-            </Form.Item>
+            <Col xs={24}>
+              <div
+                style={{
+                  borderTopWidth: '2px',
+                }} /* className=" border-t-2" */
+              >
+                <p className="my-3 text-center text-xl font-bold">
+                  Description (optional)
+                </p>
+                <TextEditorNotSetForm
+                  textEditorValue={textEditorValue}
+                  defaultTextEditorValue={fileData?.details || ''}
+                  setTextEditorValue={setTextEditorValue}
+                />
+              </div>
+            </Col>
             <div className="flex items-center justify-center">
               <Button
                 type="primary"

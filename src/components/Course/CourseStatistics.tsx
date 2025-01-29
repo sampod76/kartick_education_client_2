@@ -10,7 +10,6 @@ const CourseStatistics = ({ courseId }: { courseId: string }) => {
   const { data, isLoading } = useGetSingleCourseModuleLessonQuizVideoSizeQuery(courseId);
 
   const allData: any = data;
-  // console.log('🚀 ~ CourseStatistics ~ allData:', allData);
 
   let overViews: any[] = [
     {

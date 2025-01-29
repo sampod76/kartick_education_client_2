@@ -12,7 +12,6 @@ export default function ChangePassword() {
   const [changePassword, { isLoading }] = useChangePasswordMutation();
   const [passwordMatched, setPasswordMatched] = useState(false);
   const onFinish = async (values: any) => {
-    // console.log("🚀 ~ onFinish ~ values:", values);
     if (values.password !== values.confirmPassword) {
       setPasswordMatched(true);
       return false;
@@ -24,7 +23,6 @@ export default function ChangePassword() {
         oldPassword: values.currentPassword,
         newPassword: values.password,
       })) as any;
-      // console.log("🚀 ~ onFinish ~ res:", res);
 
       if (res?.error || res?.success === false) {
         Error_model_hook(res?.error || res);

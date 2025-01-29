@@ -1,12 +1,7 @@
 import { authKey } from '@/constants/storageKey';
-import { removeUserInfo } from '@/services/auth.service';
 
-import { IGenericErrorResponse, ResponseSuccessType } from '@/types';
-import {
-  getFromLocalStorage,
-  getRefreshToken,
-  setToLocalStorage,
-} from '@/utils/local-storage';
+import { ResponseSuccessType } from '@/types';
+import { getFromLocalStorage, setToLocalStorage } from '@/utils/local-storage';
 import axios from 'axios';
 import { getBaseUrl } from '../config/envConfig';
 // import { message } from 'antd';
@@ -49,7 +44,7 @@ instance.interceptors.response.use(
   async function (error) {
     const config = error?.config;
 
-    if (error?.response?.status === 403 && !config?._retry) {
+    if (error?.response?.status === 401 && !config?._retry) {
       config._retry = true;
       try {
         // const response = await getRefreshToken();

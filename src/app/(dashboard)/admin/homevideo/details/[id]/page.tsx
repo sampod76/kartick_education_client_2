@@ -10,8 +10,6 @@ const HomeVideoDetailPage = ({ params }: any) => {
 
   const item = data && data.length > 0 ? data[0] : null;
 
-  //   console.log(data[0],"data");
-
   return (
     <div>
       <HomeVideoCard

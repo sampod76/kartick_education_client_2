@@ -16,6 +16,22 @@ export default function CourseMilestoneDetails({ courseId }: { courseId: string 
       <div className="rounded-xl backdrop-blur-sm">
         <CourseStatistics courseId={courseId} />
         <MilestoneHomeList courseId={courseId} />
+        {/* <Tabs
+          type="card"
+          centered
+          items={[
+            {
+              key: '1',
+              label: 'Content',
+              children: <MilestoneHomeList courseId={courseId} />,
+            },
+            {
+              key: '2',
+              label: 'Teacher',
+              children: <div courseId={courseId}></div>,
+            },
+          ]}
+        /> */}
       </div>
     </div>
   );

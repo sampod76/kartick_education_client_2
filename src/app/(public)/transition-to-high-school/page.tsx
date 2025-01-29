@@ -1,7 +1,6 @@
 'use client';
 import SupportDonateHelpDesk from '@/components/widgets/SupportDonate';
 import Image from 'next/image';
-import React from 'react';
 
 export default function Transition() {
   return (
@@ -37,21 +36,22 @@ export default function Transition() {
             journey designed to equip students with both academic and emotional tools for
             success. Our curriculum offers a wide range of electives, allowing students to
             explore their passions and develop new skills, ensuring a well-rounded
-            education. The iBlossom Cast platform further enhances this experience,
-            providing a creative outlet for building confidence through storytelling and
-            expression. Additionally, our Social and Emotional Learning (SEL) curriculum
-            nurtures students’ social and emotional growth, helping them navigate high
-            school challenges with resilience and self-assurance. This holistic approach
-            ensures that students are not only academically prepared but also emotionally
-            equipped for success in high school and beyond. Understanding that the
-            transition to high school is a pivotal moment for homeschooling families,
-            iBlossomLearn is committed to providing full support. Our experienced
-            counselors are dedicated to preparing students for higher education, ensuring
-            they are both college and career ready. Through personalized academic
-            planning, students receive the guidance they need to confidently navigate high
-            school. With a blend of rigorous coursework, engaging electives, and
-            opportunities like iBlossom Cast, we empower students to excel academically
-            while exploring their passions and preparing for a successful future.
+            education. The Iblossomlearn P.D Institute platform further enhances this
+            experience, providing a creative outlet for building confidence through
+            storytelling and expression. Additionally, our Social and Emotional Learning
+            (SEL) curriculum nurtures students’ social and emotional growth, helping them
+            navigate high school challenges with resilience and self-assurance. This
+            holistic approach ensures that students are not only academically prepared but
+            also emotionally equipped for success in high school and beyond. Understanding
+            that the transition to high school is a pivotal moment for homeschooling
+            families, iBlossomLearn is committed to providing full support. Our
+            experienced counselors are dedicated to preparing students for higher
+            education, ensuring they are both college and career ready. Through
+            personalized academic planning, students receive the guidance they need to
+            confidently navigate high school. With a blend of rigorous coursework,
+            engaging electives, and opportunities like Iblossomlearn P.D Institute, we
+            empower students to excel academically while exploring their passions and
+            preparing for a successful future.
           </p>
           {/* <div className="  self-center w-80 mt-6 rounded-3xl p-1 border-2 border-primary">
             <button className="bg-primary p-2 rounded-3xl px-5  text-[12px] lg:text-base text-white  w-full ">

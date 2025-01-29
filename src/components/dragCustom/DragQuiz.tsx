@@ -34,7 +34,6 @@ const DragQUizTest: React.FC<DragAndDropProps> = ({
   const [imagesData, setImagesData] = useState<IAnswer[]>(quizData?.answers);
 
   const [draggedItems, setDraggedItems] = useState<IAnswer[]>([]);
-  console.log('🚀 ~ draggedItems:', draggedItems);
 
   useEffect(() => {
     if (disabled) {
@@ -54,11 +53,9 @@ const DragQUizTest: React.FC<DragAndDropProps> = ({
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     const draggedItem = event.dataTransfer.getData('text/plain');
-    console.log('🚀 ~ handleDrop ~ draggedItem:', draggedItem);
 
     if (!draggedItems.some((item) => item?._id === draggedItem)) {
       const draggedAnswer = imagesData.find((answer) => answer._id === draggedItem);
-      console.log('🚀 ~ handleDrop ~ draggedAnswer:', draggedAnswer);
 
       if (draggedAnswer) {
         setDraggedItems((prevItems) => [...prevItems, draggedAnswer]);
@@ -88,7 +85,6 @@ const DragQUizTest: React.FC<DragAndDropProps> = ({
   const correctAnswer = defaultValue?._id
     ? quizData.answers.filter((item) => item?.correct)
     : [];
-  console.log('🚀 ~ correctAnswer:', correctAnswer);
 
   return (
     <div className={`max-w-2xl mx-auto my-3 ${disabled && 'disabled  cursor-none '}`}>

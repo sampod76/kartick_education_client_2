@@ -14,8 +14,9 @@ const FaqSchema = yup.object().shape({
 export { FaqSchema };
 
 export type IFaq = {
-  title: string;
-  image?: string;
+  question: string;
+  answer?: string;
   content: string;
   status?: string;
+  _id: string;
 };

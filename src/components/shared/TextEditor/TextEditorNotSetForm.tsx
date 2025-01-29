@@ -1,4 +1,7 @@
 'use client';
+import ModalComponent from '@/components/Modal/ModalComponents';
+import ImageListInServer from '@/components/ui/ImageListModal/ImageListCom';
+import { Button } from 'antd';
 import JoditEditor from 'jodit-react';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
@@ -7,10 +10,14 @@ const TextEditorNotSetValue = ({
   setTextEditorValue,
   defaultTextEditorValue = '',
   name = 'details',
+  height,
+  isReset = false,
 }: {
   textEditorValue?: string;
   defaultTextEditorValue?: string;
   name?: string;
+  height?: number;
+  isReset?: boolean;
   setTextEditorValue: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const editor = useRef<any>(null);
@@ -23,6 +30,8 @@ const TextEditorNotSetValue = ({
       placeholder: 'Start typing...',
       defaultMode: 1, // Set default alignment to left
       toolbarAdaptive: false,
+      //  height: height, // Set the height of the editor
+      minHeight: height || 500,
     }),
     [],
   );
@@ -30,10 +39,19 @@ const TextEditorNotSetValue = ({
     if (defaultTextEditorValue && !content) {
       setContent(defaultTextEditorValue);
     }
-  }, [defaultTextEditorValue]);
+    if (isReset) {
+      setContent('');
+      setTextEditorValue('');
+    }
+  }, [defaultTextEditorValue, isReset]);
 
   return (
     <>
+      <div className="flex justify-end my-1">
+        <ModalComponent button={<Button type="primary">Open file list</Button>}>
+          <ImageListInServer addedImages={[]} selectMultiple setAddedImages={() => {}} />
+        </ModalComponent>
+      </div>
       {openTextEditor && (
         <JoditEditor
           ref={editor}

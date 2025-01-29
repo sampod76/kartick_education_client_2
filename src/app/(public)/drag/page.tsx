@@ -54,8 +54,6 @@ export default function DragTest() {
     setImagesData((prev) => [...prev, item]);
   };
 
-  // console.log(ImagesData, 'draggedItems', draggedItems)
-
   return (
     <div className="max-w-2xl mx-auto my-3">
       <div style={{ display: 'flex', gap: '10px' }} id="images">

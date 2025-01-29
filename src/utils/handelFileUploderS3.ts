@@ -19,15 +19,35 @@ const singleFileUploaderInS3 = async (fileData: { pre_url: any }, uploadFile: an
 
     return fileData;
   } catch (error: any) {
-    console.log('🚀 ~ error:', error);
     throw new Error(error?.message || 'Error');
   }
 };
+type IPreUrlParams = {
+  filename: string;
+  mimetype: string;
+  uid?: string;
+};
 
+export const getS3PreUrlToken = async (data: Record<string, IPreUrlParams[]>) => {
+  try {
+    const response = await axiosInstance.post(
+      url,
+      data, //example {files:[{ filename: string; mimetype: string; uid?: string; }]}
+      {
+        withCredentials: true,
+      },
+    );
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message || error.message || 'Error');
+  }
+};
 export const multipleFilesUploaderS3 = async (
   files: any[],
 ): Promise<IFileAfterUpload[]> => {
-  console.log('🚀 ~ multipleFilesUploaderS3 ~ files:', files);
+  if (!files.length) {
+    return [];
+  }
   try {
     const filesModifyServerFormate = files.map((file, index) => {
       let uid = file?.uid;
@@ -42,20 +62,19 @@ export const multipleFilesUploaderS3 = async (
       };
     });
 
+    //-----------------------get pre-url-----------------------------
     const promises: any[] = [];
-    const getFilesToken = await axiosInstance({
-      url: url,
-      method: 'POST',
-      data: { images: filesModifyServerFormate },
-      withCredentials: true,
+    const getFilesToken = await getS3PreUrlToken({
+      documents: filesModifyServerFormate,
     });
-    const serverResponseObjects = getFilesToken?.data?.images || [];
-
-    files.forEach((file) => {
+    const serverResponseObjects = getFilesToken?.documents || [];
+    //----------------------------------------------------------------
+    files?.forEach((file) => {
       const serverObject = serverResponseObjects?.find(
-        (image: { uid: any }) => image?.uid === file?.uid, //!when use ant-d uploader then file.originFileObj in have --> default uid . when use custom uploader then add uid custom
+        (serverFile: { uid: any }) => serverFile?.uid === file?.uid,
       );
-      const fileUpload = singleFileUploaderInS3(serverObject, file);
+      const mainUploadFile = file.originFileObj ? file.originFileObj : file;
+      const fileUpload = singleFileUploaderInS3(serverObject, mainUploadFile);
       promises.push(fileUpload);
     });
     const result = await Promise.all(promises);

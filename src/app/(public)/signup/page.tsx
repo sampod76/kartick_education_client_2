@@ -42,7 +42,6 @@ const SignUpTeacherAndStudent = ({ setOpen }: any) => {
   }
 
   const onSubmit = async (values: any) => {
-    console.log('🚀 ~ onSubmit ~ values:', values);
     removeNullUndefinedAndFalsey(values);
 
     try {
@@ -57,7 +56,6 @@ const SignUpTeacherAndStudent = ({ setOpen }: any) => {
         values.image = imageUrl[0];
       }
       let res;
-      console.log('🚀 ~ onSubmit ~ values:', values);
 
       if (values?.role === USER_ROLE.STUDENT) {
         const { password, ...allValue } = values;
@@ -101,7 +99,6 @@ const SignUpTeacherAndStudent = ({ setOpen }: any) => {
           }
         } catch (err: any) {
           Error_model_hook(err?.data || err?.message);
-          console.log(err);
         }
         // router.push('/login');
       }
@@ -194,7 +191,7 @@ const SignUpTeacherAndStudent = ({ setOpen }: any) => {
                   rules={[{ required: true, message: 'Please select your role!' }]}
                 >
                   <Select placeholder="Select role">
-                    <Option value="teacher">Teacher</Option>
+                    <Option value="seller">Teacher</Option>
                     <Option value="student">Student</Option>
                   </Select>
                 </Form.Item>

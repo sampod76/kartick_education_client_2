@@ -19,7 +19,6 @@ const ServiceDetiles = ({ params }: any) => {
       skip: !Boolean(params?.id),
     },
   );
-  console.log(ratingData);
 
   if (isLoading || ratingLoading) {
     return <LoadingForDataFetch />;

@@ -57,7 +57,7 @@ export default function AssignmentSubmission() {
   });
 
   const categoryData: any = Category?.data;
-  // console.log("🚀 ~ QuizDashList ~ categoryData:", categoryData);
+
   //---------------------------------------------------------
 
   const [page, setPage] = useState<number>(1);
@@ -100,8 +100,6 @@ export default function AssignmentSubmission() {
   }
   const { data, isLoading } = useGetAllSubmitAssignmentQuery({ ...query });
 
-  // console.log(data);
-
   //@ts-ignore
   const QuizData = data?.data;
 
@@ -112,11 +110,8 @@ export default function AssignmentSubmission() {
     confirm_modal(`Are you sure you want to delete`).then(async (res) => {
       if (res.isConfirmed) {
         try {
-          // console.log(id);
-
           const res: any = null;
 
-          // console.log(res, "response for delete Quiz");
           if (res?.success == false) {
             // message.success("Admin Successfully Deleted!");
             // setOpen(false);
@@ -311,13 +306,12 @@ export default function AssignmentSubmission() {
     },
   ];
   const onPaginationChange = (page: number, pageSize: number) => {
-    //  //// console.log("Page:", page, "PageSize:", pageSize);
     setPage(page);
     setSize(pageSize);
   };
   const onTableChange = (pagination: any, filter: any, sorter: any) => {
     const { order, field } = sorter;
-    //// console.log(order, field);
+
     setSortBy(field as string);
     setSortOrder(order === 'ascend' ? 'asc' : 'desc');
   };

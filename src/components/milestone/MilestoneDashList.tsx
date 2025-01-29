@@ -1,6 +1,5 @@
 'use client';
 import ActionBar from '@/components/ui/ActionBar';
-import UMBreadCrumb from '@/components/ui/UMBreadCrumb';
 import UMTable from '@/components/ui/UMTable';
 import { useDebounced } from '@/redux/hooks';
 import { ReloadOutlined } from '@ant-design/icons';
@@ -9,14 +8,12 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 import UMModal from '@/components/ui/UMModal';
-import dayjs from 'dayjs';
 
 import { Error_model_hook, Success_model, confirm_modal } from '@/utils/modalHook';
 import Image from 'next/image';
 
 import { AllImage } from '@/assets/AllImge';
 import FilterCourse from '@/components/dashboard/Filter/FilterCourse';
-import HeadingUI from '@/components/ui/dashboardUI/HeadingUI';
 import {
   useDeleteMilestoneMutation,
   useGetAllMilestoneQuery,
@@ -25,7 +22,16 @@ import { useGetAllCategoryChildrenQuery } from '@/redux/api/categoryChildrenApi'
 import { useGlobalContext } from '../ContextApi/GlobalContextApi';
 import SelectCategoryChildren from '../Forms/GeneralField/SelectCategoryChildren';
 
-const MileStoneList = () => {
+const MileStoneList = ({
+  queryObject,
+}: {
+  queryObject?: {
+    course: string;
+    category?: string;
+    sortBy?: string;
+    setSortOrder?: string;
+  };
+}) => {
   const { userInfo } = useGlobalContext();
   //
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -41,9 +47,12 @@ const MileStoneList = () => {
     queryCategory['author'] = userInfo?.id;
   }
   //! for Category options selection
-  const { data: Category, isLoading: categoryLoading } = useGetAllCategoryChildrenQuery({
-    ...queryCategory,
-  });
+  const { data: Category, isLoading: categoryLoading } = useGetAllCategoryChildrenQuery(
+    {
+      ...queryCategory,
+    },
+    { skip: !!queryObject?.course },
+  );
   const categoryData: any = Category?.data;
   //----------------------------------------------------------------
 
@@ -53,8 +62,8 @@ const MileStoneList = () => {
 
   const [page, setPage] = useState<number>(1);
   const [size, setSize] = useState<number>(10);
-  const [sortBy, setSortBy] = useState<string>('');
-  const [sortOrder, setSortOrder] = useState<string>('');
+  const [sortBy, setSortBy] = useState<string>(queryObject?.sortBy || '');
+  const [sortOrder, setSortOrder] = useState<string>(queryObject?.setSortOrder || '');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [open, setOpen] = useState<boolean>(false);
   const [adminId, setAdminId] = useState<string>('');
@@ -66,8 +75,8 @@ const MileStoneList = () => {
   query['sortOrder'] = sortOrder;
   query['status'] = 'active';
   //
-  query['category'] = category?._id;
-  query['course'] = course?._id;
+  query['category'] = queryObject?.category || category?._id;
+  query['course'] = queryObject?.course || course?._id;
   //
   if (filterValue) {
     query['course'] = filterValue;
@@ -136,19 +145,22 @@ const MileStoneList = () => {
     {
       title: 'Name',
       dataIndex: 'title',
-      ellipsis: true,
-      sorter: true,
+      // ellipsis: true,
+      // sorter: true,
+      render: function (data: any) {
+        return <p className="line-clamp-2">{data}</p>;
+      },
     },
+    // {
+    //   title: 'Description',
+    //   dataIndex: 'short_description',
+    //   ellipsis: true,
+    // },
     {
-      title: 'Description',
-      dataIndex: 'short_description',
-      ellipsis: true,
-    },
-    {
-      title: 'Milestone Number',
+      title: 'S/N',
       dataIndex: 'milestone_number',
       ellipsis: true,
-      width: 100,
+      width: 120,
     },
     {
       title: 'course',
@@ -158,15 +170,15 @@ const MileStoneList = () => {
       //   return <>{data?.title}</>;
       // },
     },
-    {
-      title: 'Created at',
-      dataIndex: 'createdAt',
-      width: 150,
-      render: function (data: any) {
-        return data && dayjs(data).format('MMM D, YYYY hh:mm A');
-      },
-      sorter: true,
-    },
+    // {
+    //   title: 'Created at',
+    //   dataIndex: 'createdAt',
+    //   width: 150,
+    //   render: function (data: any) {
+    //     return data && dayjs(data).format('MMM D, YYYY hh:mm A');
+    //   },
+    //   sorter: true,
+    // },
     {
       title: 'Action',
       // fixed: "right",
@@ -186,6 +198,11 @@ const MileStoneList = () => {
                   <Menu.Item key="edit">
                     <Link href={`/${userInfo?.role}/milestone/edit/${record._id}`}>
                       Edit
+                    </Link>
+                  </Menu.Item>
+                  <Menu.Item key="Material">
+                    <Link href={`/${userInfo?.role}/milestone/material/${record._id}`}>
+                      Material
                     </Link>
                   </Menu.Item>
                   {/* <Menu.Item key="add_milestone">
@@ -264,46 +281,36 @@ const MileStoneList = () => {
         padding: '1rem',
       }}
     >
-      <UMBreadCrumb
-        items={[
-          {
-            label: `${userInfo?.role}`,
-            link: `/${userInfo?.role}`,
-          },
-          {
-            label: `Milestone`,
-            link: `/${userInfo?.role}/milestones`,
-          },
-        ]}
-      />
-      <HeadingUI>Milestone List</HeadingUI>
-      <ActionBar>
-        <div className="flex gap-2">
-          <Input
-            size="large"
-            placeholder="Search"
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{
-              width: '20%',
-            }}
-          />
-          <FilterCourse filterValue={filterValue} setFilterValue={setFilterValue} />
-        </div>
-        <div>
-          <Button type="default" style={{ marginRight: '5px' }} onClick={showDrawer}>
-            Filter
-          </Button>
-
-          <Link href={`/${userInfo?.role}/milestone/create`}>
-            <Button type="default">Create Milestone</Button>
-          </Link>
-          {(!!sortBy || !!sortOrder || !!searchTerm) && (
-            <Button style={{ margin: '0px 5px' }} type="default" onClick={resetFilters}>
-              <ReloadOutlined />
+      <h1>Milestone List</h1>
+      {!queryObject?.course && (
+        <ActionBar>
+          <div className="flex gap-2">
+            <Input
+              size="large"
+              placeholder="Search"
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{
+                width: '250px',
+              }}
+            />
+            <FilterCourse filterValue={filterValue} setFilterValue={setFilterValue} />
+          </div>
+          <div>
+            <Button type="default" style={{ marginRight: '5px' }} onClick={showDrawer}>
+              Filter
             </Button>
-          )}
-        </div>
-      </ActionBar>
+
+            <Link href={`/${userInfo?.role}/milestone/create`}>
+              <Button type="default">Create Milestone</Button>
+            </Link>
+            {(!!sortBy || !!sortOrder || !!searchTerm) && (
+              <Button style={{ margin: '0px 5px' }} type="default" onClick={resetFilters}>
+                <ReloadOutlined />
+              </Button>
+            )}
+          </div>
+        </ActionBar>
+      )}
       <UMTable
         loading={isLoading}
         columns={columns}

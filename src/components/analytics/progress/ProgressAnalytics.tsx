@@ -33,11 +33,10 @@ export default function ProgressAnalytics() {
   const { data: CategoryData, isLoading } = useGetAnalyticsSubmitAllQuizQuery(query, {
     skip: !Boolean(userInfo?.id),
   });
-  console.log('🚀 ~ ProgressAnalytics ~ CategoryData:', CategoryData);
+
   //! collapse section ////
   const [currentCollapse, setCurrentCollapse] = useState<string[]>([]);
   const handleChange = (key: any) => {
-    console.log(key, 'key');
     setCurrentCollapse(key);
   };
 

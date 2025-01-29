@@ -1,8 +1,4 @@
-import { AllImage } from '@/assets/AllImge';
-import { Col, Row } from 'antd';
-import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
 
 const HomeLinkSection = () => {
   return (
@@ -14,7 +10,7 @@ const HomeLinkSection = () => {
           </h2>
         </div>
 
-        <div className="space-y-6 md:space-y-10 md:mb-6   px-6">
+        <div className="space-y-6 md:space-y-10 md:mb-6 px-6">
           {/* first 2 */}
           <div className="space-y-6 md:space-y-0 md:flex justify-between  items-center gap-8 2xl:gap-28 h-full  ">
             <div
@@ -97,7 +93,7 @@ const HomeLinkSection = () => {
                   className="text-black whitespace-nowrap hover:text-white"
                   href={'/ibcast'}
                 >
-                  Iblossom Cast
+                  Iblossomlearn P.D Institute
                 </Link>
               </div>
             </div>

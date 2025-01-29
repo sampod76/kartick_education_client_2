@@ -57,8 +57,6 @@ export const studentApi = baseApi.injectEndpoints({
     }),
     updateStudent: build.mutation({
       query: ({ data, id }) => {
-        //// console.log(data, "student data", id);
-
         return {
           url: `${STUDENT_URL}/${id}`,
           method: 'PATCH',

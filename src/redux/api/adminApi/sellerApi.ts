@@ -1,6 +1,6 @@
 import { IMeta } from '@/types';
-import { baseApi } from '../baseApi';
 import { tagTypes } from '../../tag-types';
+import { baseApi } from '../baseApi';
 
 const ADMIN_URL = '/seller';
 
@@ -13,8 +13,8 @@ export const sellerApi = baseApi.injectEndpoints({
           url: '/users/create-seller',
           method: 'POST',
           data: data,
-          // contentType: "multipart/form-data",
-          contentType: 'application/json',
+          contentType: 'multipart/form-data',
+          // contentType: 'application/json',
         };
       },
       invalidatesTags: [tagTypes.seller],

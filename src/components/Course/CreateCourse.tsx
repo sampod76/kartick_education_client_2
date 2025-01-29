@@ -12,6 +12,7 @@ import {
   message,
   Row,
   Select,
+  Space,
   Spin,
   Typography,
   Upload,
@@ -26,6 +27,7 @@ import { useGetAllCourse_labelQuery } from '@/redux/api/adminApi/courseLevelApi'
 import { useGetSingleSellerQuery } from '@/redux/api/adminApi/sellerApi';
 import { useGetAllUsersQuery } from '@/redux/api/adminApi/usersApi';
 import { multipleFilesUploaderS3 } from '@/utils/handelFileUploderS3';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import dynamic from 'next/dynamic';
 import { useGlobalContext } from '../ContextApi/GlobalContextApi';
 import LoadingSkeleton from '../ui/Loading/LoadingSkeleton';
@@ -33,6 +35,11 @@ const TextEditorNotSetForm = dynamic(
   () => import('@/components/shared/TextEditor/TextEditorNotSetForm'),
   {
     ssr: false,
+    loading: () => (
+      <div className="flex items-center justify-center h-32">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-600"></div>
+      </div>
+    ),
   },
 );
 
@@ -82,7 +89,6 @@ const CreateCourse = ({ setOpen }: any) => {
   // });
   const [form] = Form.useForm();
   const onFinish = async (values: any) => {
-    console.log('🚀 ~ onFinish ~ values:', values);
     if (!values?.images?.length) {
       Error_model_hook('Please upload atleast one image');
       return;
@@ -248,33 +254,7 @@ const CreateCourse = ({ setOpen }: any) => {
                   </Form.Item>
                 </Col>
                 <Col xs={24} md={24} lg={3} style={{}}>
-                  <Form.Item
-                    label="Course Id"
-                    name="courseId"
-                    className="col-span-2"
-                    // initialValue={1} // Set as a number instead of a string
-                    // rules={[
-                    //   {
-                    //     required: true,
-                    //     message: 'Please enter the courseId',
-                    //   },
-                    //   {
-                    //     validator: (_, value) => {
-                    //       if (!value) {
-                    //         return Promise.reject(
-                    //           new Error('Please enter the lesson number'),
-                    //         );
-                    //       }
-                    //       if (!Number.isInteger(value) || value <= 0) {
-                    //         return Promise.reject(
-                    //           new Error('Please enter a positive integer'),
-                    //         );
-                    //       }
-                    //       return Promise.resolve();
-                    //     },
-                    //   },
-                    // ]}
-                  >
+                  <Form.Item label="Course Id" name="courseId" className="col-span-2">
                     <Input
                       className="w-full"
                       placeholder="Course Id"
@@ -528,12 +508,7 @@ const CreateCourse = ({ setOpen }: any) => {
                   formSubmitted={formSubmitted}
                   setFormSubmitted={setFormSubmitted}
                 /> */}
-                {/* <UploadImageNotForm
-                  setImageLoading={setImageLoading}
-                  setImages={setImages}
-                  multiple={false}
-                  isReset={isReset}
-                /> */}
+
                 <Form.Item
                   // label="Image"
                   name="images"
@@ -590,6 +565,75 @@ const CreateCourse = ({ setOpen }: any) => {
                   </Form.Item>
                 </div>
               </div>
+              <Form.List name="additional_courses">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name, ...restField }) => (
+                      <Space
+                        key={key}
+                        style={{
+                          display: 'grid',
+                          // flexDirection: "column", // Stack items vertically on smaller screens
+                          margin: '21px auto',
+                          width: '100%',
+                          gridTemplateColumns: 'repeat(1 ,1fr)',
+                          boxShadow:
+                            '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19)',
+                          padding: '1rem',
+                        }}
+                        align="center"
+                      >
+                        <Form.Item
+                          {...restField}
+                          label="Title"
+                          name={[name, 'title']}
+                          // rules={[{ required: true, message: 'Missing first name' }]}
+                        >
+                          <Input placeholder="title" />
+                        </Form.Item>
+                        <Form.Item
+                          {...restField}
+                          label="Link"
+                          name={[name, 'link']}
+                          rules={[{ required: true, message: 'Missing link' }]}
+                        >
+                          <Input placeholder="link" />
+                        </Form.Item>
+                        <div className="">
+                          <Form.Item
+                            {...restField}
+                            label="Platform"
+                            name={[name, 'platform']}
+                            style={{ width: '15rem' }}
+                          >
+                            <Input placeholder="Platform" />
+                          </Form.Item>
+                          <button
+                            onClick={() => remove(name)}
+                            className="space-x-2 text-red-600 flex gap-1 items-center"
+                          >
+                            <MinusCircleOutlined />
+                            Remove
+                          </button>
+                        </div>
+                      </Space>
+                    ))}
+                    <br />
+                    <div className="flex justify-center items-center  w-full">
+                      <Form.Item>
+                        <Button
+                          type="dashed"
+                          onClick={() => add()}
+                          block
+                          icon={<PlusOutlined />}
+                        >
+                          Add Additional course
+                        </Button>
+                      </Form.Item>
+                    </div>
+                  </>
+                )}
+              </Form.List>
             </Row>
           </div>
           {/* <div>
@@ -614,6 +658,7 @@ const CreateCourse = ({ setOpen }: any) => {
             <TextEditorNotSetForm
               textEditorValue={textEditorValue}
               setTextEditorValue={setTextEditorValue}
+              height={300}
             />
           </div>
           {/* <div>

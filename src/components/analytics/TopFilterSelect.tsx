@@ -44,7 +44,6 @@ export default function TopFilterSelect({
   }
 
   const onChangeTime = (time: string) => {
-    // console.log(time,'on time')
     setTime(time);
   };
   return (

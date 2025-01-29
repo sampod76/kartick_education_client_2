@@ -67,7 +67,7 @@ const UploadImage = ({
       // Get this url from response in real world.
 
       const upload = await multipleFilesUploaderS3([info.file.originFileObj]);
-      // console.log('🚀 ~ upload:112233', upload);
+      console.log('🚀 ~ upload:112233', upload);
 
       let imgUrl;
       const value = name.split(',');

@@ -22,13 +22,11 @@ export default function EditCourseLabel({ courseLabelId }: { courseLabelId: stri
       skip: !Boolean(courseLabelId),
     },
   );
-  // console.log("🚀 ~ EditCourseLabel ~ Course_labelData:", Course_labelData)
-  // const { data: Course_labelData = [] } = useGetAllCourse_labelQuery({});
+
   const [updateCourse_label, { isLoading: updateLoading, error }] =
     useUpdateCourse_labelMutation();
 
   const onSubmit = async (values: any) => {
-    console.log('🚀 ~ onSubmit ~ values:', values);
     removeNullUndefinedAndFalsey(values);
 
     try {

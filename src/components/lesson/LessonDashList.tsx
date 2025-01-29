@@ -27,7 +27,11 @@ import { useGlobalContext } from '../ContextApi/GlobalContextApi';
 import ModalComponent from '../Modal/ModalComponents';
 import AssignmentUpload from '../assignment/Assignment';
 
-export default function LessonDashList() {
+export default function LessonDashList({
+  queryObject,
+}: {
+  queryObject?: { module: string; sortOrder: string; sortBy: string };
+}) {
   const { userInfo, userInfoLoading } = useGlobalContext();
   //
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -67,14 +71,14 @@ export default function LessonDashList() {
 
   query['limit'] = size;
   query['page'] = page;
-  query['sortBy'] = sortBy;
-  query['sortOrder'] = sortOrder;
+  query['sortBy'] = queryObject?.sortBy || sortBy;
+  query['sortOrder'] = queryObject?.sortOrder || sortOrder;
   query['status'] = 'active';
   //
   query['category'] = category?._id;
   query['course'] = course?._id;
   query['milestone'] = milestone?._id;
-  query['module'] = module?._id;
+  query['module'] = queryObject?.module || module?._id;
   //
   if (filterValue) {
     query['module'] = filterValue;
@@ -313,13 +317,17 @@ export default function LessonDashList() {
               width: '250px',
             }}
           />
-          <FilterModule filterValue={filterValue} setFilterValue={setFilterValue} />
+          {!queryObject?.module && (
+            <FilterModule filterValue={filterValue} setFilterValue={setFilterValue} />
+          )}
         </div>
 
         <div>
-          <Button type="default" style={{ marginRight: '5px' }} onClick={showDrawer}>
-            Filter
-          </Button>
+          {!queryObject?.module && (
+            <Button type="default" style={{ marginRight: '5px' }} onClick={showDrawer}>
+              Filter
+            </Button>
+          )}
 
           <Link href={`/${userInfo?.role}/lesson/create`}>
             <Button type="default">Create Lesson</Button>

@@ -10,7 +10,6 @@ export const SingleQuizApi = baseApi.injectEndpoints({
     // get all academic departments
     getAllSingleQuiz: build.query({
       query: (arg: Record<string, any>) => {
-        //// console.log(arg,'aa')
         return {
           url: SINGLE_QUIZ_URL,
           method: 'GET',
@@ -28,8 +27,6 @@ export const SingleQuizApi = baseApi.injectEndpoints({
     // get single academic department
     getSingleOneQuiz: build.query({
       query: (id: string | string[] | undefined) => {
-        //// console.log(id);
-
         return {
           url: `${SINGLE_QUIZ_URL}/${id}`,
           method: 'GET',
@@ -53,8 +50,6 @@ export const SingleQuizApi = baseApi.injectEndpoints({
     // update ac department
     updateSingleQuiz: build.mutation({
       query: ({ data, id }) => {
-        //// console.log(data, "Quiz data");
-
         return {
           url: `${SINGLE_QUIZ_URL}/${id}`,
           method: 'PATCH',

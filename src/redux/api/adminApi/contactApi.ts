@@ -48,8 +48,6 @@ export const contactApi = baseApi.injectEndpoints({
     // create a new academic department
     addContact: build.mutation({
       query: (data) => {
-        //// console.log(data, "cacccc");
-
         return {
           url: Contact_URL,
           method: 'POST',
@@ -61,8 +59,6 @@ export const contactApi = baseApi.injectEndpoints({
     // create a new academic department
     addSupport: build.mutation({
       query: (data) => {
-        //// console.log(data, "cacccc");
-
         return {
           url: Contact_URL + '/support',
           method: 'POST',
@@ -74,7 +70,6 @@ export const contactApi = baseApi.injectEndpoints({
     // update ac department
     updateContact: build.mutation({
       query: ({ data, id }) => {
-        //// console.log(data, "contact data");
         return {
           url: `${Contact_URL}/${id}`,
           method: 'PATCH',

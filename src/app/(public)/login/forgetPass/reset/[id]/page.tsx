@@ -25,7 +25,7 @@ export default function ResetPasswordPage({ params }: { params: { id: string } }
     };
     try {
       const res = await resetPassword(passwordData).unwrap();
-      // console.log(res);
+
       if (res?.success == false) {
         Error_model_hook(res?.message);
       } else {
@@ -33,7 +33,6 @@ export default function ResetPasswordPage({ params }: { params: { id: string } }
         form.resetFields();
         router.replace('/');
       }
-      // console.log(res);
     } catch (error: any) {
       Error_model_hook(error?.message);
       console.log(error);

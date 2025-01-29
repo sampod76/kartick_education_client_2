@@ -123,8 +123,6 @@ export default function StudentActivePackageToCourse() {
   ];
 
   const navigatePackage = (getPackage: any[]) => {
-    console.log('🚀 ~ navigatePackage ~ getPackage:', getPackage);
-
     //@ts-ignore
     const data =
       getPackage?.map((single: any) => ({

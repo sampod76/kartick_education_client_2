@@ -1,13 +1,9 @@
 'use client';
-import React, { useState } from 'react';
 import { Tabs, TabsProps } from 'antd';
-import ModuleList from './ModuleList';
-import ReviewsPage from '../Course/CourseDetails/ReviewsPage';
-import Courses from '../Home/coureses/Courses';
+import { useState } from 'react';
 import LessonList from '../lesson/LessonList';
 // import GlossaryPage from "../"
-import { ContainerOutlined, SettingOutlined, ReadOutlined } from '@ant-design/icons';
-import Quizes from '../Quiz/Quizes';
+import { ContainerOutlined, ReadOutlined, SettingOutlined } from '@ant-design/icons';
 import GlossaryPage from '../Glossary/Glossary';
 import ResourcePage from '../Resource/ResourceViewForTabs';
 
@@ -76,7 +72,7 @@ export default function ModuleTab({
     },
   ];
   return (
-    <div className="mt-5">
+    <div className="mt-5 bg-slate-100">
       <Tabs
         defaultActiveKey={activeTabKey}
         tabBarStyle={{

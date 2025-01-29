@@ -15,6 +15,7 @@ import {
   message,
   Row,
   Select,
+  Space,
   Spin,
   Tooltip,
   Typography,
@@ -31,7 +32,7 @@ import { useGetSingleSellerQuery } from '@/redux/api/adminApi/sellerApi';
 import { useGetAllUsersQuery } from '@/redux/api/adminApi/usersApi';
 import { IFileAfterUpload } from '@/types/globalType';
 import { multipleFilesUploaderS3 } from '@/utils/handelFileUploderS3';
-import { MinusCircleOutlined } from '@ant-design/icons';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import dynamic from 'next/dynamic';
 import { FaBook } from 'react-icons/fa';
 import { useGlobalContext } from '../ContextApi/GlobalContextApi';
@@ -44,11 +45,16 @@ const TextEditorNotSetForm = dynamic(
   () => import('@/components/shared/TextEditor/TextEditorNotSetForm'),
   {
     ssr: false,
+    loading: () => (
+      <div className="flex items-center justify-center h-32">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-600"></div>
+      </div>
+    ),
   },
 );
 const UpdateCourse = ({ courseId }: { courseId: string }) => {
   const [allSyllabus, setSyllabusFiles] = useState<IFileAfterUpload[]>([]);
-  console.log('🚀 ~ EditLesson ~ allSyllabus:', allSyllabus);
+
   const { userInfo, userInfoLoading } = useGlobalContext();
   const id = userInfo?.roleBaseUserId;
   let disable = true;
@@ -227,6 +233,7 @@ const UpdateCourse = ({ courseId }: { courseId: string }) => {
     return <LoadingSkeleton />;
   }
   const fileData = { ...getCourse };
+
   delete fileData?.syllabus;
   return (
     <div className="rounded-lg bg-white p-2 shadow-lg md:p-5">
@@ -687,6 +694,75 @@ const UpdateCourse = ({ courseId }: { courseId: string }) => {
               </Form.Item>
             </div>
           )}
+          <Form.List name="additional_courses">
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map(({ key, name, ...restField }) => (
+                  <Space
+                    key={key}
+                    style={{
+                      display: 'grid',
+                      // flexDirection: "column", // Stack items vertically on smaller screens
+                      margin: '21px auto',
+                      width: '100%',
+                      gridTemplateColumns: 'repeat(1 ,1fr)',
+                      boxShadow:
+                        '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19)',
+                      padding: '1rem',
+                    }}
+                    align="center"
+                  >
+                    <Form.Item
+                      {...restField}
+                      label="Title"
+                      name={[name, 'title']}
+                      // rules={[{ required: true, message: 'Missing first name' }]}
+                    >
+                      <Input placeholder="title" />
+                    </Form.Item>
+                    <Form.Item
+                      {...restField}
+                      label="Link"
+                      name={[name, 'link']}
+                      rules={[{ required: true, message: 'Missing link' }]}
+                    >
+                      <Input placeholder="link" />
+                    </Form.Item>
+                    <div className="">
+                      <Form.Item
+                        {...restField}
+                        label="Platform"
+                        name={[name, 'platform']}
+                        style={{ width: '15rem' }}
+                      >
+                        <Input placeholder="Platform" />
+                      </Form.Item>
+                      <button
+                        onClick={() => remove(name)}
+                        className="space-x-2 text-red-600 flex gap-1 items-center"
+                      >
+                        <MinusCircleOutlined />
+                        Remove
+                      </button>
+                    </div>
+                  </Space>
+                ))}
+                <br />
+                <div className="flex justify-center items-center  w-full">
+                  <Form.Item>
+                    <Button
+                      type="dashed"
+                      onClick={() => add()}
+                      block
+                      icon={<PlusOutlined />}
+                    >
+                      Add Additional course
+                    </Button>
+                  </Form.Item>
+                </div>
+              </>
+            )}
+          </Form.List>
           <div style={{ borderTopWidth: '2px' }} /* className=" border-t-2" */>
             <p className="my-3 text-center text-xl font-bold">Description (optional)</p>
             <TextEditorNotSetForm

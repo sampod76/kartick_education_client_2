@@ -14,6 +14,11 @@ const TextEditorNotSetValue = dynamic(
   () => import('@/components/shared/TextEditor/TextEditorNotSetForm'),
   {
     ssr: false, // Disable server-side rendering for this component
+    loading: () => (
+      <div className="flex items-center justify-center h-32">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-600"></div>
+      </div>
+    ),
   },
 );
 export default function CreateAdvanceClass() {
@@ -29,7 +34,6 @@ export default function CreateAdvanceClass() {
 
   const [ClassData, setClassData] = useState<any>([]);
 
-  console.log(ClassData, 'ClassData');
   const [addShowAdvance, { isLoading: ShowAdvanceLoading }] =
     useAddShowAdvanceClassesMutation();
 
@@ -37,8 +41,6 @@ export default function CreateAdvanceClass() {
 
   // console.log(course, "course");
   const onFinish = async (values: any) => {
-    console.log('🚀 ~ file: CreateAdvanceClass.tsx:55 ~ onFinish ~ values:', values);
-
     const advancePlanData = {
       ...values,
       classes: ClassData,
@@ -59,8 +61,6 @@ export default function CreateAdvanceClass() {
         setTextEditorValue('');
         setIsReset(true);
       }
-
-      // console.log(res);
     } catch (error: any) {
       Error_model_hook(error?.message);
       console.log(error);

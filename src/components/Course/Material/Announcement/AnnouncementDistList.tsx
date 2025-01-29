@@ -7,7 +7,7 @@ import {
   useGetAllAnnouncementQuery,
 } from '@/redux/api/adminApi/announcementApi';
 import { confirm_modal, Error_model_hook, Success_model } from '@/utils/modalHook';
-import { Button, Pagination, PaginationProps } from 'antd';
+import { Button, Empty, Pagination, PaginationProps } from 'antd';
 import Link from 'next/link';
 import { useState } from 'react';
 import AnnouncementForm from './CreateAnnouncement';
@@ -72,52 +72,90 @@ export default function Announcement({ courseId }: { courseId: string }) {
         </div>
       )}
       <div className="mt-2">
-        {allData.map((item, index) => (
-          <div key={index}>
-            <div
-              className="mb-2 rounded-lg border border-blue-300 bg-blue-50 p-2 text-blue-800 dark:border-blue-800 dark:bg-gray-800 dark:text-blue-400"
-              role="alert"
-            >
-              <div className="flex justify-between">
-                <div className="flex items-center">
-                  <svg
-                    className="mr-2 h-4 w-4 flex-shrink-0"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                  </svg>
-                  <h3 className="text-lg font-medium">{item?.title}</h3>
-                </div>
-                {(userInfo?.role === 'admin' || userInfo?.role === 'seller') && (
-                  <div className="flex items-center gap-2">
-                    <ModalComponent
-                      button={
-                        <Button color="default" variant="filled">
-                          Edit
-                        </Button>
-                      }
+        {allData.map((item, index) => {
+          let viewLink = false;
+          if (userInfo?.role === 'admin' || userInfo?.role === 'seller') {
+            viewLink = true;
+          } else if (item?.startDate && new Date(item.startDate) <= new Date()) {
+            viewLink = true;
+          }
+          return (
+            <div key={index}>
+              <div
+                className="mb-2 rounded-lg border border-blue-300 bg-blue-50 p-2 text-blue-800 dark:border-blue-800 dark:bg-gray-800 dark:text-blue-400"
+                role="alert"
+              >
+                <div className="flex justify-between">
+                  <div className="flex items-center">
+                    <svg
+                      className="mr-2 h-4 w-4 flex-shrink-0"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
                     >
-                      <AnnouncementForm initialValues={item} courseId={courseId} />
-                    </ModalComponent>
-                    <Button
-                      loading={dLoading}
-                      color="danger"
-                      variant="filled"
-                      onClick={() => handleDelete(item._id)}
-                    >
-                      Delete
-                    </Button>
+                      <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                    </svg>
+                    <h3 className="text-lg font-medium">{item?.title}</h3>
                   </div>
-                )}
-              </div>
-              <div className="mb-4 mt-2 line-clamp-3 text-sm">{item?.description}</div>
-              <div className="flex">
-                {item?.startDate && new Date(item.startDate) <= new Date() ? (
-                  <div>
-                    <Link target="_blank" href={item?.zoho?.link || ''}>
-                      <button className="mr-2 inline-flex items-center rounded-lg bg-blue-800 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-200">
+                  {(userInfo?.role === 'admin' || userInfo?.role === 'seller') && (
+                    <div className="flex items-center gap-2">
+                      <ModalComponent
+                        button={
+                          <Button color="default" variant="filled">
+                            Edit
+                          </Button>
+                        }
+                      >
+                        <AnnouncementForm initialValues={item} courseId={courseId} />
+                      </ModalComponent>
+                      <Button
+                        loading={dLoading}
+                        color="danger"
+                        variant="filled"
+                        onClick={() => handleDelete(item._id)}
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  )}
+                </div>
+                <div className="mb-4 mt-2 line-clamp-3 text-sm">{item?.description}</div>
+                <div className="flex">
+                  {viewLink ? (
+                    <div>
+                      <Link target="_blank" href={item?.zoho?.link || ''}>
+                        <button className="mr-2 inline-flex items-center rounded-lg bg-blue-800 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-200">
+                          <svg
+                            className="mr-2 h-3 w-3"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor"
+                            viewBox="0 0 20 14"
+                          >
+                            <path d="M10 0C4.612 0 0 5.336 0 7c0 1.742 3.546 7 10 7 6.454 0 10-5.258 10-7 0-1.664-4.612-7-10-7Zm0 10a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />
+                          </svg>
+                          Join Class
+                        </button>
+                      </Link>
+                      <div className="flex justify-start gap-2 text-black">
+                        <p className="text-green-400">
+                          Start:{' '}
+                          {item?.startDate &&
+                            DateFormatByDayJs(item?.startDate, 'DD MMMM YYYY hh:mm')}
+                        </p>
+
+                        <p className="text-red-400">
+                          End:{' '}
+                          {item?.endDate &&
+                            DateFormatByDayJs(item?.endDate, 'DD MMMM YYYY hh:mm')}
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-start gap-2">
+                      <Button
+                        disabled
+                        className="mr-2 inline-flex items-center rounded-lg bg-blue-800 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-200"
+                      >
                         <svg
                           className="mr-2 h-3 w-3"
                           xmlns="http://www.w3.org/2000/svg"
@@ -126,58 +164,28 @@ export default function Announcement({ courseId }: { courseId: string }) {
                         >
                           <path d="M10 0C4.612 0 0 5.336 0 7c0 1.742 3.546 7 10 7 6.454 0 10-5.258 10-7 0-1.664-4.612-7-10-7Zm0 10a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />
                         </svg>
-                        Join Class
-                      </button>
-                    </Link>
-                    <div className="flex justify-start gap-2 text-black">
-                      <p className="text-green-400">
-                        Start:{' '}
-                        {item?.startDate &&
-                          DateFormatByDayJs(item?.startDate, 'DD MMMM YYYY hh:mm')}
-                      </p>
+                        Join Class{' '}
+                      </Button>
+                      <div className="flex justify-start gap-2 text-black">
+                        <p className="text-green-400">
+                          Start:{' '}
+                          {item?.startDate &&
+                            DateFormatByDayJs(item?.startDate, 'DD MMMM YYYY hh:mm')}
+                        </p>
 
-                      <p className="text-red-400">
-                        End:{' '}
-                        {item?.endDate &&
-                          DateFormatByDayJs(item?.endDate, 'DD MMMM YYYY hh:mm')}
-                      </p>
+                        <p className="text-red-400">
+                          End:{' '}
+                          {item?.endDate &&
+                            DateFormatByDayJs(item?.endDate, 'DD MMMM YYYY hh:mm')}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                ) : (
-                  <div className="flex items-center justify-start gap-2">
-                    <Button
-                      disabled
-                      className="mr-2 inline-flex items-center rounded-lg bg-blue-800 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-200"
-                    >
-                      <svg
-                        className="mr-2 h-3 w-3"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor"
-                        viewBox="0 0 20 14"
-                      >
-                        <path d="M10 0C4.612 0 0 5.336 0 7c0 1.742 3.546 7 10 7 6.454 0 10-5.258 10-7 0-1.664-4.612-7-10-7Zm0 10a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />
-                      </svg>
-                      Join Class{' '}
-                    </Button>
-                    <div className="flex justify-start gap-2 text-black">
-                      <p className="text-green-400">
-                        Start:{' '}
-                        {item?.startDate &&
-                          DateFormatByDayJs(item?.startDate, 'DD MMMM YYYY hh:mm')}
-                      </p>
-
-                      <p className="text-red-400">
-                        End:{' '}
-                        {item?.endDate &&
-                          DateFormatByDayJs(item?.endDate, 'DD MMMM YYYY hh:mm')}
-                      </p>
-                    </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
 
         {/* <div
           className="mb-4 rounded-lg border border-red-300 bg-red-50 p-4 text-red-800 dark:border-red-800 dark:bg-gray-800 dark:text-red-400"
@@ -217,6 +225,7 @@ export default function Announcement({ courseId }: { courseId: string }) {
           </div>
         </div> */}
       </div>
+      {!allData.length && <Empty />}
       <div className="mt-4">
         <Pagination
           showSizeChanger

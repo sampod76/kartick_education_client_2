@@ -25,7 +25,7 @@ import type { MenuProps } from 'antd';
 import Link from 'next/link';
 import { CiLogin } from 'react-icons/ci';
 import { GiJetPack } from 'react-icons/gi';
-import { MdAssignment } from 'react-icons/md';
+import { MdAssignment, MdMarkEmailRead } from 'react-icons/md';
 import { PiPackageDuotone } from 'react-icons/pi';
 import { USER_ROLE } from './role';
 export const dashboardItems = (role: string, setCollapsed?: any) => {
@@ -459,6 +459,53 @@ export const dashboardItems = (role: string, setCollapsed?: any) => {
             </Link>
           ),
           key: `/${role}/package`,
+        },
+      ],
+    },
+    {
+      label: 'FAQ',
+      key: 'FAQ-Package',
+      icon: <GiJetPack />,
+      children: [
+        {
+          label: (
+            <Link
+              onClick={() => (setCollapsed ? setCollapsed(false) : null)}
+              href={`/${role}/faq/create`}
+            >
+              Create FAQ
+            </Link>
+          ),
+          key: `/${role}/faq/create`,
+        },
+        {
+          label: (
+            <Link
+              onClick={() => (setCollapsed ? setCollapsed(false) : null)}
+              href={`/${role}/faq`}
+            >
+              FAQ List
+            </Link>
+          ),
+          key: `/${role}/faq`,
+        },
+      ],
+    },
+    {
+      label: 'Email Marketing',
+      key: 'Email-Marketing',
+      icon: <MdMarkEmailRead />,
+      children: [
+        {
+          label: (
+            <Link
+              onClick={() => (setCollapsed ? setCollapsed(false) : null)}
+              href={`/${role}/email-marketing/email-list`}
+            >
+              Email list
+            </Link>
+          ),
+          key: `/${role}/email/list`,
         },
       ],
     },

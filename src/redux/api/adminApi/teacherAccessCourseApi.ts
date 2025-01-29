@@ -26,7 +26,6 @@ export const teacherAccessCourseApi = baseApi.injectEndpoints({
     // get single academic department
     getSingleTeacherAccessCoursey: build.query({
       query: (id: string | string[] | undefined) => {
-        //// console.log(id);
         return {
           url: `${URL}/${id}`,
           method: 'GET',
@@ -38,8 +37,6 @@ export const teacherAccessCourseApi = baseApi.injectEndpoints({
     // create a new academic department
     addTeacherAccessCoursey: build.mutation({
       query: (data) => {
-        //// console.log(data, "cacccc");
-
         return {
           url: URL,
           method: 'POST',
@@ -51,7 +48,6 @@ export const teacherAccessCourseApi = baseApi.injectEndpoints({
     // update ac department
     updateTeacherAccessCoursey: build.mutation({
       query: ({ data, id }) => {
-        //// console.log(data, "TeacherAccessCoursey data");
         return {
           url: `${URL}/${id}`,
           method: 'PATCH',

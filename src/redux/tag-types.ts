@@ -1,5 +1,8 @@
 export enum tagTypes {
   student = 'student',
+  EmailMarketing = 'EmailMarketing',
+  FileList = 'FileList',
+  Faq = 'Faq',
   FriendShip = 'FriendShip',
   announcement = 'announcement',
   TeacherAccessCoursey = 'TeacherAccessCoursey',
@@ -43,6 +46,9 @@ export enum tagTypes {
 
 export const tagTypesList = [
   tagTypes.ChatMessage,
+  tagTypes.EmailMarketing,
+  tagTypes.FileList,
+  tagTypes.Faq,
   tagTypes.FriendShip,
   tagTypes.announcement,
   tagTypes.deleteAssignment,

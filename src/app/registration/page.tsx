@@ -58,7 +58,7 @@ const Registration = () => {
           email: values?.email,
           password: values?.password,
         }).unwrap();
-        console.log(res);
+
         if (res?.accessToken) {
           router.push('/');
           message.success('User logged in successfully!');
@@ -77,7 +77,6 @@ const Registration = () => {
   //   return message.loading("Loading...");
   // }
   const selectDate: DatePickerProps['onChange'] = (date, dateString) => {
-    // console.log(date, dateString);
     setOtherData((c: any) => ({ ...c, dateOfBirth: dateString }));
   };
   // Function to disable future dates

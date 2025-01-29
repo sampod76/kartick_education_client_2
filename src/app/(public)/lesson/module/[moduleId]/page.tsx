@@ -9,7 +9,7 @@ import Link from 'next/link';
 export default function LessonPage({ params }: { params: { moduleId: string } }) {
   const moduleId = params.moduleId;
   const { data: moduleData, isLoading } = useGetSingleModuleQuery(moduleId);
-  // console.log('🚀 ~ moduleData:', moduleData);
+
   const milestoneId = moduleData?.milestone?._id;
 
   if (isLoading) {
@@ -107,18 +107,6 @@ export default function LessonPage({ params }: { params: { moduleId: string } })
 
             {/* main */}
             <div className="w-full lg:max-w-[70%]">
-              {/* //! top user sections */}
-              {/* <div className="flex flex-col justify-center items-center mb-5">
-              <Image
-                src={AllImage.profileAvater || ""}
-                width={300}
-                height={300}
-                className="w-[7rem]  h-[7rem] rounded-full"
-                alt=""
-              />
-              <h3 className="text-[#AAA4A4] font-semibold"> David</h3>
-            </div> */}
-              {/* <ModuleTop moduleData={moduleData} /> */}
               <ModuleTab moduleId={moduleId} moduleData={moduleData} />
             </div>
           </div>

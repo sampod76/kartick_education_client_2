@@ -21,11 +21,10 @@ export interface IDecodedInfo {
 
 export const getUserInfo = (): IDecodedInfo | { e: '' } => {
   const authToken = getFromLocalStorage(authKey);
-  // console.log(authToken)
 
   if (authToken) {
     const decodedData = decodedToken(authToken) as IDecodedInfo;
-    // console.log(decodedData)
+
     return decodedData;
   } else {
     return { e: '' };

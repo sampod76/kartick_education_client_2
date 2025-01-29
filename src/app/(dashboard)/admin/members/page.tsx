@@ -13,7 +13,7 @@ import { Button, Dropdown, Input, Select, Space, TableProps, Tooltip } from 'ant
 import { useState } from 'react';
 
 import ModalComponent from '@/components/Modal/ModalComponents';
-import MemberModal from '@/components/members/MemberModal';
+import MemberModal from '@/components/PageBuilder/PageBuilderCreateForm';
 import ActionBar from '@/components/ui/ActionBar';
 import CustomImageTag from '@/components/ui/CustomTag/CustomImageTag';
 import UMTable from '@/components/ui/UMTable';

@@ -1,18 +1,10 @@
 /* eslint-disable react/no-unescaped-entities */
 'use client';
-import React from 'react';
-import LinkGroup from './LinkGroup';
-import NavLink from './NavLink';
-import Image from 'next/image';
-import { AllImage } from '@/assets/AllImge';
-import Logo from '../shared/Logo';
+import { Form, message } from 'antd';
 import Link from 'next/link';
-import { Button, Form, Input, message } from 'antd';
-import { CiLinkedin } from 'react-icons/ci';
-import { CiFacebook } from 'react-icons/ci';
-import { AiFillTwitterCircle } from 'react-icons/ai';
-import { IoLogoInstagram } from 'react-icons/io';
-import PDFViewer from '../ui/PdfViewer';
+import ModalComponent from '../Modal/ModalComponents';
+import Logo from '../shared/Logo';
+import EmailCollect from '../widgets/emailCollect';
 const Footer = () => {
   const footerNavs = [
     {
@@ -20,11 +12,11 @@ const Footer = () => {
       items: [
         {
           // href: '/',
-          name: 'Partners',
+          name: 'F&Q',
         },
         {
           // href: '/',
-          name: 'Blog',
+          name: 'Partners',
         },
         {
           // href: '/',
@@ -129,18 +121,24 @@ const Footer = () => {
           <div>
             <div className="py-4">
               <h2 className="text-lg font-bold">Newsletter</h2>
-              <Form onFinish={OnSubmit} form={form}>
-                <div className="flex max-w-sm items-center rounded-md border p-1">
-                  <input
-                    type="email"
-                    placeholder="Enter your email"
-                    className="w-full p-2.5 outline-none"
-                  />
+              <ModalComponent
+                button={
                   <button className="rounded-md bg-[#2a63ff] p-2.5 text-white shadow-md outline-none focus:shadow-none sm:px-5">
                     Subscribe
                   </button>
+                }
+                width={500}
+              >
+                <div
+                  data-aos="fade-left"
+                  className="grid-cols-1 text-center bg-[#5373fe] rounded-lg p-2"
+                >
+                  <h2 className="text-3xl font-bold my-6 text-white">
+                    Submit Your Email
+                  </h2>
+                  <EmailCollect />
                 </div>
-              </Form>
+              </ModalComponent>
             </div>
             <div className="flex justify-between">
               <div>© Ibossomlearn All Rights Reserved</div>

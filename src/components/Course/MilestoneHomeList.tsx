@@ -24,6 +24,7 @@ const MilestoneHomeList = ({ courseId }: { courseId: string }) => {
 
   const query: Record<string, any> = {};
   query['limit'] = 999999;
+  query['sortBy'] = 'milestone_number';
   query['sortOrder'] = 'asc';
   query['status'] = 'active';
   query['isDelete'] = ENUM_YN.NO;
@@ -64,7 +65,7 @@ const MilestoneHomeList = ({ courseId }: { courseId: string }) => {
                   button={
                     <div className="flex items-center justify-center">
                       <p className="flex cursor-pointer items-center gap-2 rounded-lg px-2 py-1 text-base text-blue-400">
-                        <FaBook /> (See Syllabus)
+                        <FaBook /> (Scope and Sequence)
                       </p>
                     </div>
                   }

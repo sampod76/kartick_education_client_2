@@ -19,12 +19,11 @@ export default function AddSellerInCourse({ sellerId }: { sellerId: string }) {
   const { data, isLoading } = useGetAllCategoryQuery({});
   const { data: findSeller, isLoading: sellerLoading } =
     useGetSingleSellerQuery(sellerId);
-  //   console.log('🚀 ~ AddSellerInCourse ~ findSeller:', findSeller);
+
   const [addCateroyAdmin, { isLoading: aloading }] =
     useAddCatagoriesByAdminToSellerMutation();
-  //   console.log('🚀 ~ AddSellerInCourse ~ data:', data);
+
   const [checkedList, setCheckedList] = useState<any>();
-  //   console.log('🚀 ~ AddSellerInCourse ~ checkedList:', checkedList);
 
   useEffect(() => {
     if (findSeller?.accessCategories?.length) {
@@ -59,12 +58,12 @@ export default function AddSellerInCourse({ sellerId }: { sellerId: string }) {
       const accessCategories = checkedList?.map((checked: any) => ({
         category: checked,
       }));
-      console.log('🚀 ~ accessCategories ~ accessCategories:', accessCategories);
+
       const res = await addCateroyAdmin({
         id: sellerId,
         data: { accessCategories },
       }).unwrap();
-      console.log('🚀 ~ submit ~ res:', res);
+
       Success_model('Successfully added');
     } catch (error: any) {
       Error_model_hook(error?.message);

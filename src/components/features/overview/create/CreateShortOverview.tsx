@@ -15,6 +15,11 @@ const TextEditorNotSetValue = dynamic(
   () => import('@/components/shared/TextEditor/TextEditorNotSetForm'),
   {
     ssr: false, // Disable server-side rendering for this component
+    loading: () => (
+      <div className="flex items-center justify-center h-32">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-600"></div>
+      </div>
+    ),
   },
 );
 const LabelUi = dynamic(() => import('@/components/ui/dashboardUI/LabelUi'), {
@@ -24,7 +29,7 @@ export default function CreateShortOverview() {
   const [form] = Form.useForm();
 
   const [textEditorValue, setTextEditorValue] = useState('');
-  // console.log(uuid,"uuiduuid")
+
   const { data, isLoading, error } = useGetAllCategoryQuery({
     status: ENUM_STATUS.ACTIVE,
     isDelete: ENUM_YN.NO,
@@ -38,11 +43,8 @@ export default function CreateShortOverview() {
 
   const [addShortOverView, { isLoading: shortOverviewLoading }] =
     useAddShortOverViewMutation();
-  // console.log("🚀 ~ CreateSkillsPlan ~ AddPackageLoading:", AddPackageLoading)
 
   const onFinish = async (values: any) => {
-    // console.log("Received values", values);
-
     const shortOverView = {
       title: values.title,
 
@@ -51,20 +53,18 @@ export default function CreateShortOverview() {
 
       cards: values?.cards,
     };
-    console.log('🚀 ~ onFinish ~ shortOverView:', shortOverView);
+
     // return
 
     try {
       const res = await addShortOverView(shortOverView).unwrap();
-      console.log(res);
+
       if (res?.success == false) {
         Error_model_hook(res?.message);
       } else {
         Success_model('Successfully added Short Overview');
         form.resetFields();
       }
-
-      // console.log(res);
     } catch (error: any) {
       Error_model_hook(error?.message);
       console.log(error);
@@ -104,20 +104,7 @@ export default function CreateShortOverview() {
           <LabelUi>Add cards</LabelUi>
           <Form.List name="cards">
             {(fields, { add, remove }) => {
-              // console.log(fields,'fieldsfieldsfieldsfields') ;
-
-              // const handleChange = (value: any) => {
-              //   console.log(value, 'value');
-              //   const updatedOptions = options?.filter(
-              //     (item) => item?.value !== value
-              //   );
-              //   // console.log(updatedOptions)
-              //   options = updatedOptions;
-              //   // console.log(options)
-              // };
-
               const handleRemove = (value: any) => {
-                console.log(value, 'handleRemove');
                 remove(value);
               };
 

@@ -25,7 +25,6 @@ const DonationForm: React.FC = () => {
   const [form] = Form.useForm();
   const router = useRouter();
   const onFinish = async (values: DonationFormValues) => {
-    console.log('Form Data:', values);
     try {
       const donating = await addDonation({
         ...values,
@@ -33,7 +32,7 @@ const DonationForm: React.FC = () => {
         author: userInfo?.id,
         role: userInfo?.role,
       }).unwrap();
-      console.log(donating, 'donating');
+
       if (donating?._id) {
         const res = await requestPaymentLink({
           donationId: donating?._id,

@@ -16,7 +16,7 @@ export default function ForgetPassword() {
     const passwordData = {
       email: values.email,
     };
-    console.log('🚀 ~ onFinish ~ passwordData:', passwordData);
+    // console.log('🚀 ~ onFinish ~ passwordData:', passwordData);
 
     try {
       const res = await forgetPassword(passwordData).unwrap();

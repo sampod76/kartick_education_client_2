@@ -1,8 +1,11 @@
-import React from 'react';
+'use client';
 import podcastStart from '@/assets/podcast/podcast_star.png';
 import podcast from '@/assets/podcast/sidePerson.png';
 import podcastSide from '@/assets/podcast/sidePodCastOnlye.png';
 import Image from 'next/image';
+import Link from 'next/link';
+import AudioPlayer from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
 export default function PodCastPage() {
   return (
     <div className="container mx-auto mt-12 ">
@@ -14,7 +17,46 @@ export default function PodCastPage() {
           className="h-[18rem] w-[20rem] text-center mx-auto"
           alt="podast"
         />
-
+        <div data-aos="zoom-out" className="bodyText lg:pb-2">
+          Download the Free Audio Tool:
+          <br />
+          <Link
+            href={'http://audacityteam.org/download'}
+            className="cursor-pointer text-center text-[16px] text-blue-500"
+          >
+            (Download audacity)
+          </Link>
+          <div className="mx-auto mt-2 flex max-w-[400px] justify-center">
+            {/* <audio crossOrigin="anonymous" controls>
+                <source
+                  src={
+                    getBaseUrl() + '/paly-audio/' + 'audio-5456646456454.mp3'
+                  }
+                  type="audio/ogg"
+                />
+              </audio> */}
+            <AudioPlayer
+              autoPlay={false}
+              // src={getBaseUrl() + '/paly-audio/' + 'audio-5456646456454.mp3'}
+              src={
+                'https://iblossomlearn.s3.us-east-2.amazonaws.com/audios/audio-5456646456454.mp3'
+              }
+              // onPlay={e => console.log("onPlay")}
+              crossOrigin="anonymous"
+              preload="auto"
+              // onLoadedMetaData={}
+              // other props here
+            />
+          </div>
+          <br />{' '}
+          <span className="">
+            Audacity. Follow the link below. For creating podcasts, a great free audio
+            tool is Audacity. It is an open-source audio recording and editing software
+            that is perfect for beginners and experienced users alike. You can download it
+            for free from audacityteam.org. Audacity offers a range of features that make
+            it easy to record, edit, and produce high-quality audio for podcasts.
+          </span>
+        </div>
         <div className="block lg:flex gap-7 p-5">
           <div className="">
             <h2 className="text-xl leading-10 font-semibold">

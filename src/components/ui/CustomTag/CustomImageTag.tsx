@@ -18,7 +18,7 @@ export default function CustomImageTag({
   width,
   height,
   alt = 'Image',
-  preview,
+  preview = true,
   className,
   ...props
 }: ImageTagProps) {
@@ -27,7 +27,7 @@ export default function CustomImageTag({
   const imageSrc = fileObjectToLink(src);
 
   return (
-    <div className="">
+    <div className="z-50">
       <Image
         src={imageSrc}
         width={width || 750}
@@ -42,7 +42,7 @@ export default function CustomImageTag({
 
       <div
         onClick={() => setOpenModal(false)}
-        className={`fixed z-[100] flex items-center justify-center ${
+        className={`fixed z-50 flex items-center justify-center ${
           openModal ? 'opacity-1 visible' : 'invisible opacity-0'
         } inset-0 h-full w-full bg-black/70 duration-100`}
       >
@@ -115,7 +115,7 @@ export default function CustomImageTag({
                 navigator.clipboard.writeText(imageSrc);
                 message.success('Link Copy Success');
               }}
-              className="p-3 text-xl text-[#fff] duration-200 hover:opacity-60"
+              className="p-3 text-xl text-[#fff] duration-200 hover:opacity-60 cursor-pointer"
             >
               <svg
                 className="mr-1 inline-block w-5"
