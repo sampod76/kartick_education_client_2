@@ -60,7 +60,8 @@ jobs:
         run: cd /home/sampod/actions-runner-client/_work/kartick_education_client_2/kartick_education_client_2
       - name: Install Dependencies
         run: yarn install
-
+      - name: Unzip environment
+        run: 7z x .env.local.zip -p"${{ secrets.ZIP_PASS }}" -o./ -y
       - name: Build the Project
         run: yarn build
       - name: Check if education-client is running and restart or start accordingly
