@@ -1,2 +1,2 @@
-bash scripts/zip_env.sh
+# bash scripts/zip_env.sh
 npm run format:fix

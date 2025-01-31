@@ -47,7 +47,7 @@ jobs:
           name: build-output
           path: . # Adjust if build output is in a specific folder
   deploy:
-    # needs: build
+    needs: build
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
@@ -60,8 +60,8 @@ jobs:
         run: cd /home/sampod/actions-runner-client/_work/kartick_education_client_2/kartick_education_client_2
       - name: Install Dependencies
         run: yarn install
-      - name: Unzip environment
-        run: 7z x .env.local.zip -p"${{ secrets.ZIP_PASS }}" -o./ -y
+      # - name: Unzip environment
+      #   run: 7z x .env.local.zip -p"${{ secrets.ZIP_PASS }}" -o./ -y
       - name: Build the Project
         run: yarn build
       - name: Check if education-client is running and restart or start accordingly
