@@ -1,14 +1,28 @@
 /* eslint-disable react/no-unescaped-entities */
+'use client';
+import LoadingSkeleton from '@/components/ui/Loading/LoadingSkeleton';
 import SupportDonateHelpDesk from '@/components/widgets/SupportDonate';
+import { useGetAllPageBuilderQuery } from '@/redux/api/adminApi/pageBuilderApi';
+import fileObjectToLink from '@/utils/fileObjectToLink';
+import { Empty } from 'antd';
 import Image from 'next/image';
 
 const AboutUspage = () => {
+  const { data, isLoading } = useGetAllPageBuilderQuery({ pageType: 'aboutUs' });
+  if (isLoading) {
+    return <LoadingSkeleton />;
+  }
+  const value = data?.data?.length ? data?.data[0] : null;
+  if (!value) {
+    return <Empty></Empty>;
+  }
   return (
     <div className="">
       <div className="">
         <div className="relative">
           <Image
-            src={'/banner/about-us.png'}
+            // src={'/banner/about-us.png'}
+            src={fileObjectToLink(value.bannerImage)}
             width={1900}
             height={750}
             alt=""
@@ -19,71 +33,66 @@ const AboutUspage = () => {
               //   data-aos="zoom-out"
               className="absolute left-1/2 top-1/2 mx-auto w-fit -translate-x-1/2 -translate-y-1/2 transform whitespace-nowrap rounded-[35px] bg-white bg-opacity-50 px-5 py-3 text-center text-xl text-black lg:right-1/2 lg:px-16 lg:text-2xl"
             >
-              About Us
+              {/* About Us */}
+              {value.heading}
             </h1>
           </div>
         </div>
         <div className="h-10 bg-primary"></div>
         <div className="mb-20 flex flex-col items-center justify-center space-y-5 px-5 py-7 text-center lg:space-y-12 lg:px-28">
           <h1 data-aos="zoom-in" className="mt-2 text-3xl font-bold lg:mt-6 lg:text-4xl">
-            About Us
+            {/* About Us */}
+            {value.heading}
           </h1>
-          <p data-aos="zoom-in" className="bodyText lg:pb-6">
-            The story of iBlossomLearn began during the pandemic, when educational gaps
-            widen and traditional learning methods were challenged. Recognizing the need
-            for a flexible and supportive learning environment, Sabah Kunle, with 17 years
-            of classroom experience and expertise in curriculum development, founded
-            iBlossomLearn. necessary for lifelong success.
-          </p>
+          {value?.firstParagraphs?.map((value, i) => {
+            return (
+              <p
+                key={i}
+                data-aos={i % 2 == 0 ? 'zoom-in' : 'zoom-out'}
+                className="bodyText lg:pb-6"
+              >
+                {value?.h1}
+              </p>
+            );
+          })}
         </div>
         <div
           // data-aos="zoom-out"
           className="bg-black p-5 py-10 text-start text-white lg:py-24"
         >
           <ul className="list-outside list-disc space-y-5 px-5 text-lg lg:px-28 2xl:text-xl">
-            <h1 data-aos="zoom-in">
-              Her vision was to create a platform that catered to the diverse needs of
-              homeschooling families through six key components:
-            </h1>
-            <li data-aos="zoom-out" className="">
-              <strong>iBlossomLearn Private School:</strong>A top-tier institution
-              offering a holistic K-12 curriculum tailored to each student's needs.
-            </li>
-            <li data-aos="zoom-in">
-              <strong>Flex Accredited K12:</strong> Through strategic partnerships, Sabah
-              made it possible for iBlossomLearn to offer an accredited K-12 program. This
-              allows students to earn recognized diplomas while learning at their own
-              pace.
-            </li>
-            <li data-aos="zoom-out">
-              <strong>iBlossomLearn Language Institute:</strong> Offering over 20
-              languages, this institute immerses students in both language and culture,
-              guided by expert professors.
-            </li>
-            <li data-aos="zoom-in">
-              <strong>Iblossomlearn P.D Institute:</strong> A unique platform where
-              students access reading materials through podcasts and create their own
-              audio stories, fostering creativity and enhancing communication skills.
-            </li>
-            <li data-aos="zoom-out">
-              <strong>SEL for Homeschooling Families:</strong>A Social and Emotional
-              Learning (SEL) curriculum designed specifically to support homeschooling
-              families, helping students develop essential life skills alongside academic
-              achievements.
-            </li>
-            <li data-aos="zoom-in">
-              <strong>i-TalkEasi Unlimited:</strong>A program that enhances English
-              fluency through structured and open-ended conversations with native
-              speakers, building confidence and communication skills. This platform is
-              especially beneficial to Adult English Language Learners
-            </li>
+            <h1 data-aos="zoom-in">{value.firstItemTitle}</h1>
+            {value?.firstItems?.map((value, i) => {
+              let strongText = '';
+              let remaning = '';
+              const valueSprite = value?.h1?.split(':');
+
+              if (valueSprite?.length > 0) {
+                strongText = valueSprite[0];
+                remaning = valueSprite.splice(1).join(':');
+              }
+              return (
+                <li key={i} data-aos={i % 2 == 0 ? 'zoom-in' : 'zoom-out'} className="">
+                  <strong>{strongText} : </strong>
+                  <strong>{remaning}</strong>
+                </li>
+              );
+            })}
           </ul>
         </div>
         <div data-aos="zoom-out" className="my-10 px-5 lg:my-16 lg:px-28">
           <p className="bodyText text-center">
-            With these innovative programs, iBlossomLearn provides a nurturing, adaptable
-            learning environment that addresses the academic, social, and emotional needs
-            of students, preparing them to thrive in an ever-changing world.
+            {value?.secondParagraphs?.map((value, i) => {
+              return (
+                <p
+                  key={i}
+                  data-aos={i % 2 == 0 ? 'zoom-in' : 'zoom-out'}
+                  className="bodyText lg:pb-6"
+                >
+                  {value?.h1}
+                </p>
+              );
+            })}
           </p>
         </div>
       </div>

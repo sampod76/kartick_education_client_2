@@ -12,13 +12,7 @@ import { useState } from 'react';
 import CustomImageTag from '../ui/CustomTag/CustomImageTag';
 import { FileProgress } from '../ui/FileUploader/FileUploaderUi';
 import LoadingSkeleton from '../ui/Loading/LoadingSkeleton';
-const PageBuilderCreateForm = ({
-  readOnly = false,
-  id,
-}: {
-  readOnly?: boolean;
-  id: string;
-}) => {
+const AboutUsCom = ({ readOnly = false, id }: { readOnly?: boolean; id: string }) => {
   const [fileProgressList, setFileProgressList] = useState<FileProgress[]>([]);
 
   const { data, isLoading } = useGetSinglePageBuilderQuery(id);
@@ -29,7 +23,6 @@ const PageBuilderCreateForm = ({
   const [updatePageBuilder, { isLoading: uloading }] = useUpdatePageBuilderMutation();
 
   const handleFinish = async (values: any) => {
-    // return;
     try {
       if (values.bannerImage && values.bannerImage[0].originFileObj) {
         const data = await FilProgressMultipleFilesUploaderS3(
@@ -84,47 +77,7 @@ const PageBuilderCreateForm = ({
       initialValues={iniValue._id ? { ...iniValue } : {}}
       layout="vertical"
     >
-      {/* <div className="block items-center gap-2 lg:flex">
-        <Form.Item
-          label="Member type"
-          name="memberType"
-          className="w-40"
-          rules={[
-            {
-              required: iniValue._id ? false : true,
-              message: 'Please select the company!',
-            },
-          ]}
-        >
-          <Select placeholder="Select a member type" size="large">
-            <Select.Option value="aboutUs">About Us</Select.Option>
-            <Select.Option value="boardOfTrustees">Board Of Trustees</Select.Option>
-            <Select.Option value="leadership">Leadership</Select.Option>
-            <Select.Option value="ourStaff">Our Staff</Select.Option>
-            <Select.Option value="careerOpportunities">
-              Career Opportunities
-            </Select.Option>
-          </Select>
-        </Form.Item>
-        {iniValue?.bannerImage && (
-          <Form.Item
-            label="Status"
-            name="status"
-            className="w-40"
-            // rules={[
-            //   {
-            //     required: iniValue._id ? false : true,
-            //     message: 'Please select status!',
-            //   },
-            // ]}
-          >
-            <Select placeholder="Select a status" size="large">
-              <Select.Option value="active">Active</Select.Option>
-              <Select.Option value="deactivate">Deactivate</Select.Option>
-            </Select>
-          </Form.Item>
-        )}
-      </div> */}
+      <h1 className="text-center text-3xl py-1 underline">{iniValue.heading}</h1>
       <fieldset className="border-2 border-gray-300 rounded-md p-3">
         <legend className="font-bold px-2 whitespace-nowrap inline-block">
           Banner section
@@ -242,14 +195,137 @@ const PageBuilderCreateForm = ({
           )}
         </Form.List>
       </fieldset>
+      <fieldset
+        style={{
+          border: '2px solid #ddd',
+          padding: '10px',
+          borderRadius: '5px',
+        }}
+      >
+        <legend style={{ fontWeight: 'bold', padding: '0 10px' }}>Option section</legend>
+        <Form.Item label="Option Title" name="firstItemTitle">
+          <Input placeholder="Enter item title " />
+        </Form.Item>
+        <fieldset
+          style={{
+            border: '2px solid #ddd',
+            padding: '10px',
+            borderRadius: '5px',
+          }}
+        >
+          <legend
+            className="text-center"
+            style={{ fontWeight: 'bold', padding: '0 10px' }}
+          >
+            Option add
+          </legend>
+          <Form.List name={`firstItems`}>
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map(({ key, name, fieldKey, ...restField }) => (
+                  <Row gutter={[16, 16]} key={key} align="middle">
+                    <Col xs={24} sm={24} md={20}>
+                      <Form.Item
+                        {...restField}
+                        name={[name, 'h1']}
+                        //@ts-ignore
+                        fieldKey={[fieldKey, 'h1']}
+                        rules={[
+                          {
+                            required: true,
+                            message: 'Please enter a text',
+                          },
+                        ]}
+                      >
+                        <Input placeholder="Enter text" className="w-full" />
+                      </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={12} md={2}>
+                      <Button
+                        type="link"
+                        onClick={() => remove(name)}
+                        icon={<MinusCircleOutlined />}
+                        danger
+                        className="!pb-10"
+                      >
+                        Remove
+                      </Button>
+                    </Col>
+                  </Row>
+                ))}
+                <Form.Item>
+                  <Button
+                    type="dashed"
+                    onClick={() => add()}
+                    block
+                    icon={<PlusOutlined />}
+                  >
+                    Add
+                  </Button>
+                </Form.Item>
+              </>
+            )}
+          </Form.List>
+        </fieldset>
+      </fieldset>
+      <fieldset
+        style={{
+          border: '2px solid #ddd',
+          padding: '10px',
+          borderRadius: '5px',
+        }}
+      >
+        <legend style={{ fontWeight: 'bold', padding: '0 10px' }}>Last Paragraphs</legend>
+        <Form.List name={`secondParagraphs`}>
+          {(fields, { add, remove }) => (
+            <>
+              {fields.map(({ key, name, fieldKey, ...restField }) => (
+                <Row gutter={[16, 16]} key={key} align="middle">
+                  <Col xs={24} sm={24} md={20}>
+                    <Form.Item
+                      {...restField}
+                      name={[name, 'h1']}
+                      //@ts-ignore
+                      fieldKey={[fieldKey, 'h1']}
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Please enter a text',
+                        },
+                      ]}
+                    >
+                      <Input.TextArea
+                        placeholder="Enter text"
+                        className="w-full"
+                        rows={6}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col xs={24} sm={12} md={2}>
+                    <Button
+                      type="link"
+                      onClick={() => remove(name)}
+                      icon={<MinusCircleOutlined />}
+                      danger
+                      className="!pb-10"
+                    >
+                      Remove
+                    </Button>
+                  </Col>
+                </Row>
+              ))}
+              <Form.Item>
+                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                  Add
+                </Button>
+              </Form.Item>
+            </>
+          )}
+        </Form.List>
+      </fieldset>
       <div className="my-2 flex items-center justify-center gap-2 rounded-md border">
         <Form.Item>
-          <Button
-            loading={isLoading || uloading}
-            type="primary"
-            className="mt-4"
-            htmlType="submit"
-          >
+          <Button loading={uloading} type="primary" className="mt-4" htmlType="submit">
             Submit
           </Button>
         </Form.Item>
@@ -270,4 +346,4 @@ const PageBuilderCreateForm = ({
   );
 };
 
-export default PageBuilderCreateForm;
+export default AboutUsCom;
