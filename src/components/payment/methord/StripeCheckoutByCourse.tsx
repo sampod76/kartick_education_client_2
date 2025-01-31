@@ -1,4 +1,4 @@
-import DonateNowButton from '@/app/(dashboard)/admin/donation/DonateNowButton';
+// import DonateNowButton from '@/app/(dashboard)/admin/donation/DonateNowButton';
 import { USER_ROLE } from '@/constants/role';
 import { useAddStripeCoursePaymentMutation } from '@/redux/api/public/paymentApi';
 import { useGetCheckPurchasesCourseQuery } from '@/redux/api/public/purchaseCourseApi';
@@ -75,7 +75,8 @@ export default function StripeCheckoutByCourse({ courseData }: any) {
             htmlType="submit"
             className="mt-4 w-fit !border-none bg-transparent shadow-none"
           >
-            <DonateNowButton text={'Pay by Card'} />
+            {/* <DonateNowButton text={'Pay by Card'} /> */}
+            Pay by Card
           </Button>
         </div>
       )}
