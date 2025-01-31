@@ -3,24 +3,21 @@
 import { ReloadOutlined } from '@ant-design/icons';
 
 import LoadingSkeleton from '@/components/ui/Loading/LoadingSkeleton';
-import {
-  useDeleteMemberMutation,
-  useGetAllMemberQuery,
-} from '@/redux/api/adminApi/memberApi';
-import { confirm_modal, Error_model_hook, Success_model } from '@/utils/modalHook';
 
-import { Button, Dropdown, Input, Select, Space, TableProps, Tooltip } from 'antd';
+import { Button, Input, Select, Space, TableProps, Tooltip } from 'antd';
 import { useState } from 'react';
 
-import ModalComponent from '@/components/Modal/ModalComponents';
-import MemberModal from '@/components/PageBuilder/PageBuilderCreateForm';
+import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
 import ActionBar from '@/components/ui/ActionBar';
 import CustomImageTag from '@/components/ui/CustomTag/CustomImageTag';
 import UMTable from '@/components/ui/UMTable';
+import { useGetAllPageBuilderQuery } from '@/redux/api/adminApi/pageBuilderApi';
 import { IMeta } from '@/types/common';
 import fileObjectToLink from '@/utils/fileObjectToLink';
+import Link from 'next/link';
 
 export default function PageBuilderListPage() {
+  const { userInfo } = useGlobalContext();
   //
   const query: Record<string, any> = {};
   const [page, setPage] = useState<number>(1);
@@ -35,23 +32,12 @@ export default function PageBuilderListPage() {
   query['sortOrder'] = sortOrder;
   query['pageType'] = pageType;
 
-  const { data, isLoading } = useGetAllMemberQuery(query);
-  const [deleteCategory, { isLoading: dLoading }] = useDeleteMemberMutation();
+  const { data, isLoading } = useGetAllPageBuilderQuery(query);
+
   if (isLoading) {
     return <LoadingSkeleton />;
   }
-  const handleDelete = (id: string) => {
-    confirm_modal(`Are you sure you want to delete`).then(async (res: any) => {
-      if (res.isConfirmed) {
-        try {
-          const res = await deleteCategory(id).unwrap();
-          Success_model('Successfully Deleted');
-        } catch (error: any) {
-          Error_model_hook(error.message);
-        }
-      }
-    });
-  };
+  const handleDelete = (id: string) => {};
   let resentUser = data?.data || [];
 
   const meta = (data?.meta as IMeta) || [];
@@ -111,61 +97,20 @@ export default function PageBuilderListPage() {
       key: '_id',
       width: 120,
       render: (record: any) => {
-        const menuItems = [
-          {
-            key: 'view',
-            label: (
-              <ModalComponent
-                button={
-                  <Button className="!w-20" type="default">
-                    View
-                  </Button>
-                }
-              >
-                <MemberModal initialValues={record} readOnly={true} />
-              </ModalComponent>
-            ),
-          },
-          {
-            key: 'edit',
-            label: (
-              <ModalComponent
-                button={
-                  <Button className="!w-20" type="default">
-                    Edit
-                  </Button>
-                }
-              >
-                <MemberModal initialValues={record} />
-              </ModalComponent>
-            ),
-          },
-          {
-            key: 'delete',
-            label: (
-              <Button
-                className="!w-20"
-                type="default"
-                loading={dLoading}
-                onClick={() => handleDelete(record._id)}
-              >
-                Delete
-              </Button>
-            ),
-          },
-        ];
-
-        return (
-          <Space size="middle">
-            <Dropdown
-              placement="bottom"
-              arrow
-              menu={{ items: menuItems }} // Pass items directly to the menu prop
-            >
-              <button className="text-blue-700">Action</button>
-            </Dropdown>
-          </Space>
-        );
+        if (record.pageType === 'aboutUs') {
+          return (
+            <div>
+              <Space size="middle">
+                <Link href={'/aboutUs'}>View</Link>
+                <Link href={`/${userInfo?.role}/page-builder/aboutUs/${record._id}`}>
+                  Edit
+                </Link>
+              </Space>
+            </div>
+          );
+        } else {
+          return <></>;
+        }
       },
     },
   ];
@@ -191,30 +136,21 @@ export default function PageBuilderListPage() {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1">
-          <h1 className="text-2xl font-bold capitalize">Member list</h1>
-          <ModalComponent
-            button={
-              <p className="mx-2 cursor-pointer rounded-xl border px-3 text-lg font-bold text-green-400">
-                Create Member
-              </p>
-            }
-          >
-            <MemberModal />
-          </ModalComponent>
-        </div>
-
         <ActionBar>
           <div className="mx-2">
             <Select
               onChange={(value) => setPageType(value)}
-              placeholder="Select a member type"
+              placeholder="Select a page type"
               allowClear
               size="large"
             >
+              <Select.Option value="aboutUs">About Us</Select.Option>
               <Select.Option value="boardOfTrustees">Board Of Trustees</Select.Option>
               <Select.Option value="leadership">Leadership</Select.Option>
               <Select.Option value="ourStaff">Our Staff</Select.Option>
+              <Select.Option value="careerOpportunities">
+                Career Opportunities
+              </Select.Option>
             </Select>
           </div>
           <Input
