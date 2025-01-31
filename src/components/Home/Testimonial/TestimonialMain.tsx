@@ -1,12 +1,8 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
 import './testimonial.css';
 
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { Image } from 'antd';
-import { CutText } from '@/utils/CutText';
+import 'slick-carousel/slick/slick.css';
 
 export default function TestimonialMain() {
   const testimonials = [
@@ -93,7 +89,7 @@ export default function TestimonialMain() {
           Explore how <span className="text-secondary">iBlossomLearn </span> supports
           students and be inspired <br /> by their success stories.
         </h2>
-        <Slider {...settings}></Slider>
+        {/* <Slider {...settings}></Slider> */}
       </div>
     </div>
   );
