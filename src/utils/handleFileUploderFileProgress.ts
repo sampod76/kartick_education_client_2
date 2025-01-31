@@ -11,17 +11,30 @@ const singleFileUploaderInS3 = async (
   setFileProgressList: any,
 ) => {
   try {
+    console.log(fileData);
     const updateFileProgress = (progress: number) => {
       setFileProgressList((prev: any) =>
-        prev.map((item: any) =>
-          item.uid === fileData.uid
-            ? {
+        prev.map(
+          (item: any) => {
+            if (item.uid === fileData.uid) {
+              return {
                 ...item,
                 progress,
                 status: progress === 100 ? 'done' : 'uploading',
                 url: progress === 100 && fileObjectToLink(fileData as any),
-              }
-            : item,
+              };
+            } else {
+              return item;
+            }
+          },
+          // item.uid === fileData.uid
+          //   ? {
+          //       ...item,
+          //       progress,
+          //       status: progress === 100 ? 'done' : 'uploading',
+          //       url: progress === 100 && fileObjectToLink(fileData as any),
+          //     }
+          //   : item,
         ),
       );
     };
@@ -47,7 +60,12 @@ const singleFileUploaderInS3 = async (
       });
     };
     if (fileData.mimetype.includes('image')) {
-      resizedImageFile = await resizeImage(uploadFile);
+      if (uploadFile?.size > 2 * 1024 * 1024) {
+        // 2mb up image resize
+        resizedImageFile = await resizeImage(uploadFile);
+      } else {
+        resizedImageFile = uploadFile;
+      }
     } else {
       resizedImageFile = uploadFile;
     }

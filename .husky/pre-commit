@@ -1,0 +1,2 @@
+bash scripts/zip_env.sh
+npm run format:fix

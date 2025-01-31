@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
 import PageBuilderCreateForm from '@/components/PageBuilder/PageBuilderCreateForm';
 
-export default function PageBuilderCreate() {
+export default function PageBuilderEdit({ params }: { params: { id: string } }) {
   return (
     <div>
-      <PageBuilderCreateForm />
+      <PageBuilderCreateForm id={params.id} />
     </div>
   );
 }

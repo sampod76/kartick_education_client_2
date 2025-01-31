@@ -24,6 +24,7 @@ import {
 import type { MenuProps } from 'antd';
 import Link from 'next/link';
 import { CiLogin } from 'react-icons/ci';
+import { FaPage4 } from 'react-icons/fa';
 import { GiJetPack } from 'react-icons/gi';
 import { MdAssignment, MdMarkEmailRead } from 'react-icons/md';
 import { PiPackageDuotone } from 'react-icons/pi';
@@ -488,6 +489,24 @@ export const dashboardItems = (role: string, setCollapsed?: any) => {
             </Link>
           ),
           key: `/${role}/faq`,
+        },
+      ],
+    },
+    {
+      label: 'Page builders',
+      key: 'Page builders',
+      icon: <FaPage4 />,
+      children: [
+        {
+          label: (
+            <Link
+              onClick={() => (setCollapsed ? setCollapsed(false) : null)}
+              href={`/${role}/page-builder`}
+            >
+              Page Lists
+            </Link>
+          ),
+          key: `/${role}/pageList`,
         },
       ],
     },

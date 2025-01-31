@@ -52,7 +52,7 @@ export const homeNavItems = (role: string | null): MenuProps['items'] => {
             <Link
               className="text-[14px] font-bold capitalize"
               //  href="/"
-              href="/about-us"
+              href="/aboutUs"
             >
               About Us
             </Link>

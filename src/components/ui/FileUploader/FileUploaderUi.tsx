@@ -6,7 +6,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import { Button, Form, message, Progress, Upload } from 'antd';
 import { useState } from 'react';
 import { MdContentCopy } from 'react-icons/md';
-interface FileProgress {
+export interface FileProgress {
   uid: string;
   name: string;
   progress: number;

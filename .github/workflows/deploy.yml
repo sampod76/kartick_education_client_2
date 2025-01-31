@@ -18,8 +18,14 @@ jobs:
         with:
           node-version: 23.x
 
-      - name: Set up Yarn
-        run: npm install -g yarn
+      - name: Check if Yarn is installed
+        run: |
+          if ! command -v yarn &> /dev/null; then
+            echo "Yarn not found, installing..."
+            npm install -g yarn
+          else
+            echo "Yarn is already installed."
+          fi
 
       - name: Cache Yarn dependencies
         uses: actions/cache@v2
@@ -54,7 +60,17 @@ jobs:
         run: cd /home/sampod/actions-runner-client/_work/kartick_education_client_2/kartick_education_client_2
       - name: Install Dependencies
         run: yarn install
+      - name: Unzip environment
+        run: 7z x .env.local.zip -p"${{ secrets.ZIP_PASS }}" -o./ -y
       - name: Build the Project
         run: yarn build
-      - name: Restart Application with PM2
-        run: pm2 restart education-client
+      - name: Check if education-client is running and restart or start accordingly
+        run: |
+          # Check if the process is running
+          if pm2 list | grep -q "education-client"; then
+            echo "education-client is already running, restarting it..."
+            pm2 restart education-client
+          else
+            echo "education-client is not running, starting it..."
+            pm2 start ecosystem.config.js --env production
+          fi
