@@ -1,5 +1,5 @@
 'use client';
-import DonateNowButton from '@/app/(dashboard)/admin/donation/DonateNowButton';
+// import DonateNowButton from '@/app/(dashboard)/admin/donation/DonateNowButton';
 import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
 import { useAddDonationMutation } from '@/redux/api/public/donactionApi';
 import { useAddDonateStripePaymentMutation } from '@/redux/api/public/paymentApi';
@@ -175,7 +175,7 @@ const DonationForm: React.FC = () => {
               htmlType="submit"
               className="mt-4 w-full !border-none bg-transparent shadow-none"
             >
-              <DonateNowButton />
+              Donate now
             </Button>
           </Form.Item>
         </Form>

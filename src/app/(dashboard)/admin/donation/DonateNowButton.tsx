@@ -1,252 +1,258 @@
-import styled from 'styled-components';
+// import styled from 'styled-components';
 
-const DonateNowButton = ({ text }: { text?: string }) => {
-  return (
-    <StyledWrapper>
-      <button className="btn">
-        <div className="wrapper">
-          <p className="text">{text || 'Donate now'}</p>
+// const DonateNowButton = ({ text }: { text?: string }) => {
+//   return (
+//     <StyledWrapper>
+//       <div className="button-container">
+//         <button className="btn">
+//           <div className="wrapper">
+//             <p className="text">{text || 'Donate now'}</p>
 
-          <div className="flower flower1">
-            <div className="petal one" />
-            <div className="petal two" />
-            <div className="petal three" />
-            <div className="petal four" />
-          </div>
-          <div className="flower flower2">
-            <div className="petal one" />
-            <div className="petal two" />
-            <div className="petal three" />
-            <div className="petal four" />
-          </div>
-          <div className="flower flower3">
-            <div className="petal one" />
-            <div className="petal two" />
-            <div className="petal three" />
-            <div className="petal four" />
-          </div>
-          <div className="flower flower4">
-            <div className="petal one" />
-            <div className="petal two" />
-            <div className="petal three" />
-            <div className="petal four" />
-          </div>
-          <div className="flower flower5">
-            <div className="petal one" />
-            <div className="petal two" />
-            <div className="petal three" />
-            <div className="petal four" />
-          </div>
-          <div className="flower flower6">
-            <div className="petal one" />
-            <div className="petal two" />
-            <div className="petal three" />
-            <div className="petal four" />
-          </div>
-        </div>
-      </button>
-    </StyledWrapper>
-  );
-};
+//             <div className="flower flower1">
+//               <div className="petal one" />
+//               <div className="petal two" />
+//               <div className="petal three" />
+//               <div className="petal four" />
+//             </div>
+//             <div className="flower flower2">
+//               <div className="petal one" />
+//               <div className="petal two" />
+//               <div className="petal three" />
+//               <div className="petal four" />
+//             </div>
+//             <div className="flower flower3">
+//               <div className="petal one" />
+//               <div className="petal two" />
+//               <div className="petal three" />
+//               <div className="petal four" />
+//             </div>
+//             <div className="flower flower4">
+//               <div className="petal one" />
+//               <div className="petal two" />
+//               <div className="petal three" />
+//               <div className="petal four" />
+//             </div>
+//             <div className="flower flower5">
+//               <div className="petal one" />
+//               <div className="petal two" />
+//               <div className="petal three" />
+//               <div className="petal four" />
+//             </div>
+//             <div className="flower flower6">
+//               <div className="petal one" />
+//               <div className="petal two" />
+//               <div className="petal three" />
+//               <div className="petal four" />
+//             </div>
+//           </div>
+//         </button>
+//       </div>
+//     </StyledWrapper>
+//   );
+// };
 
-const StyledWrapper = styled.div`
-  .btn {
-    height: 4em;
-    width: 12em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    border: 0px solid black;
-    cursor: pointer;
-  }
+// const StyledWrapper = styled.div`
+//   .button-container {
+//     display: inline-block;
+//   }
 
-  .wrapper {
-    height: 2em;
-    width: 8em;
-    position: relative;
-    background: transparent;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+//   .btn {
+//     height: 4em;
+//     width: 12em;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     background: transparent;
+//     border: 0px solid black;
+//     cursor: pointer;
+//   }
 
-  .text {
-    font-size: 17px;
-    z-index: 1;
-    color: #000;
-    padding: 4px 12px;
-    border-radius: 4px;
-    background: rgba(255, 255, 255, 0.7);
-    transition: all 0.5s ease;
-  }
+//   .wrapper {
+//     height: 2em;
+//     width: 8em;
+//     position: relative;
+//     background: transparent;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//   }
 
-  .flower {
-    display: grid;
-    grid-template-columns: 1em 1em;
-    position: absolute;
-    transition: grid-template-columns 0.8s ease;
-  }
+//   .text {
+//     font-size: 17px;
+//     z-index: 1;
+//     color: #000;
+//     padding: 4px 12px;
+//     border-radius: 4px;
+//     background: rgba(255, 255, 255, 0.7);
+//     transition: all 0.5s ease;
+//   }
 
-  .flower1 {
-    top: -12px;
-    left: -13px;
-    transform: rotate(5deg);
-  }
+//   .flower {
+//     display: grid;
+//     grid-template-columns: 1em 1em;
+//     position: absolute;
+//     transition: grid-template-columns 0.8s ease;
+//   }
 
-  .flower2 {
-    bottom: -5px;
-    left: 8px;
-    transform: rotate(35deg);
-  }
+//   .flower1 {
+//     top: -12px;
+//     left: -13px;
+//     transform: rotate(5deg);
+//   }
 
-  .flower3 {
-    bottom: -15px;
-    transform: rotate(0deg);
-  }
+//   .flower2 {
+//     bottom: -5px;
+//     left: 8px;
+//     transform: rotate(35deg);
+//   }
 
-  .flower4 {
-    top: -14px;
-    transform: rotate(15deg);
-  }
+//   .flower3 {
+//     bottom: -15px;
+//     transform: rotate(0deg);
+//   }
 
-  .flower5 {
-    right: 11px;
-    top: -3px;
-    transform: rotate(25deg);
-  }
+//   .flower4 {
+//     top: -14px;
+//     transform: rotate(15deg);
+//   }
 
-  .flower6 {
-    right: -15px;
-    bottom: -15px;
-    transform: rotate(30deg);
-  }
+//   .flower5 {
+//     right: 11px;
+//     top: -3px;
+//     transform: rotate(25deg);
+//   }
 
-  .petal {
-    height: 1em;
-    width: 1em;
-    border-radius: 40% 70% / 7% 90%;
-    background: linear-gradient(#07a6d7, #93e0ee);
-    border: 0.5px solid #96d1ec;
-    z-index: 0;
-    transition:
-      width 0.8s ease,
-      height 0.8s ease;
-  }
+//   .flower6 {
+//     right: -15px;
+//     bottom: -15px;
+//     transform: rotate(30deg);
+//   }
 
-  .two {
-    transform: rotate(90deg);
-  }
+//   .petal {
+//     height: 1em;
+//     width: 1em;
+//     border-radius: 40% 70% / 7% 90%;
+//     background: linear-gradient(#07a6d7, #93e0ee);
+//     border: 0.5px solid #96d1ec;
+//     z-index: 0;
+//     transition:
+//       width 0.8s ease,
+//       height 0.8s ease;
+//   }
 
-  .three {
-    transform: rotate(270deg);
-  }
+//   .two {
+//     transform: rotate(90deg);
+//   }
 
-  .four {
-    transform: rotate(180deg);
-  }
+//   .three {
+//     transform: rotate(270deg);
+//   }
 
-  .btn:hover .petal {
-    background: linear-gradient(#0761d7, #93bdee);
-    border: 0.5px solid #96b4ec;
-  }
+//   .four {
+//     transform: rotate(180deg);
+//   }
 
-  .btn:hover .flower {
-    grid-template-columns: 1.5em 1.5em;
-  }
+//   .btn:hover .petal {
+//     background: linear-gradient(#0761d7, #93bdee);
+//     border: 0.5px solid #96b4ec;
+//   }
 
-  .btn:hover .flower .petal {
-    width: 1.5em;
-    height: 1.5em;
-  }
+//   .btn:hover .flower {
+//     grid-template-columns: 1.5em 1.5em;
+//   }
 
-  .btn:hover .text {
-    background: rgba(255, 255, 255, 0.4);
-  }
+//   .btn:hover .flower .petal {
+//     width: 1.5em;
+//     height: 1.5em;
+//   }
 
-  .btn:hover div.flower1 {
-    animation: 15s linear 0s normal none infinite running flower1;
-  }
+//   .btn:hover .text {
+//     background: rgba(255, 255, 255, 0.4);
+//   }
 
-  @keyframes flower1 {
-    0% {
-      transform: rotate(5deg);
-    }
+//   .btn:hover div.flower1 {
+//     animation: 15s linear 0s normal none infinite running flower1;
+//   }
 
-    100% {
-      transform: rotate(365deg);
-    }
-  }
+//   @keyframes flower1 {
+//     0% {
+//       transform: rotate(5deg);
+//     }
 
-  .btn:hover div.flower2 {
-    animation: 13s linear 1s normal none infinite running flower2;
-  }
+//     100% {
+//       transform: rotate(365deg);
+//     }
+//   }
 
-  @keyframes flower2 {
-    0% {
-      transform: rotate(35deg);
-    }
+//   .btn:hover div.flower2 {
+//     animation: 13s linear 1s normal none infinite running flower2;
+//   }
 
-    100% {
-      transform: rotate(-325deg);
-    }
-  }
+//   @keyframes flower2 {
+//     0% {
+//       transform: rotate(35deg);
+//     }
 
-  .btn:hover div.flower3 {
-    animation: 16s linear 1s normal none infinite running flower3;
-  }
+//     100% {
+//       transform: rotate(-325deg);
+//     }
+//   }
 
-  @keyframes flower3 {
-    0% {
-      transform: rotate(0deg);
-    }
+//   .btn:hover div.flower3 {
+//     animation: 16s linear 1s normal none infinite running flower3;
+//   }
 
-    100% {
-      transform: rotate(360deg);
-    }
-  }
+//   @keyframes flower3 {
+//     0% {
+//       transform: rotate(0deg);
+//     }
 
-  .btn:hover div.flower4 {
-    animation: 17s linear 1s normal none infinite running flower4;
-  }
+//     100% {
+//       transform: rotate(360deg);
+//     }
+//   }
 
-  @keyframes flower4 {
-    0% {
-      transform: rotate(15deg);
-    }
+//   .btn:hover div.flower4 {
+//     animation: 17s linear 1s normal none infinite running flower4;
+//   }
 
-    100% {
-      transform: rotate(375deg);
-    }
-  }
+//   @keyframes flower4 {
+//     0% {
+//       transform: rotate(15deg);
+//     }
 
-  .btn:hover div.flower5 {
-    animation: 20s linear 1s normal none infinite running flower5;
-  }
+//     100% {
+//       transform: rotate(375deg);
+//     }
+//   }
 
-  @keyframes flower5 {
-    0% {
-      transform: rotate(25deg);
-    }
+//   .btn:hover div.flower5 {
+//     animation: 20s linear 1s normal none infinite running flower5;
+//   }
 
-    100% {
-      transform: rotate(-335deg);
-    }
-  }
+//   @keyframes flower5 {
+//     0% {
+//       transform: rotate(25deg);
+//     }
 
-  .btn:hover div.flower6 {
-    animation: 15s linear 1s normal none infinite running flower6;
-  }
+//     100% {
+//       transform: rotate(-335deg);
+//     }
+//   }
 
-  @keyframes flower6 {
-    0% {
-      transform: rotate(30deg);
-    }
+//   .btn:hover div.flower6 {
+//     animation: 15s linear 1s normal none infinite running flower6;
+//   }
 
-    100% {
-      transform: rotate(390deg);
-    }
-  }
-`;
+//   @keyframes flower6 {
+//     0% {
+//       transform: rotate(30deg);
+//     }
 
-export default DonateNowButton;
+//     100% {
+//       transform: rotate(390deg);
+//     }
+//   }
+// `;
+
+// export default DonateNowButton;

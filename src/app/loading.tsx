@@ -18,12 +18,13 @@
 
 // export default Loading;
 'use client';
+import { Spin } from 'antd';
 import styled from 'styled-components';
 
 const Loading = () => {
   return (
     <div className="flex min-h-screen items-center justify-center">
-      <StyledWrapper>
+      {/* <StyledWrapper>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="200px"
@@ -100,7 +101,8 @@ const Loading = () => {
             </g>
           </g>
         </svg>
-      </StyledWrapper>
+      </StyledWrapper> */}
+      <Spin />
     </div>
   );
 };
