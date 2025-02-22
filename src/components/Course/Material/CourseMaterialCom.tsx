@@ -15,6 +15,7 @@ import CourseCardMaterial from './CourseCardMaterial';
 export default function CourseMaterialCom({ courseId }: { courseId: string }) {
   const router = useRouter();
   const path = usePathname();
+
   const searchQuery = useSearchParams();
   const mainTab = searchQuery.get('mainTab');
   const secondTab = searchQuery.get('secondTab');
