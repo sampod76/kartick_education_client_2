@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 import Image from 'next/image';
 import fileObjectToLink from '../../../utils/fileObjectToLink';
+import { cn } from '@/utils/cn';
 type ImageTagProps = {
   src: any;
   width?: number;
@@ -22,18 +23,34 @@ export default function CustomImageTag({
   className,
   ...props
 }: ImageTagProps) {
+  const [isLoading, setIsLoading] = useState(true);
+  console.log('🚀 ~ isLoading:', isLoading);
   const [openModal, setOpenModal] = useState(false);
 
   const imageSrc = fileObjectToLink(src);
-
+  const handleLoadingComplete = () => {
+    console.log('first image loaded false');
+    setIsLoading(false);
+  };
   return (
     <div className="z-50">
+      <Image
+        className={isLoading ? 'block' : 'hidden'}
+        src={'/imageLoading.gif'}
+        height={500}
+        width={500}
+        alt=""
+      />
+
       <Image
         src={imageSrc}
         width={width || 750}
         height={height || 750}
         alt={alt || 'Images'}
-        className={className}
+        onLoadingComplete={handleLoadingComplete}
+        loading="lazy"
+        className={cn(className)}
+        style={isLoading ? { visibility: 'hidden' } : { visibility: 'visible' }}
         onClick={() => {
           preview && setOpenModal(true);
         }}
