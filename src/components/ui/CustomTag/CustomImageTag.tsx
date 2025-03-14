@@ -24,7 +24,7 @@ export default function CustomImageTag({
   ...props
 }: ImageTagProps) {
   const [isLoading, setIsLoading] = useState(true);
-  console.log('🚀 ~ isLoading:', isLoading);
+  // console.log('🚀 ~ isLoading:', isLoading);
   const [openModal, setOpenModal] = useState(false);
 
   const imageSrc = fileObjectToLink(src);
@@ -35,7 +35,7 @@ export default function CustomImageTag({
   return (
     <div className="z-50">
       <Image
-        className={isLoading ? 'block' : 'hidden'}
+        className={isLoading ? 'block w-10' : 'hidden'}
         src={'/imageLoading.gif'}
         height={500}
         width={500}
