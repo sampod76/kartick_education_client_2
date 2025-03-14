@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  useAddPageBuilderMutation,
   useGetSinglePageBuilderQuery,
   useUpdatePageBuilderMutation,
 } from '@/redux/api/adminApi/pageBuilderApi';
@@ -17,7 +18,13 @@ import CustomImageTag from '../ui/CustomTag/CustomImageTag';
 import { FileProgress } from '../ui/FileUploader/FileUploaderUi';
 import LoadingSkeleton from '../ui/Loading/LoadingSkeleton';
 const { confirm } = Modal;
-const AboutUsCom = ({ readOnly = false, id }: { readOnly?: boolean; id: string }) => {
+const BoardOfTrusteesCom = ({
+  readOnly = false,
+  id,
+}: {
+  readOnly?: boolean;
+  id: string;
+}) => {
   const [fileProgressList, setFileProgressList] = useState<FileProgress[]>([]);
 
   const { data, isLoading } = useGetSinglePageBuilderQuery(id);
@@ -26,6 +33,7 @@ const AboutUsCom = ({ readOnly = false, id }: { readOnly?: boolean; id: string }
   const [form] = Form.useForm();
 
   const [updatePageBuilder, { isLoading: uloading }] = useUpdatePageBuilderMutation();
+  const [createPage, { isLoading: cloading }] = useAddPageBuilderMutation();
 
   const handleFinish = async (values: any) => {
     try {
@@ -46,7 +54,8 @@ const AboutUsCom = ({ readOnly = false, id }: { readOnly?: boolean; id: string }
         }).unwrap();
         message.success('Successfully Updated');
       } else {
-        // const res = await addMember(formData).unwrap();
+        // values.pageType;
+        // const res = await createPage(values).unwrap();
         message.success('Successfully added');
         // form.resetFields();
       }
@@ -343,7 +352,12 @@ const AboutUsCom = ({ readOnly = false, id }: { readOnly?: boolean; id: string }
       </fieldset>
       <div className="my-2 flex items-center justify-center gap-2 rounded-md border">
         <Form.Item>
-          <Button loading={uloading} type="primary" className="mt-4" htmlType="submit">
+          <Button
+            loading={uloading || cloading}
+            type="primary"
+            className="mt-4"
+            htmlType="submit"
+          >
             Submit
           </Button>
         </Form.Item>
@@ -364,4 +378,4 @@ const AboutUsCom = ({ readOnly = false, id }: { readOnly?: boolean; id: string }
   );
 };
 
-export default AboutUsCom;
+export default BoardOfTrusteesCom;

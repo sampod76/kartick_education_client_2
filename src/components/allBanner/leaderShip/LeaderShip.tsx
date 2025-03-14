@@ -15,7 +15,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { RiMessage2Fill } from 'react-icons/ri';
-export default function BoardOfTrust() {
+export default function LeadershipCom() {
   const { userInfo } = useGlobalContext();
   const router = useRouter();
   const pathName = usePathname();
@@ -31,7 +31,7 @@ export default function BoardOfTrust() {
   query['sortBy'] = sortBy;
   query['sortOrder'] = sortOrder;
   query['status'] = 'active';
-  query['memberType'] = 'boardOfTrustees';
+  query['memberType'] = 'academicsProgram';
   const debouncedSearchTerm = useDebounced({
     searchQuery: searchTerm,
     delay: 600,
@@ -42,18 +42,17 @@ export default function BoardOfTrust() {
   }
   //
   const { data: pdata, isLoading: ploading } = useGetAllPageBuilderQuery({
-    pageType: 'boardOrTrustees',
+    pageType: 'leaderShip',
   });
   const { data, isLoading } = useGetAllMemberQuery(query);
   if (ploading) {
     return <LoadingSkeleton />;
   }
   const value = pdata?.data?.length ? pdata?.data[0] : null;
-  console.log('🚀 ~ BoardOfTrust ~ value:', value);
-  const Administartions = data?.data || [];
   if (!value) {
     return <Empty></Empty>;
   }
+  const Administartions = data?.data || [];
   return (
     <div className="">
       <div className="">

@@ -17,7 +17,13 @@ import CustomImageTag from '../ui/CustomTag/CustomImageTag';
 import { FileProgress } from '../ui/FileUploader/FileUploaderUi';
 import LoadingSkeleton from '../ui/Loading/LoadingSkeleton';
 const { confirm } = Modal;
-const AboutUsCom = ({ readOnly = false, id }: { readOnly?: boolean; id: string }) => {
+const UniversalPageBuilderCom = ({
+  readOnly = false,
+  id,
+}: {
+  readOnly?: boolean;
+  id: string;
+}) => {
   const [fileProgressList, setFileProgressList] = useState<FileProgress[]>([]);
 
   const { data, isLoading } = useGetSinglePageBuilderQuery(id);
@@ -54,6 +60,7 @@ const AboutUsCom = ({ readOnly = false, id }: { readOnly?: boolean; id: string }
       // message.error(error?.data?.message || error?.message || 'Somthing is wrong');
       Error_model_hook(error?.message);
     }
+    form.resetFields(['bannerImage']);
   };
 
   if (isLoading) {
@@ -364,4 +371,4 @@ const AboutUsCom = ({ readOnly = false, id }: { readOnly?: boolean; id: string }
   );
 };
 
-export default AboutUsCom;
+export default UniversalPageBuilderCom;

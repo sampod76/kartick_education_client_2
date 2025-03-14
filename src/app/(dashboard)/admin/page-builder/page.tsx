@@ -97,19 +97,205 @@ export default function PageBuilderListPage() {
       key: '_id',
       width: 120,
       render: (record: any) => {
-        if (record.pageType === 'aboutUs') {
-          return (
-            <div>
-              <Space size="middle">
-                <Link href={'/aboutUs'}>View</Link>
-                <Link href={`/${userInfo?.role}/page-builder/aboutUs/${record._id}`}>
-                  Edit
-                </Link>
-              </Space>
-            </div>
-          );
-        } else {
-          return <></>;
+        switch (record.pageType) {
+          case 'aboutUs':
+            return (
+              <div>
+                <Space size="middle">
+                  <Link href={'/aboutUs'}>View</Link>
+                  <Link href={`/${userInfo?.role}/page-builder/aboutUs/${record._id}`}>
+                    Edit
+                  </Link>
+                </Space>
+              </div>
+            );
+          case 'boardOrTrustees':
+            return (
+              <div>
+                <Space size="middle">
+                  <Link href={'/board-of-trustees'}>View</Link>
+                  <Link
+                    href={`/${userInfo?.role}/page-builder/boardOrTrustees/${record._id}`}
+                  >
+                    Edit
+                  </Link>
+                </Space>
+              </div>
+            );
+          case 'leaderShip':
+            return (
+              <div>
+                <Space size="middle">
+                  <Link href={'/leadership'}>View</Link>
+                  <Link href={`/${userInfo?.role}/page-builder/leaderShip/${record._id}`}>
+                    Edit
+                  </Link>
+                </Space>
+              </div>
+            );
+          case 'staff':
+            return (
+              <div>
+                <Space size="middle">
+                  <Link href={'/staff'}>View</Link>
+                  <Link href={`/${userInfo?.role}/page-builder/staff/${record._id}`}>
+                    Edit
+                  </Link>
+                </Space>
+              </div>
+            );
+          case 'careerOpportunities':
+            return (
+              <div>
+                <Space size="middle">
+                  <Link href={'/career-opportunities'}>View</Link>
+                  <Link
+                    href={`/${userInfo?.role}/page-builder/careerOpportunities/${record._id}`}
+                  >
+                    Edit
+                  </Link>
+                </Space>
+              </div>
+            );
+          case 'academicsProgram':
+            return (
+              <div>
+                <Space size="middle">
+                  <Link href={'/academicsProgram'}>View</Link>
+                  <Link
+                    href={`/${userInfo?.role}/page-builder/academicsProgram/${record._id}`}
+                  >
+                    Edit
+                  </Link>
+                </Space>
+              </div>
+            );
+          case 'inclusionApproach':
+            return (
+              <div>
+                <Space size="middle">
+                  <Link href={'/inclusionApproach'}>View</Link>
+                  <Link
+                    href={`/${userInfo?.role}/page-builder/inclusionApproach/${record._id}`}
+                  >
+                    Edit
+                  </Link>
+                </Space>
+              </div>
+            );
+          case 'transitionToHighSchool':
+            return (
+              <div>
+                <Space size="middle">
+                  <Link href={'/transitionToHighSchool'}>View</Link>
+                  <Link
+                    href={`/${userInfo?.role}/page-builder/transitionToHighSchool/${record._id}`}
+                  >
+                    Edit
+                  </Link>
+                </Space>
+              </div>
+            );
+          case 'elibrary':
+            return (
+              <div>
+                <Space size="middle">
+                  <Link href={'/elibrary'}>View</Link>
+                  <Link href={`/${userInfo?.role}/page-builder/elibrary/${record._id}`}>
+                    Edit
+                  </Link>
+                </Space>
+              </div>
+            );
+          case 'supplementalActivities':
+            return (
+              <div>
+                <Space size="middle">
+                  <Link href={'/supplementalActivities'}>View</Link>
+                  <Link
+                    href={`/${userInfo?.role}/page-builder/supplementalActivities/${record._id}`}
+                  >
+                    Edit
+                  </Link>
+                </Space>
+              </div>
+            );
+          case 'privacyPolicy':
+            return (
+              <div>
+                <Space size="middle">
+                  <Link href={'/privacyPolicy'}>View</Link>
+                  <Link
+                    href={`/${userInfo?.role}/page-builder/privacyPolicy/${record._id}`}
+                  >
+                    Edit
+                  </Link>
+                </Space>
+              </div>
+            );
+          case 'support':
+            return (
+              <div>
+                <Space size="middle">
+                  <Link href={'/support'}>View</Link>
+                  <Link href={`/${userInfo?.role}/page-builder/support/${record._id}`}>
+                    Edit
+                  </Link>
+                </Space>
+              </div>
+            );
+          case 'theLearningArcTuring':
+            return (
+              <div>
+                <Space size="middle">
+                  <Link href={'/theLearningArcTuring'}>View</Link>
+                  <Link
+                    href={`/${userInfo?.role}/page-builder/theLearningArcTuring/${record._id}`}
+                  >
+                    Edit
+                  </Link>
+                </Space>
+              </div>
+            );
+          case 'podcast':
+            return (
+              <div>
+                <Space size="middle">
+                  <Link href={'/podcast'}>View</Link>
+                  <Link href={`/${userInfo?.role}/page-builder/podcast/${record._id}`}>
+                    Edit
+                  </Link>
+                </Space>
+              </div>
+            );
+          case 'professionalDevelopment':
+            return (
+              <div>
+                <Space size="middle">
+                  <Link href={'/professionalDevelopment'}>View</Link>
+                  <Link
+                    href={`/${userInfo?.role}/page-builder/professionalDevelopment/${record._id}`}
+                  >
+                    Edit
+                  </Link>
+                </Space>
+              </div>
+            );
+          case 'theLearningArcTutoring':
+            return (
+              <div>
+                <Space size="middle">
+                  <Link href={'/theLearningArcTutoring'}>View</Link>
+                  <Link
+                    href={`/${userInfo?.role}/page-builder/theLearningArcTutoring/${record._id}`}
+                  >
+                    Edit
+                  </Link>
+                </Space>
+              </div>
+            );
+          default:
+            return <></>;
         }
       },
     },
