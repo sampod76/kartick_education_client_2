@@ -148,7 +148,7 @@ export default function PageBuilderListPage() {
             return (
               <div>
                 <Space size="middle">
-                  <Link href={'/careerOpportunities'}>View</Link>
+                  <Link href={'/career-opportunities'}>View</Link>
                   <Link
                     href={`/${userInfo?.role}/page-builder/careerOpportunities/${record._id}`}
                   >

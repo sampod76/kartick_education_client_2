@@ -62,19 +62,55 @@ export default function CareerOpportunitiesComponents() {
               </p>
             );
           })}
-          {/* <h3 className="lg:pb-6">
-            Submit your CV with a cover to{' '}
-            <span
-              onClick={() => {
-                navigator.clipboard.writeText('hello@iblossomlearn-academy.org');
-                message.success('Email copy your clipboard');
-              }}
-              className="cursor-pointer text-blue-400"
-            >
-              hello@iblossomlearn-academy.org
-            </span>
-             
-          </h3> */}
+          {value.firstItemTitle && value?.firstItems && (
+            <div>
+              <div className="space-y-2 bg-black px-5 py-4 text-white lg:py-10">
+                <p data-aos="zoom-in" className="text-center text-xl">
+                  {value.firstItemTitle}
+                </p>
+
+                <div className="bodyText flex justify-center">
+                  <ul className="mx-auto w-fit list-inside list-disc space-y-2 py-4 text-xl">
+                    {value?.firstItems?.map((value, i) => {
+                      let strongText = '';
+                      let remaning = '';
+                      const valueSprite = value?.h1?.split(':');
+
+                      if (valueSprite?.length > 0) {
+                        strongText = valueSprite[0];
+                        remaning = valueSprite.splice(1).join(':');
+                      }
+                      return (
+                        <li
+                          key={i}
+                          data-aos={i % 2 == 0 ? 'zoom-in' : 'zoom-out'}
+                          className=""
+                        >
+                          <strong>{strongText} : </strong>
+                          <strong>{remaning}</strong>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          )}
+          <div data-aos="zoom-out" className="my-10 px-5 lg:my-16 lg:px-28">
+            <p className="bodyText text-center">
+              {value?.secondParagraphs?.map((value, i) => {
+                return (
+                  <p
+                    key={i}
+                    data-aos={i % 2 == 0 ? 'zoom-in' : 'zoom-out'}
+                    className="bodyText lg:pb-6"
+                  >
+                    {value?.h1}
+                  </p>
+                );
+              })}
+            </p>
+          </div>
         </div>
         <Image
           src={'/banner/careropp2.png'}
