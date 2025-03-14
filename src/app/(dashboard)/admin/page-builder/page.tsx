@@ -126,7 +126,7 @@ export default function PageBuilderListPage() {
             return (
               <div>
                 <Space size="middle">
-                  <Link href={'/leaderShip'}>View</Link>
+                  <Link href={'/leadership'}>View</Link>
                   <Link href={`/${userInfo?.role}/page-builder/leaderShip/${record._id}`}>
                     Edit
                   </Link>

@@ -15,7 +15,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { RiMessage2Fill } from 'react-icons/ri';
-export default function BoardOfTrust() {
+export default function SupportCom() {
   const { userInfo } = useGlobalContext();
   const router = useRouter();
   const pathName = usePathname();
@@ -49,7 +49,6 @@ export default function BoardOfTrust() {
     return <LoadingSkeleton />;
   }
   const value = pdata?.data?.length ? pdata?.data[0] : null;
-  console.log('🚀 ~ BoardOfTrust ~ value:', value);
   const Administartions = data?.data || [];
   if (!value) {
     return <Empty></Empty>;
