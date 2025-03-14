@@ -49,10 +49,10 @@ export default function LeadershipCom() {
     return <LoadingSkeleton />;
   }
   const value = pdata?.data?.length ? pdata?.data[0] : null;
-  const Administartions = data?.data || [];
   if (!value) {
     return <Empty></Empty>;
   }
+  const Administartions = data?.data || [];
   return (
     <div className="">
       <div className="">

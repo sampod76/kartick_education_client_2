@@ -1,9 +1,10 @@
 import BoardOfTrusteesCom from '@/components/PageBuilder/boardOfTrustees';
+import UniversalPageBuilderCom from '@/components/PageBuilder/universalPageBuilder';
 
-export default function LeaderShip({ params }: { params: { id: string } }) {
+export default function CareerOpportunities({ params }: { params: { id: string } }) {
   return (
     <div>
-      <BoardOfTrusteesCom id={params.id} />
+      <UniversalPageBuilderCom id={params.id} />
     </div>
   );
 }
