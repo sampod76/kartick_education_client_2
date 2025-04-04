@@ -185,9 +185,9 @@ export default function ModuleDashList({
     //   sorter: true,
     // },
     {
-      title: 'Status',
-      dataIndex: 'status',
-      width: 80,
+      title: 'Total Lessons',
+      dataIndex: 'totalLessons',
+      width: 150,
     },
     {
       title: 'Action',

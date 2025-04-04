@@ -173,9 +173,9 @@ export default function LessonDashList({
     },
     {
       title: 'Total Files',
-
+      dataIndex: ['files'],
       render: function (data: any) {
-        return <>{data?.files?.length || ''}</>;
+        return <>{data?.length || 0}</>;
       },
       width: 100,
     },

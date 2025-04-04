@@ -21,7 +21,7 @@ import { useGlobalContext } from '../ContextApi/GlobalContextApi';
 import SellerUserlistModal from '../User/SellerUserlistModal';
 import StudentsModal from '../User/StudentlistModal';
 
-const CourseList = () => {
+const CourseList = ({ categoryId }: { categoryId?: string }) => {
   const query: Record<string, any> = {};
 
   // const userInfo = getUserInfo() as IDecodedInfo;
@@ -40,7 +40,7 @@ const CourseList = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [courseId, setCourseId] = useState<string>('');
 
-  const [filterValue, setFilterValue] = useState('');
+  const [filterValue, setFilterValue] = useState(categoryId || '');
 
   query['limit'] = size;
   query['page'] = page;
