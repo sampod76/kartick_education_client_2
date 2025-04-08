@@ -255,61 +255,103 @@ const CreateLesson = () => {
                 <InputNumber className="w-28" placeholder="1" type="number" min={1} />
               </Form.Item>
             </div>
-
-            <Divider> Add Video </Divider>
-
-            {videos.map((video, index) => (
-              <div key={index} style={{ display: 'flex', marginBottom: '10px' }}>
-                <Select
-                  value={video.platform}
-                  onChange={(value) => handleVideoChange(index, 'platform', value)}
-                  style={{ width: '20%', marginRight: '10px' }}
-                >
-                  <Option value="vimeo">Vimeo</Option>
-                  <Option value="youtube">Youtube</Option>
-                </Select>
-                <Input
-                  placeholder="Enter Video URL"
-                  value={video.link}
-                  onChange={(e) => handleVideoChange(index, 'link', e.target.value)}
-                  style={{ width: '70%', marginRight: '10px' }}
-                />
-                <MinusCircleOutlined
-                  onClick={() => removeVideo(index)}
-                  style={{ fontSize: '20px', color: 'red' }}
-                />
-              </div>
-            ))}
-
-            <div className="flex items-center justify-center">
-              <Button type="dashed" onClick={addVideo} className="">
-                <PlusOutlined /> Add Video
-              </Button>
-            </div>
-            <Divider> Add File (pdf/ppt/doc) </Divider>
-            <Form.Item
-              // label="Image"
-              name="files"
-              valuePropName="fileList"
-              getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.fileList)}
-              className="flex items-center justify-center"
+            <fieldset
+              style={{
+                border: '2px solid #ddd',
+                padding: '10px',
+                borderRadius: '5px',
+              }}
             >
-              <Upload
-                // action="/upload"
-                multiple={true}
-                // listType=""
-                maxCount={20}
-                showUploadList={true}
-                accept={Object.values(ENUM_MIMETYPE).join(',')}
-                beforeUpload={(file) => {
-                  return false; // Stop automatic upload
-                }}
-                customRequest={() => {}}
+              <legend style={{ fontWeight: 'bold', padding: '0 10px' }}>
+                Video Upload Section
+              </legend>
+              <Form.Item
+                // label="Image"
+                name="customVideos"
+                valuePropName="fileList"
+                getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.fileList)}
+                className="flex items-center justify-center"
               >
-                <Button className="!font-sm !overflow-hidden">Add File</Button>
-              </Upload>
-            </Form.Item>
+                <Upload
+                  // action="/upload"
+                  multiple={true}
+                  // listType=""
+                  maxCount={4}
+                  showUploadList={true}
+                  accept={'video/*'}
+                  beforeUpload={(file) => {
+                    return false; // Stop automatic upload
+                  }}
+                  customRequest={() => {}}
+                >
+                  <Button className="!font-sm !overflow-hidden">Add File</Button>
+                </Upload>
+              </Form.Item>
+              <div>
+                {videos.map((video, index) => (
+                  <div key={index} style={{ display: 'flex', marginBottom: '10px' }}>
+                    <Select
+                      value={video.platform}
+                      onChange={(value) => handleVideoChange(index, 'platform', value)}
+                      style={{ width: '20%', marginRight: '10px' }}
+                    >
+                      <Option value="vimeo">Vimeo</Option>
+                      <Option value="youtube">Youtube</Option>
+                    </Select>
+                    <Input
+                      placeholder="Enter Video URL"
+                      value={video.link}
+                      onChange={(e) => handleVideoChange(index, 'link', e.target.value)}
+                      style={{ width: '70%', marginRight: '10px' }}
+                    />
+                    <MinusCircleOutlined
+                      onClick={() => removeVideo(index)}
+                      style={{ fontSize: '20px', color: 'red' }}
+                    />
+                  </div>
+                ))}
+                <div className="flex items-center justify-center">
+                  <Button type="dashed" onClick={addVideo} className="">
+                    <PlusOutlined /> Add Video
+                  </Button>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset
+              style={{
+                border: '2px solid #ddd',
+                padding: '10px',
+                borderRadius: '5px',
+              }}
+              className="mt-5"
+            >
+              <legend style={{ fontWeight: 'bold', padding: '0 10px' }}>
+                Add File (pdf/ppt/doc) Section
+              </legend>
 
+              <Form.Item
+                // label="Image"
+                name="files"
+                valuePropName="fileList"
+                getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.fileList)}
+                className="flex items-center justify-center"
+              >
+                <Upload
+                  // action="/upload"
+                  multiple={true}
+                  // listType=""
+                  maxCount={20}
+                  showUploadList={true}
+                  accept={Object.values(ENUM_MIMETYPE).join(',')}
+                  beforeUpload={(file) => {
+                    return false; // Stop automatic upload
+                  }}
+                  customRequest={() => {}}
+                >
+                  <Button className="!font-sm !overflow-hidden">Add File</Button>
+                </Upload>
+              </Form.Item>
+            </fieldset>
             <Col xs={24}>
               <div
                 style={{

@@ -22,16 +22,19 @@ export const FileUploaderUi = () => {
   const handleUpload = async () => {
     try {
       setLoading(true);
+      // console.log(fileList, 'fileList');
       const data = await FilProgressMultipleFilesUploaderS3(
         fileList,
         setFileProgressList,
       );
+      // console.log('🚀 ~ handleUpload ~ data:', data);
       const res = await addFileList({ files: data }).unwrap();
       setLoading(false);
       Success_model('Successful upload');
     } catch (error) {
       console.log('🚀 ~ handleUpload ~ error:', error);
       ErrorModal(error);
+      setLoading(false);
     }
   };
 

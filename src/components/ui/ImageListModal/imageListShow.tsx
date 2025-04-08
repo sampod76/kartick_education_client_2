@@ -61,6 +61,7 @@ export default function ImageListShow({
   }
   const allFiles = data?.data;
   const meta = data?.meta;
+  console.log('🚀 ~ allFiles:', allFiles);
   // Calculate the index of the first and last profile to be displayed on the current page
   const onShowSizeChange = (current: number, pageSize: number) => {
     setPage(current);
@@ -88,32 +89,26 @@ export default function ImageListShow({
     {
       title: 'Status',
       dataIndex: 'status',
+      width: 100,
     },
     {
       title: 'Action',
       // dataIndex: '_id',
-      width: 130,
+      width: 150,
       render: function (file: any) {
         return (
-          <div className="flex  gap-1">
-            {/* <Link href={`/${userInfo?.data?.role}/blog/details/${data}`}>
-              <Button type="primary">
-                <EyeOutlined />
-              </Button>
-            </Link>
-            <Link href={`/${userInfo?.data?.role}/blog/edit/${data}`}>
-              <Button
-                style={{
-                  margin: '0px 5px',
-                }}
-                type="default"
-              >
-                <EditOutlined />
-              </Button>
-            </Link>
-            <Button onClick={() => handleDelete(data)} type="default" danger>
-              <DeleteOutlined />
-            </Button> */}
+          <div className="flex justify-center items-center gap-1">
+            <p
+              className="cursor-pointer"
+              onClick={() => {
+                if (file.url) {
+                  navigator.clipboard.writeText(JSON.stringify(file));
+                }
+                message.success('Link Copy Success');
+              }}
+            >
+              <MdContentCopy />
+            </p>
             <p
               className="cursor-pointer"
               onClick={() => {
@@ -255,7 +250,7 @@ export default function ImageListShow({
             </div>
           </div>
         )}
-        {fileType === 'pdf' && (
+        {fileType !== 'image' && (
           <div>
             <UMTable
               loading={isLoading}
