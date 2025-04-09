@@ -23,6 +23,8 @@ import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { useGlobalContext } from '../ContextApi/GlobalContextApi';
 import FileContainShow from '../Course/FileContaintShow';
+import ModalComponent from '../Modal/ModalComponents';
+import ImageListInServer from '../ui/ImageListModal/ImageListCom';
 const TextEditorNotSetForm = dynamic(
   () => import('@/components/shared/TextEditor/TextEditorNotSetForm'),
   {
@@ -263,8 +265,18 @@ const CreateLesson = () => {
               <legend style={{ fontWeight: 'bold', padding: '0 10px' }}>
                 Video Upload Section
               </legend>
+              <div className="flex justify-between items-center">
+                <p className="mb-2 text-sm text-gray-500">Custom Video JSON Format</p>
+                <ModalComponent button={<Button type="primary">Upload Video </Button>}>
+                  <ImageListInServer
+                    addedImages={[]}
+                    selectMultiple
+                    setAddedImages={() => {}}
+                  />
+                </ModalComponent>
+              </div>
               <Form.Item
-                label="Custom Video JSON Format"
+                // label="Custom Video JSON Format"
                 name="customVideos"
                 className=""
               >

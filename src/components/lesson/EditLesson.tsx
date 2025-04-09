@@ -30,6 +30,7 @@ import { IFileAfterUpload } from '../../types/globalType';
 import { useGlobalContext } from '../ContextApi/GlobalContextApi';
 import FileContainShow from '../Course/FileContaintShow';
 import ModalComponent from '../Modal/ModalComponents';
+import ImageListInServer from '../ui/ImageListModal/ImageListCom';
 import LessonContainShow from './LessonContainShow';
 const { Option } = Select;
 const TextEditorNotSetForm = dynamic(
@@ -114,6 +115,7 @@ export default function EditLesson({ lessonId }: { lessonId: string }) {
       videos,
     };
     if (customVideo && isValidJson(customVideo)) {
+      console.log(LessonData['videos']);
       LessonData['videos'].push(JSON.parse(customVideo));
       delete LessonData['customVideos'];
     }
@@ -158,14 +160,16 @@ export default function EditLesson({ lessonId }: { lessonId: string }) {
 
   useEffect(() => {
     if (data?._id) {
+      if (data?.videos?.find((f: any) => f?.path)) {
+        const customVideo = data?.videos?.find((f: any) => f?.path);
+        setCustomVideo(JSON.stringify(customVideo));
+      }
       if (data?.videos) {
-        setVideos(data?.videos);
+        const another = data?.videos?.filter((f: any) => !f?.path);
+        setVideos(another);
       }
       if (data?.files?.length) {
         setFiles(data?.files);
-      }
-      if (data?.videos?.find((f: any) => f?.path)) {
-        setCustomVideo(JSON.stringify(data?.videos.filter((f: any) => f?.path)));
       }
     }
   }, [data?._id]);
@@ -255,7 +259,7 @@ export default function EditLesson({ lessonId }: { lessonId: string }) {
               <ModalComponent
                 button={
                   <div className="flex items-center justify-center">
-                    <Button type="primary">Click To Open</Button>
+                    <Button type="primary">Show All Content&apos;s</Button>
                   </div>
                 }
                 width={1200}
@@ -266,7 +270,17 @@ export default function EditLesson({ lessonId }: { lessonId: string }) {
             </div>
 
             <Divider> Add Video </Divider>
-            <Form.Item label="Custom Video JSON Format" name="customVideos" className="">
+            <div className="flex justify-between items-center my-2">
+              <p className="mb-2 text-sm text-gray-500">Custom Video JSON Format</p>
+              <ModalComponent button={<Button type="primary">Upload Video </Button>}>
+                <ImageListInServer
+                  addedImages={[]}
+                  selectMultiple
+                  setAddedImages={() => {}}
+                />
+              </ModalComponent>
+            </div>
+            <Form.Item name="customVideos" className="">
               <Input.TextArea
                 // width={750}
                 rows={5}

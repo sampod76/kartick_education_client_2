@@ -267,7 +267,7 @@ export default function ImageListShow({
           </div>
         )}
       </div>
-      <div className="flex justify-center mt-2 items-center border p-1 rounded-md">
+      {/* <div className="flex justify-center mt-2 items-center border p-1 rounded-md">
         <div className="">
           <Button
             type="primary"
@@ -278,7 +278,7 @@ export default function ImageListShow({
             Add Files
           </Button>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
