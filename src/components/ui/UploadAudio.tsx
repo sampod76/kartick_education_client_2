@@ -31,26 +31,23 @@ const UploadAudioFile = ({
     setValue(name, files);
   }, [files, name, setValue]);
 
-  const handleFileProcessing = useCallback(
-    async (file: any) => {
-      try {
-        // Process the file based on fileType (image or audio)
-        // For now, let's just log the file type and URL
+  const handleFileProcessing = useCallback(async (file: any) => {
+    try {
+      // Process the file based on fileType (image or audio)
+      // For now, let's just log the file type and URL
 
-        if (file) {
-          const audioURL = await uploadAudioInServer(file);
-          // console.log('audioURL', audioURL)
-          file = audioURL;
-        }
-        setFiles(file);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error processing file:', error);
-        setLoading(false);
+      if (file) {
+        const audioURL = await uploadAudioInServer(file);
+        // console.log('audioURL', audioURL)
+        file = audioURL;
       }
-    },
-    [fileType],
-  );
+      setFiles(file);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error processing file:', error);
+      setLoading(false);
+    }
+  }, []);
 
   const handleChange: UploadProps['onChange'] = async (
     info: UploadChangeParam<UploadFile>,

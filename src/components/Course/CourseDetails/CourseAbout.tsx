@@ -14,7 +14,9 @@ export default function CourseAbout({ courseId }: { courseId: string }) {
   return (
     <div>
       <div>
-        {courseData?.details ? parse(courseData?.details) : courseData?.short_description}{' '}
+        {courseData?.details
+          ? parse(courseData?.details)
+          : courseData?.short_description}{' '}
       </div>
     </div>
   );

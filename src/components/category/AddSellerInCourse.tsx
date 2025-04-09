@@ -33,7 +33,7 @@ export default function AddSellerInCourse({ sellerId }: { sellerId: string }) {
 
       setCheckedList(setDefaults);
     }
-  }, [findSeller?.updatedAt]);
+  }, [findSeller?.accessCategories, findSeller.updatedAt]);
 
   if (isLoading) {
     return <div>Loading...</div>;
