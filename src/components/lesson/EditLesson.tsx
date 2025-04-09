@@ -11,6 +11,7 @@ import LoadingSkeleton from '@/components/ui/Loading/LoadingSkeleton';
 import { ENUM_MIMETYPE } from '@/constants/globalEnums';
 import { removeNullUndefinedAndFalsey } from '@/hooks/removeNullUndefinedAndFalsey';
 import { multipleFilesUploaderS3 } from '@/utils/handelFileUploderS3';
+import { isValidJson } from '@/utils/jsonUtls';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import {
   Button,
@@ -27,7 +28,9 @@ import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import { IFileAfterUpload } from '../../types/globalType';
 import { useGlobalContext } from '../ContextApi/GlobalContextApi';
+import FileContainShow from '../Course/FileContaintShow';
 import ModalComponent from '../Modal/ModalComponents';
+import ImageListInServer from '../ui/ImageListModal/ImageListCom';
 import LessonContainShow from './LessonContainShow';
 const { Option } = Select;
 const TextEditorNotSetForm = dynamic(
@@ -43,6 +46,7 @@ const TextEditorNotSetForm = dynamic(
 );
 
 export default function EditLesson({ lessonId }: { lessonId: string }) {
+  const [customVideo, setCustomVideo] = useState<any>('');
   const [textEditorValue, setTextEditorValue] = useState('');
   const [videos, setVideos] = useState<any[]>([{ platform: 'vimeo', link: '' }]);
   const [loading, setLoading] = useState(false);
@@ -110,6 +114,11 @@ export default function EditLesson({ lessonId }: { lessonId: string }) {
       ...values,
       videos,
     };
+    if (customVideo && isValidJson(customVideo)) {
+      console.log(LessonData['videos']);
+      LessonData['videos'].push(JSON.parse(customVideo));
+      delete LessonData['customVideos'];
+    }
 
     removeNullUndefinedAndFalsey(LessonData);
 
@@ -151,8 +160,13 @@ export default function EditLesson({ lessonId }: { lessonId: string }) {
 
   useEffect(() => {
     if (data?._id) {
+      if (data?.videos?.find((f: any) => f?.path)) {
+        const customVideo = data?.videos?.find((f: any) => f?.path);
+        setCustomVideo(JSON.stringify(customVideo));
+      }
       if (data?.videos) {
-        setVideos(data?.videos);
+        const another = data?.videos?.filter((f: any) => !f?.path);
+        setVideos(another);
       }
       if (data?.files?.length) {
         setFiles(data?.files);
@@ -242,21 +256,10 @@ export default function EditLesson({ lessonId }: { lessonId: string }) {
               </Form.Item>
             </div>
             <div className="my-4">
-              {/* <ModalInComponent
-                button={
-                  <div className="flex items-center justify-center">
-                    <p className="cursor-pointer rounded-lg bg-blue-500 px-2 py-1 text-white">
-                      Click To Open Content
-                    </p>
-                  </div>
-                }
-              >
-                <LessonContainShow lesson={data} />
-              </ModalInComponent> */}
               <ModalComponent
                 button={
                   <div className="flex items-center justify-center">
-                    <Button type="primary">Click To Open</Button>
+                    <Button type="primary">Show All Content&apos;s</Button>
                   </div>
                 }
                 width={1200}
@@ -267,29 +270,55 @@ export default function EditLesson({ lessonId }: { lessonId: string }) {
             </div>
 
             <Divider> Add Video </Divider>
-
-            {videos?.map((video, index) => (
-              <div key={index} style={{ display: 'flex', marginBottom: '10px' }}>
-                <Select
-                  value={video.platform}
-                  onChange={(value) => handleVideoChange(index, 'platform', value)}
-                  style={{ width: '20%', marginRight: '10px' }}
-                >
-                  <Option value="vimeo">Vimeo</Option>
-                  <Option value="youtube">Youtube</Option>
-                </Select>
-                <Input
-                  placeholder="Enter Video URL"
-                  value={video.link}
-                  onChange={(e) => handleVideoChange(index, 'link', e.target.value)}
-                  style={{ width: '70%', marginRight: '10px' }}
+            <div className="flex justify-between items-center my-2">
+              <p className="mb-2 text-sm text-gray-500">Custom Video JSON Format</p>
+              <ModalComponent button={<Button type="primary">Upload Video </Button>}>
+                <ImageListInServer
+                  addedImages={[]}
+                  selectMultiple
+                  setAddedImages={() => {}}
                 />
-                <MinusCircleOutlined
-                  onClick={() => removeVideo(index)}
-                  style={{ fontSize: '20px', color: 'red' }}
-                />
-              </div>
-            ))}
+              </ModalComponent>
+            </div>
+            <Form.Item name="customVideos" className="">
+              <Input.TextArea
+                // width={750}
+                rows={5}
+                value={customVideo}
+                onChange={(e) => setCustomVideo(e.target.value)}
+                // className="!w-96"
+                placeholder="Please enter video JSON copy"
+              />
+              {isValidJson(customVideo) && (
+                <div className="mt-2 text-sm text-gray-500">
+                  <FileContainShow files={[JSON.parse(customVideo)]} />
+                </div>
+              )}
+            </Form.Item>
+            {videos
+              ?.filter((f) => !f.path)
+              .map((video, index) => (
+                <div key={index} style={{ display: 'flex', marginBottom: '10px' }}>
+                  <Select
+                    value={video.platform}
+                    onChange={(value) => handleVideoChange(index, 'platform', value)}
+                    style={{ width: '20%', marginRight: '10px' }}
+                  >
+                    <Option value="vimeo">Vimeo</Option>
+                    <Option value="youtube">Youtube</Option>
+                  </Select>
+                  <Input
+                    placeholder="Enter Video URL"
+                    value={video.link}
+                    onChange={(e) => handleVideoChange(index, 'link', e.target.value)}
+                    style={{ width: '70%', marginRight: '10px' }}
+                  />
+                  <MinusCircleOutlined
+                    onClick={() => removeVideo(index)}
+                    style={{ fontSize: '20px', color: 'red' }}
+                  />
+                </div>
+              ))}
 
             <div className="flex items-center justify-center">
               <Button type="dashed" onClick={addVideo} className="">

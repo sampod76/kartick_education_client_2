@@ -104,10 +104,11 @@ export default function ImageListShow({
                 if (file.url) {
                   navigator.clipboard.writeText(JSON.stringify(file));
                 }
-                message.success('Link Copy Success');
+                message.success('Link Copy JSON File ');
               }}
             >
               <MdContentCopy />
+              JSON
             </p>
             <p
               className="cursor-pointer"
@@ -266,7 +267,7 @@ export default function ImageListShow({
           </div>
         )}
       </div>
-      <div className="flex justify-center mt-2 items-center border p-1 rounded-md">
+      {/* <div className="flex justify-center mt-2 items-center border p-1 rounded-md">
         <div className="">
           <Button
             type="primary"
@@ -277,7 +278,7 @@ export default function ImageListShow({
             Add Files
           </Button>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -16,21 +16,15 @@ import { USER_ROLE } from '@/constants/role';
 import { removeNullUndefinedAndFalsey } from '@/hooks/removeNullUndefinedAndFalsey';
 import { IFileAfterUpload } from '@/types/globalType';
 import { multipleFilesUploaderS3 } from '@/utils/handelFileUploderS3';
+import { isValidJson } from '@/utils/jsonUtls';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import {
-  Button,
-  Col,
-  Divider,
-  Form,
-  Input,
-  InputNumber,
-  Row,
-  Select,
-  Upload,
-} from 'antd';
+import { Button, Col, Form, Input, InputNumber, Row, Select, Upload } from 'antd';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { useGlobalContext } from '../ContextApi/GlobalContextApi';
+import FileContainShow from '../Course/FileContaintShow';
+import ModalComponent from '../Modal/ModalComponents';
+import ImageListInServer from '../ui/ImageListModal/ImageListCom';
 const TextEditorNotSetForm = dynamic(
   () => import('@/components/shared/TextEditor/TextEditorNotSetForm'),
   {
@@ -48,6 +42,7 @@ interface Video {
 }
 const { Option } = Select;
 const CreateLesson = () => {
+  const [customVideo, setCustomVideo] = useState<any>('');
   const [textEditorValue, setTextEditorValue] = useState('');
   const [form] = Form.useForm();
   const { userInfo, userInfoLoading } = useGlobalContext();
@@ -77,7 +72,6 @@ const CreateLesson = () => {
     { skip: !Boolean(module?._id) },
   );
   const onSubmit = async (values: any) => {
-    console.log('🚀 ~ onSubmit ~ values:', values);
     if (!module?._id || !milestone?._id || !course?._id || !category?._id) {
       Error_model_hook(
         'Please ensure your are selected Lesson/milestone/course/category',
@@ -98,7 +92,7 @@ const CreateLesson = () => {
     }
 
     values.lesson_number = values?.lesson_number && Number(values?.lesson_number);
-    const LessonData: object = {
+    const LessonData: any = {
       ...values,
       category: category?._id,
       course: course?._id,
@@ -107,6 +101,11 @@ const CreateLesson = () => {
       files: files,
       videos: videos.length ? videos.filter((v) => v.link) : [],
     };
+    if (customVideo && isValidJson(customVideo)) {
+      LessonData['videos'].push(JSON.parse(customVideo));
+      delete LessonData['customVideos'];
+    }
+
     removeNullUndefinedAndFalsey(LessonData);
 
     try {
@@ -261,31 +260,39 @@ const CreateLesson = () => {
                 padding: '10px',
                 borderRadius: '5px',
               }}
+              // className="col-span-10"
             >
               <legend style={{ fontWeight: 'bold', padding: '0 10px' }}>
                 Video Upload Section
               </legend>
+              <div className="flex justify-between items-center">
+                <p className="mb-2 text-sm text-gray-500">Custom Video JSON Format</p>
+                <ModalComponent button={<Button type="primary">Upload Video </Button>}>
+                  <ImageListInServer
+                    addedImages={[]}
+                    selectMultiple
+                    setAddedImages={() => {}}
+                  />
+                </ModalComponent>
+              </div>
               <Form.Item
-                // label="Image"
+                // label="Custom Video JSON Format"
                 name="customVideos"
-                valuePropName="fileList"
-                getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.fileList)}
-                className="flex items-center justify-center"
+                className=""
               >
-                <Upload
-                  // action="/upload"
-                  multiple={true}
-                  // listType=""
-                  maxCount={4}
-                  showUploadList={true}
-                  accept={'video/*'}
-                  beforeUpload={(file) => {
-                    return false; // Stop automatic upload
-                  }}
-                  customRequest={() => {}}
-                >
-                  <Button className="!font-sm !overflow-hidden">Add File</Button>
-                </Upload>
+                <Input.TextArea
+                  // width={750}
+                  rows={5}
+                  value={customVideo}
+                  onChange={(e) => setCustomVideo(e.target.value)}
+                  // className="!w-96"
+                  placeholder="Please enter video JSON copy"
+                />
+                {isValidJson(customVideo) && (
+                  <div className="mt-2 text-sm text-gray-500">
+                    <FileContainShow files={[JSON.parse(customVideo)]} />
+                  </div>
+                )}
               </Form.Item>
               <div>
                 {videos.map((video, index) => (
@@ -367,15 +374,17 @@ const CreateLesson = () => {
                 />
               </div>
             </Col>
-            <Button
-              disabled={GetLessionLoading || isLoading}
-              type="primary"
-              style={{ marginTop: '1rem' }}
-              htmlType="submit"
-              loading={addLoading || loading}
-            >
-              Create Lesson
-            </Button>
+            <div className="flex justify-center items-center my-2">
+              <Button
+                disabled={GetLessionLoading || isLoading}
+                type="primary"
+                style={{ marginTop: '1rem' }}
+                htmlType="submit"
+                loading={addLoading || loading}
+              >
+                Create Lesson
+              </Button>
+            </div>
           </Form>
         </div>
       ) : (
