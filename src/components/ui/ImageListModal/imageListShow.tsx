@@ -104,10 +104,11 @@ export default function ImageListShow({
                 if (file.url) {
                   navigator.clipboard.writeText(JSON.stringify(file));
                 }
-                message.success('Link Copy Success');
+                message.success('Link Copy JSON File ');
               }}
             >
               <MdContentCopy />
+              JSON
             </p>
             <p
               className="cursor-pointer"

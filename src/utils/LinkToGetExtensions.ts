@@ -17,12 +17,16 @@ export const LinkToGetExtensions = (
   link: string,
   extensions: IExtension[],
 ): LinkInfo | null => {
-  const match = link.match(/\.\w+$/); // Matches .extension only at the end of the string
+  try {
+    const match = link.match(/\.\w+$/); // Matches .extension only at the end of the string
 
-  if (match && extensions.includes(match[0] as IExtension)) {
-    const type = extensionTypes[match[0] as IExtension];
-    return { type, link };
+    if (match && extensions.includes(match[0] as IExtension)) {
+      const type = extensionTypes[match[0] as IExtension];
+      return { type, link };
+    }
+
+    return null; // Return null if no valid extension is found
+  } catch (error) {
+    return null; // Return null if no valid extension is found
   }
-
-  return null; // Return null if no valid extension is found
 };

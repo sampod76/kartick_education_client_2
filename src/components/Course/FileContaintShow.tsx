@@ -4,11 +4,11 @@ import fileObjectToLink from '@/utils/fileObjectToLink';
 import { LinkToGetExtensions } from '@/utils/LinkToGetExtensions';
 import { Collapse, Tabs } from 'antd';
 import { useState } from 'react';
+import AudioPlayer from 'react-h5-audio-player';
+import ReactPlayer from 'react-player';
 import CustomImageTag from '../ui/CustomTag/CustomImageTag';
 import LoadingSkeleton from '../ui/Loading/LoadingSkeleton';
 import PDFViewer from '../ui/PdfViewer';
-import ReactPlayer from 'react-player';
-import AudioPlayer from 'react-h5-audio-player';
 
 const { Panel } = Collapse;
 
@@ -62,6 +62,7 @@ export default function FileContainShow({ files }: { files: IFileAfterUpload[] }
         ),
       };
     }
+
     const application = LinkToGetExtensions(fileObjectToLink(file), [
       '.doc',
       '.docx',
@@ -74,7 +75,7 @@ export default function FileContainShow({ files }: { files: IFileAfterUpload[] }
       label: `File ${index + 1}`,
       children: (
         <div className="my-3 border">
-          {file.mimetype.includes('image') && (
+          {file?.mimetype?.includes('image') && (
             <CustomImageTag
               src={fileObjectToLink(file)}
               width={500}
@@ -82,7 +83,7 @@ export default function FileContainShow({ files }: { files: IFileAfterUpload[] }
               className="h-96 w-96"
             />
           )}
-          {file.mimetype.includes('pdf') && <PDFViewer file={fileObjectToLink(file)} />}
+          {file?.mimetype?.includes('pdf') && <PDFViewer file={fileObjectToLink(file)} />}
           {application?.type === 'document' &&
             (loading ? (
               <LoadingSkeleton />
