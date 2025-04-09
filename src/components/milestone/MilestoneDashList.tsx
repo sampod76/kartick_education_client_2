@@ -170,6 +170,15 @@ const MileStoneList = ({
       //   return <>{data?.title}</>;
       // },
     },
+    {
+      title: 'Total module',
+      dataIndex: ['totalModules'],
+      ellipsis: true,
+      // render: function (data: any) {
+      //   return <>{data?.title}</>;
+      // },
+      width: 150,
+    },
     // {
     //   title: 'Created at',
     //   dataIndex: 'createdAt',

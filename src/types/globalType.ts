@@ -19,6 +19,7 @@ export type IFileAfterUpload = {
   durl?: string;
   uid?: string;
   platform: IImagePlatform;
+  fileType: string;
   cdn?: string; //https://www.youtube.com/watch?v=kbI7kRWAU-w
   // fileId: Types.ObjectId | string | IFileUploade;
 };
