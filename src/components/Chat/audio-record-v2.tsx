@@ -39,7 +39,7 @@ const AudioRecordV2 = ({ audioFileLiveUrlRef, form, isReset }: any) => {
 
     try {
       const audioFileData = await multipleFilesUploaderS3([audioFile]);
-      console.log('🚀 ~ handleStop ~ audioFileData:', audioFileData);
+      // console.log('🚀 ~ handleStop ~ audioFileData:', audioFileData);
 
       if (audioFileData[0] && audioFileLiveUrlRef) {
         audioFileLiveUrlRef.current = audioFileData[0];
