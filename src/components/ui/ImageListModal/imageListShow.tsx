@@ -2,7 +2,10 @@ import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
 import FileContainShow from '@/components/Course/FileContaintShow';
 import ModalComponent from '@/components/Modal/ModalComponents';
 import LoadingForDataFetch from '@/components/Utlis/LoadingForDataFetch';
-import { useGetAllFileListesQuery } from '@/redux/api/AllApi/fileListApi';
+import {
+  useDeleteFileListMutation,
+  useGetAllFileListesQuery,
+} from '@/redux/api/AllApi/fileListApi';
 import { useDebounced } from '@/redux/hooks';
 import { IFileAfterUpload } from '@/types/globalType';
 import fileObjectToLink from '@/utils/fileObjectToLink';
@@ -17,9 +20,10 @@ import { saveAs } from 'file-saver';
 
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
-import { MdContentCopy } from 'react-icons/md';
+import { MdContentCopy, MdDelete } from 'react-icons/md';
 import CustomImageTag from '../CustomTag/CustomImageTag';
 
+import { confirm_modal, Error_model_hook, Success_model } from '@/utils/modalHook';
 import UMTable from '../UMTable';
 interface ImageModalProps {
   addedImages: IFileAfterUpload[];
@@ -31,6 +35,7 @@ export default function ImageListShow({
   addedImages,
   selectMultiple,
 }: ImageModalProps) {
+  const [deletefile, { isLoading: dLoading }] = useDeleteFileListMutation();
   const { userInfo } = useGlobalContext();
   const query: Record<string, any> = {};
   const [page, setPage] = useState<number>(1);
@@ -69,6 +74,24 @@ export default function ImageListShow({
   const onChange = (page: number) => {
     setPage(page);
   };
+  const handleDelete = (id: string) => {
+    confirm_modal(`Are you sure you want to delete`).then(async (res) => {
+      if (res.isConfirmed) {
+        try {
+          const res = await deletefile(id).unwrap();
+          if (res?.success == false) {
+            // message.success("Admin Successfully Deleted!");
+            // setOpen(false);
+            Error_model_hook(res?.message);
+          } else {
+            Success_model('Successfully Deleted');
+          }
+        } catch (error: any) {
+          Error_model_hook(error.message);
+        }
+      }
+    });
+  };
   const columns = [
     {
       title: 'Title',
@@ -88,6 +111,17 @@ export default function ImageListShow({
     {
       title: 'Status',
       dataIndex: 'status',
+      render: function (data: any) {
+        return (
+          <p
+            className={`${
+              data === 'active' ? 'bg-green-500' : 'bg-red-500'
+            } text-white rounded-md px-2 py-1`}
+          >
+            {data === 'active' ? 'Active' : 'Pending'}
+          </p>
+        );
+      },
       width: 100,
     },
     {
@@ -97,21 +131,6 @@ export default function ImageListShow({
       render: function (file: any) {
         return (
           <div className=" gap-1">
-            <Tooltip title="Copy JSON file">
-              <p
-                className="cursor-pointer whitespace-nowrap flex items-center gap-1"
-                onClick={() => {
-                  if (file.url) {
-                    navigator.clipboard.writeText(JSON.stringify(file));
-                  }
-                  message.success('Link Copy JSON File ');
-                }}
-              >
-                <MdContentCopy />
-                JSON
-              </p>
-            </Tooltip>
-
             <div className="flex items-center gap-1">
               <p
                 className="cursor-pointer "
@@ -138,6 +157,29 @@ export default function ImageListShow({
                   <FileContainShow files={[file]} />
                 </ModalComponent>
               </div>
+            </div>
+            <Tooltip title="Copy JSON file">
+              <p
+                className="cursor-pointer whitespace-nowrap flex items-center gap-1 border p-1 rounded-xl w-fit my-1 pr-4"
+                onClick={() => {
+                  if (file.url) {
+                    navigator.clipboard.writeText(JSON.stringify(file));
+                  }
+                  message.success('Link Copy JSON File ');
+                }}
+              >
+                <MdContentCopy />
+                JSON
+              </p>
+            </Tooltip>
+
+            <div>
+              <button
+                className="flex items-center gap-1 border p-1 rounded-xl"
+                onClick={() => handleDelete(file._id)}
+              >
+                <MdDelete className="text-lg text-red-500" /> Delete
+              </button>
             </div>
           </div>
         );
