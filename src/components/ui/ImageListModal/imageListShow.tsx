@@ -59,7 +59,8 @@ export default function ImageListShow({
   if (!!debouncedSearchTerm) {
     query['searchTerm'] = debouncedSearchTerm;
   }
-  const { data, isLoading, isFetching, isError, error } = useGetAllFileListesQuery(query);
+  const { data, isLoading, isFetching, isError, error, refetch } =
+    useGetAllFileListesQuery(query);
   if (isLoading || isFetching) {
     return <LoadingForDataFetch />;
   }
@@ -233,6 +234,14 @@ export default function ImageListShow({
           options={fileTypes}
         />
         <div>
+          <Button
+            loading={isFetching}
+            style={{ height: 40 }}
+            type="default"
+            onClick={() => refetch()}
+          >
+            <ReloadOutlined /> Soft Reload
+          </Button>
           {(!!sortBy || !!sortOrder || !!searchTerm) && (
             <Button style={{ margin: '0px 5px' }} type="default" onClick={resetFilters}>
               <ReloadOutlined />
