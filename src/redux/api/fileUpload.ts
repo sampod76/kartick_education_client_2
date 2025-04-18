@@ -3,7 +3,7 @@ import { baseApi } from './baseApi';
 
 const FILE_UPLOAD = '/upload';
 
-export const faqApi = baseApi.injectEndpoints({
+export const fileUpload = baseApi.injectEndpoints({
   endpoints: (build) => ({
     // create a new academic department
     addPdf: build.mutation({
@@ -13,7 +13,7 @@ export const faqApi = baseApi.injectEndpoints({
         data,
         contentType: 'multipart/form-data',
       }),
-      invalidatesTags: [tagTypes.faq],
+      invalidatesTags: [tagTypes.FileList],
     }),
     addAnyFile: build.mutation({
       query: (data) => ({
@@ -22,9 +22,19 @@ export const faqApi = baseApi.injectEndpoints({
         data,
         contentType: 'multipart/form-data',
       }),
-      invalidatesTags: [tagTypes.faq],
+      invalidatesTags: [tagTypes.FileList],
+    }),
+    uploadVimeoVideo: build.mutation({
+      query: (data) => ({
+        url: FILE_UPLOAD + '/upload-vimeo-video',
+        method: 'POST',
+        data,
+        // contentType: 'multipart/form-data',
+      }),
+      invalidatesTags: [tagTypes.FileList],
     }),
   }),
 });
 
-export const { useAddPdfMutation, useAddAnyFileMutation } = faqApi;
+export const { useAddPdfMutation, useAddAnyFileMutation, useUploadVimeoVideoMutation } =
+  fileUpload;

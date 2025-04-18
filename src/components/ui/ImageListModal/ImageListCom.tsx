@@ -3,6 +3,7 @@ import { Select, Tabs } from 'antd';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
 import { FileUploaderUi } from '../FileUploader/FileUploaderUi';
+import VimeoFileUpload from '../FileUploader/VimeoFileUpload';
 import ImageListShow from './imageListShow';
 const { Option } = Select;
 
@@ -47,8 +48,13 @@ const ImageListInServer: React.FC<ImageModalProps> = ({
     },
     {
       key: '2',
-      label: 'Upload New',
+      label: 'Upload New Custom Files',
       children: <FileUploaderUi />,
+    },
+    {
+      key: '3',
+      label: 'Upload Vimeo Files',
+      children: <VimeoFileUpload />,
     },
   ];
   return (

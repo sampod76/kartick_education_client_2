@@ -17,7 +17,6 @@ import { saveAs } from 'file-saver';
 
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
-import { FaEye } from 'react-icons/fa';
 import { MdContentCopy } from 'react-icons/md';
 import CustomImageTag from '../CustomTag/CustomImageTag';
 
@@ -97,34 +96,48 @@ export default function ImageListShow({
       width: 150,
       render: function (file: any) {
         return (
-          <div className="flex justify-center items-center gap-1">
-            <p
-              className="cursor-pointer"
-              onClick={() => {
-                if (file.url) {
-                  navigator.clipboard.writeText(JSON.stringify(file));
-                }
-                message.success('Link Copy JSON File ');
-              }}
-            >
-              <MdContentCopy />
-              JSON
-            </p>
-            <p
-              className="cursor-pointer"
-              onClick={() => {
-                if (file.url) {
-                  navigator.clipboard.writeText(fileObjectToLink(file));
-                }
-                message.success('Link Copy Success');
-              }}
-            >
-              <MdContentCopy />
-            </p>
-            <div>
-              <ModalComponent width={1200} button={<p>{<FaEye />}</p>}>
-                <FileContainShow files={[file]} />
-              </ModalComponent>
+          <div className=" gap-1">
+            <Tooltip title="Copy JSON file">
+              <p
+                className="cursor-pointer whitespace-nowrap flex items-center gap-1"
+                onClick={() => {
+                  if (file.url) {
+                    navigator.clipboard.writeText(JSON.stringify(file));
+                  }
+                  message.success('Link Copy JSON File ');
+                }}
+              >
+                <MdContentCopy />
+                JSON
+              </p>
+            </Tooltip>
+
+            <div className="flex items-center gap-1">
+              <p
+                className="cursor-pointer "
+                onClick={() => {
+                  if (file.url) {
+                    navigator.clipboard.writeText(fileObjectToLink(file));
+                  }
+                  message.success('Link Copy Success');
+                }}
+              >
+                <Tooltip title="Only Copy file link">
+                  <MdContentCopy />
+                </Tooltip>
+              </p>
+              <div>
+                <ModalComponent
+                  width={1200}
+                  button={
+                    <Tooltip title="View file">
+                      <p className="cursor-pointer">View</p>
+                    </Tooltip>
+                  }
+                >
+                  <FileContainShow files={[file]} />
+                </ModalComponent>
+              </div>
             </div>
           </div>
         );
