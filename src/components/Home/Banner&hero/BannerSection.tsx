@@ -2,12 +2,16 @@
 import React, { useState } from 'react';
 // import bannerBG from "@/assets/banner/bannerBG.png";
 import bannerBG from '@/assets/banner/header.png';
+import StudentVoicesUnited from '@/components/ui/Button/StudentVoicesUnited';
+import CustomImageTag from '@/components/ui/CustomTag/CustomImageTag';
 import {
   addBannerSearchValue,
   clearBannerSearchValue,
 } from '@/redux/features/bannerCourseSlice';
 import { useAppDispatch, useAppSelector, useDebounced } from '@/redux/hooks';
+import { Tooltip } from 'antd';
 import Image from 'next/image';
+import Link from 'next/link';
 const BannerSection = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [resetValue, setResetValue] = useState<boolean>(false);
@@ -72,12 +76,26 @@ const BannerSection = () => {
               className="h-[70%] w-full pr-5 lg:h-[300px]"
             />
 
-            <h2
+            <div
               data-aos="zoom-in-left"
-              className="mx-auto -ml-3 max-w-[40rem] text-center text-sm md:ml-0 lg:mt-6 lg:text-3xl 2xl:text-4xl"
+              className="mx-auto flex justify-end  items-center animate-bounce w-full mt-5"
             >
-              Empowering Educators, Students, and Families with Tailored Support
-            </h2>
+              <Tooltip title="Join our community on Discord">
+                <Link
+                  href={'https://discord.gg/zqKWVTTF'}
+                  target="_blank"
+                  className="flex justify-center items-center "
+                >
+                  <CustomImageTag
+                    //@ts-ignore
+                    style={{ animationDuration: '2s' }}
+                    src={'/voiceicon.png'}
+                    className="w-10 animate-ping "
+                  />{' '}
+                  <StudentVoicesUnited />
+                </Link>
+              </Tooltip>
+            </div>
           </div>
         </div>
       </div>
