@@ -54,7 +54,6 @@ const StyledWrapper = styled.div`
 
   strong {
     z-index: 2;
-
     font-size: 15px;
     letter-spacing: 5px;
     color: #ffffff;
@@ -189,6 +188,67 @@ const StyledWrapper = styled.div`
     100% {
       transform: scale(0.75);
       box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
+  }
+
+  /* Media Queries for Responsiveness */
+  @media (max-width: 768px) {
+    .btn {
+      width: 16rem;
+      height: 2.5rem;
+    }
+
+    strong {
+      font-size: 14px;
+      letter-spacing: 4px;
+    }
+
+    #glow {
+      width: 10rem;
+    }
+
+    .circle {
+      height: 25px;
+    }
+
+    #stars::before {
+      width: 160%;
+      height: 450%;
+    }
+
+    #stars::after {
+      top: -8rem;
+      left: -80rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .btn {
+      width: 12rem;
+      height: 2rem;
+    }
+
+    strong {
+      font-size: 7px;
+      letter-spacing: 3px;
+    }
+
+    #glow {
+      width: 8rem;
+    }
+
+    .circle {
+      height: 20px;
+    }
+
+    #stars::before {
+      width: 150%;
+      height: 400%;
+    }
+
+    #stars::after {
+      top: -6rem;
+      left: -60rem;
     }
   }
 `;
