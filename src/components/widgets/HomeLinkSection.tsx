@@ -5,8 +5,9 @@ const HomeLinkSection = () => {
     <div>
       <div className=" py-[20px] lg:py-[40px] bg-black container mx-auto text-center border ">
         <div>
-          <h2 className="text-lg sm:text-2xl xl:text-[2.9rem] 2xl:text-[3.5rem] text-center  text-white font-semibold p-5 my-4 lg:my-10">
-            What they need to learn. How they want to learn.
+          <h2 className="text-lg sm:text-2xl md:text-3xl  2xl:text-5xl  text-center text-white font-semibold p-5 my-4 lg:my-10 -mt-3">
+            Empowering Educators, Students, and Families with <br />
+            <span className="mt-7">Tailored Support</span>
           </h2>
         </div>
 
