@@ -16,9 +16,9 @@ export default function FileContainShow({
   modalId,
 }: {
   files: IFileAfterUpload[];
-  modalId: string;
+  modalId?: string;
 }) {
-  const isPageOpen = useAppSelector((state) => state.modal[modalId]);
+  const isPageOpen = useAppSelector((state) => state.modal[modalId!]);
   const [loading, setLoading] = useState(false);
   const [activeKey, setActiveKey] = useState('0'); // Track active tab
 
