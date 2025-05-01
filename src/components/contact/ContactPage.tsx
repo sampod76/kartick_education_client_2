@@ -1,25 +1,19 @@
 'use client';
-import React, { useState } from 'react';
+import { useAddContactMutation } from '@/redux/api/adminApi/contactApi';
+import { getUserInfo } from '@/services/auth.service';
+import { Error_model_hook, Success_model } from '@/utils/modalHook';
 import {
   ContactsFilled,
-  MessageFilled,
-  WhatsAppOutlined,
   EnvironmentOutlined,
   FacebookFilled,
-  TwitterCircleFilled,
-  PlusOutlined,
-  MinusOutlined,
   // LinkedInCircleFilled
   LinkedinFilled,
-  LinkedinOutlined,
-  YoutubeOutlined,
+  MessageFilled,
   TwitterOutlined,
+  YoutubeOutlined,
 } from '@ant-design/icons';
-import CreateStudentPage from '../stepper/CreateStudent';
+import { useState } from 'react';
 import ContactForm from './ContactForm';
-import { getUserInfo } from '@/services/auth.service';
-import { useAddContactMutation } from '@/redux/api/adminApi/contactApi';
-import { Error_model_hook, Success_model } from '@/utils/modalHook';
 
 export default function ContactPage() {
   const userInfo = getUserInfo() as any;
@@ -76,7 +70,7 @@ export default function ContactPage() {
                 />
                 <div className="flex text-2xl flex-col gap-3">
                   <h2 className="text-2xl font-bold">Phone</h2>
-                  <h4 className="text-slate-600  text-xl ">1 (888) 2010390</h4>
+                  <h4 className="text-slate-600  text-xl ">+1 (877) 7870093</h4>
                 </div>
               </div>
               <div className="flex align-top py-9  pr-5 pl-2  gap-[2rem] text-start ">
@@ -88,7 +82,7 @@ export default function ContactPage() {
                 />
                 <div className="flex text-2xl flex-col gap-3">
                   <h2 className="text-2xl font-bold">Message</h2>
-                  <h4 className="text-slate-600  text-xl ">1 (888) 2010390</h4>
+                  <h4 className="text-slate-600  text-xl ">+1 (877) 7870093</h4>
                 </div>
               </div>
             </div>

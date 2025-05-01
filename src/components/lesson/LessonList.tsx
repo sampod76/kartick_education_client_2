@@ -71,8 +71,9 @@ export default function LessonList({
             }
             width={1200}
             maskClosable={false}
+            modalId={lesson?._id}
           >
-            <LessonContainShow lesson={lesson} />
+            <LessonContainShow modalId={lesson?._id} lesson={lesson} />
           </ModalComponent>
         );
       } else {

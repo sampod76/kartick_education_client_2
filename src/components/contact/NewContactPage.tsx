@@ -1,15 +1,9 @@
-import { FaXTwitter, FaLinkedin, FaFacebookF, FaLocationDot } from 'react-icons/fa6';
-import { FaPhoneAlt } from 'react-icons/fa';
-import { IoMdMail } from 'react-icons/io';
-import { getUserInfo } from '@/services/auth.service';
-import { useAddContactMutation } from '@/redux/api/adminApi/contactApi';
-import { Error_model_hook, Success_model } from '@/utils/modalHook';
-import { Button, Col, Form, Row } from 'antd';
-import FormInput from '../Forms/FormInput';
-import FormTextArea from '../Forms/FormTextArea';
-import ContactForm from './ContactForm';
-import SupportDonateHelpDesk from '../widgets/SupportDonate';
 import Image from 'next/image';
+import { FaPhoneAlt } from 'react-icons/fa';
+import { FaFacebookF, FaLinkedin, FaLocationDot, FaXTwitter } from 'react-icons/fa6';
+import { IoMdMail } from 'react-icons/io';
+import SupportDonateHelpDesk from '../widgets/SupportDonate';
+import ContactForm from './ContactForm';
 
 const NewContactPage = () => {
   return (
@@ -52,11 +46,11 @@ const NewContactPage = () => {
                 <div className="contact-info mt-6">
                   <div className="flex gap-4 border-b-2 border-[#FB8500] pb-5 pt-1 items-center">
                     <FaPhoneAlt size={16} />
-                    <div className="font-bold">{`1 (888) 2010390`}</div>
+                    <div className="font-bold">{`+1 (877) 7870093`}</div>
                   </div>
                   <div className="flex gap-3 border-b-2 border-[#FB8500] pb-5 pt-3 items-center">
                     <IoMdMail size={19} />
-                    <div className="font-bold">{`hello@iblossomlearn-academy.org `}</div>
+                    <div className="font-bold">{`iblossomlearn240@gmail.com `}</div>
                   </div>
                   <div className="flex gap-3 pb-5 pt-3 items-center">
                     <FaLocationDot size={18} />

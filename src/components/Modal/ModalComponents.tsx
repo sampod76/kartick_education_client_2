@@ -1,4 +1,6 @@
 'use client';
+import { toggleModal } from '@/redux/features/modalState';
+import { useAppDispatch } from '@/redux/hooks';
 import { Button, Modal } from 'antd';
 import React, { useState } from 'react';
 
@@ -9,6 +11,7 @@ const ModalComponent = ({
   loading = false,
   width = 1000,
   maskClosable = true,
+  modalId = 'sampleModalId',
 }: {
   children: React.ReactElement;
   buttonText?: string;
@@ -16,16 +19,20 @@ const ModalComponent = ({
   loading?: boolean;
   width?: number;
   maskClosable?: boolean;
+  modalId?: string;
 }) => {
+  const dispatch = useAppDispatch();
+
   const [open, setOpen] = useState(false);
-  //   const [confirmLoading, setConfirmLoading] = useState(false);
 
   const showModal = () => {
     setOpen(true);
+    dispatch(toggleModal({ field: modalId, value: true }));
   };
 
   const handleCancel = () => {
     setOpen(false);
+    dispatch(toggleModal({ field: modalId, value: false }));
   };
 
   return (

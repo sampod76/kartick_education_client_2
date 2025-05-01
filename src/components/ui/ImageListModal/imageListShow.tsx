@@ -18,7 +18,6 @@ import {
 import { Button, Input, message, Pagination, Select, Tooltip } from 'antd';
 import { saveAs } from 'file-saver';
 
-import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import { MdContentCopy, MdDelete } from 'react-icons/md';
 import CustomImageTag from '../CustomTag/CustomImageTag';
@@ -66,7 +65,7 @@ export default function ImageListShow({
   }
   const allFiles = data?.data;
   const meta = data?.meta;
-  console.log('🚀 ~ allFiles:', allFiles);
+  // console.log('🚀 ~ allFiles:', allFiles);
   // Calculate the index of the first and last profile to be displayed on the current page
   const onShowSizeChange = (current: number, pageSize: number) => {
     setPage(current);
@@ -95,43 +94,35 @@ export default function ImageListShow({
   };
   const columns = [
     {
+      title: '',
+      dataIndex: 'thumbnail',
+      width: 100,
+      render: function (file: any) {
+        return file ? (
+          <CustomImageTag
+            src={file}
+            width={300}
+            height={300}
+            className="w-20 h-16 object-cover rounded-md"
+          />
+        ) : (
+          <div className="w-20 h-20 bg-gray-200 rounded-md"></div>
+        );
+      },
+    },
+    {
       title: 'Title',
       dataIndex: 'filename',
       ellipsis: true,
     },
 
     {
-      title: 'Created at',
-      dataIndex: 'createdAt',
-      render: function (data: any) {
-        return data && dayjs(data).format('MMM D, YYYY hh:mm A');
-      },
-      sorter: true,
-      width: 200,
-    },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      render: function (data: any) {
-        return (
-          <p
-            className={`${
-              data === 'active' ? 'bg-green-500' : 'bg-red-500'
-            } text-white rounded-md px-2 py-1`}
-          >
-            {data === 'active' ? 'Active' : 'Pending'}
-          </p>
-        );
-      },
-      width: 100,
-    },
-    {
       title: 'Action',
       // dataIndex: '_id',
-      width: 150,
+      width: 350,
       render: function (file: any) {
         return (
-          <div className=" gap-1">
+          <div className=" gap-1 flex justify-center items-center gap-1">
             <div className="flex items-center gap-1">
               <p
                 className="cursor-pointer "
@@ -151,11 +142,12 @@ export default function ImageListShow({
                   width={1200}
                   button={
                     <Tooltip title="View file">
-                      <p className="cursor-pointer">View</p>
+                      <Button className="cursor-pointer">View</Button>
                     </Tooltip>
                   }
+                  modalId={file?._id || file?.path}
                 >
-                  <FileContainShow files={[file]} />
+                  <FileContainShow modalId={file?._id || file?.path} files={[file]} />
                 </ModalComponent>
               </div>
             </div>

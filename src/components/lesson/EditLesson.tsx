@@ -264,8 +264,9 @@ export default function EditLesson({ lessonId }: { lessonId: string }) {
                 }
                 width={1200}
                 maskClosable={false}
+                modalId="editlissino"
               >
-                <LessonContainShow lesson={data} />
+                <LessonContainShow modalId="editlissino" lesson={data} />
               </ModalComponent>
             </div>
 
@@ -378,8 +379,12 @@ export default function EditLesson({ lessonId }: { lessonId: string }) {
                           }
                           width={1200}
                           maskClosable={false}
+                          modalId={file.path || '112233'}
                         >
-                          <LessonContainShow lesson={data} />
+                          <LessonContainShow
+                            modalId={file.path || '112233'}
+                            lesson={data}
+                          />
                         </ModalComponent>
                         <Tooltip title="Remove">
                           <MinusCircleOutlined
