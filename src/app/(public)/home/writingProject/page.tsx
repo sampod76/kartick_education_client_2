@@ -8,9 +8,9 @@ import { Empty } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function TalkeasiUnlimited() {
+export default function WritingProject() {
   const { data, isLoading } = useGetAllPageBuilderQuery({
-    pageType: ENUM_PAGE_BUILDER_TYPE.iTalkEasiUnlimited,
+    pageType: ENUM_PAGE_BUILDER_TYPE.writingProject,
   });
   if (isLoading) {
     return <LoadingSkeleton />;

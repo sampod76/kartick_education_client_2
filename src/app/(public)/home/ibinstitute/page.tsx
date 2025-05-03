@@ -64,9 +64,12 @@ export default function IbInstitute() {
         {value?.actionButton?.link && (
           <div className="flex justify-center items-center ">
             <Link href={value?.actionButton?.link} target="_blank">
-              <div className="  self-center w-80 mt-6 rounded-3xl p-1 border-2 border-primary">
+              <div className="  self-center  w-fit  mt-6 rounded-3xl p-1 border-2 border-primary">
                 <button className="bg-primary p-2 rounded-3xl px-5  text-[12px] lg:text-base text-white  w-full ">
-                  <p className="text-xl">Ready, Set, Go</p>
+                  <p className="text-xl">
+                    {' '}
+                    {value?.actionButton?.title || 'Ready, Set, Go'}
+                  </p>
                 </button>
               </div>
             </Link>

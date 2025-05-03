@@ -99,11 +99,115 @@ export default function PageBuilderListPage() {
       width: 120,
       render: (record: { pageType: IPageType; _id: string }) => {
         switch (record.pageType) {
+          case 'thriveInstitute':
+            return (
+              <div>
+                <Space size="middle">
+                  <Link href={`/home/${record.pageType}`}>View</Link>
+                  <Link
+                    href={`/${userInfo?.role}/page-builder/${record.pageType}/${record._id}`}
+                  >
+                    Edit
+                  </Link>
+                </Space>
+              </div>
+            );
+          case 'peacefulFamilyDynamics':
+            return (
+              <div>
+                <Space size="middle">
+                  <Link href={`/home/${record.pageType}`}>View</Link>
+                  <Link
+                    href={`/${userInfo?.role}/page-builder/${record.pageType}/${record._id}`}
+                  >
+                    Edit
+                  </Link>
+                </Space>
+              </div>
+            );
+          case 'wholeChildSeries':
+            return (
+              <div>
+                <Space size="middle">
+                  <Link href={`/home/${record.pageType}`}>View</Link>
+                  <Link
+                    href={`/${userInfo?.role}/page-builder/${record.pageType}/${record._id}`}
+                  >
+                    Edit
+                  </Link>
+                </Space>
+              </div>
+            );
+          case 'scienceInfinityProject':
+            return (
+              <div>
+                <Space size="middle">
+                  <Link href={`/home/${record.pageType}`}>View</Link>
+                  <Link
+                    href={`/${userInfo?.role}/page-builder/${record.pageType}/${record._id}`}
+                  >
+                    Edit
+                  </Link>
+                </Space>
+              </div>
+            );
+          case 'writingProject':
+            return (
+              <div>
+                <Space size="middle">
+                  <Link href={`/home/${record.pageType}`}>View</Link>
+                  <Link
+                    href={`/${userInfo?.role}/page-builder/${record.pageType}/${record._id}`}
+                  >
+                    Edit
+                  </Link>
+                </Space>
+              </div>
+            );
+          case 'iBLossomLearnPDInstitute':
+            return (
+              <div>
+                <Space size="middle">
+                  <Link href={'/home/ib-pd-institute'}>View</Link>
+                  <Link
+                    href={`/${userInfo?.role}/page-builder/${record.pageType}/${record._id}`}
+                  >
+                    Edit
+                  </Link>
+                </Space>
+              </div>
+            );
           case 'iBLossomLearnLanguageInstitute':
             return (
               <div>
                 <Space size="middle">
                   <Link href={'/home/ibinstitute'}>View</Link>
+                  <Link
+                    href={`/${userInfo?.role}/page-builder/${record.pageType}/${record._id}`}
+                  >
+                    Edit
+                  </Link>
+                </Space>
+              </div>
+            );
+          case 'flexAccreditedK12':
+            return (
+              <div>
+                <Space size="middle">
+                  <Link href={'/home/flex-accredited'}>View</Link>
+                  <Link
+                    href={`/${userInfo?.role}/page-builder/${record.pageType}/${record._id}`}
+                  >
+                    Edit
+                  </Link>
+                </Space>
+              </div>
+            );
+          case 'iTalkEasiUnlimited':
+            return (
+              <div>
+                <Space size="middle">
+                  <Link href={'/home/talkeasi-unlimited'}>View</Link>
                   <Link
                     href={`/${userInfo?.role}/page-builder/${record.pageType}/${record._id}`}
                   >

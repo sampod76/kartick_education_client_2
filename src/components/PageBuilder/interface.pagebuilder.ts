@@ -25,6 +25,7 @@ export enum ENUM_PAGE_BUILDER_TYPE {
   thriveInstitute = 'thriveInstitute',
   wholeChildSeries = 'wholeChildSeries',
   peacefulFamilyDynamics = 'peacefulFamilyDynamics',
+  iBLossomLearnPDInstitute = 'iBLossomLearnPDInstitute',
 }
 
 export const PAGE_TYPE_ARRAY = Object.values(ENUM_PAGE_BUILDER_TYPE);

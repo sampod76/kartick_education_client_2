@@ -85,7 +85,7 @@ const HomeLinkSection = () => {
                       >
                         <Link
                           className="text-black whitespace-nowrap hover:text-white"
-                          href={'/home/writing-project'}
+                          href={'/home/writingProject'}
                         >
                           The Writing Project
                         </Link>
@@ -96,7 +96,7 @@ const HomeLinkSection = () => {
                       >
                         <Link
                           className="text-black whitespace-nowrap hover:text-white"
-                          href={'/home/science-infinity-project'}
+                          href={'/home/scienceInfinityProject'}
                         >
                           The Science Infinity Project
                         </Link>
@@ -140,7 +140,7 @@ const HomeLinkSection = () => {
                       >
                         <Link
                           className="text-black whitespace-nowrap hover:text-white"
-                          href={'/home/whole-child-series'}
+                          href={'/home/wholeChildSeries'}
                         >
                           The Whole Child Series
                         </Link>
@@ -152,7 +152,7 @@ const HomeLinkSection = () => {
                       >
                         <Link
                           className="text-black whitespace-nowrap hover:text-white"
-                          href={'/home/peaceful-family-dynamics'}
+                          href={'/home/peacefulFamilyDynamics'}
                         >
                           Peaceful Family Dynamics
                         </Link>
@@ -162,7 +162,7 @@ const HomeLinkSection = () => {
                 >
                   <Link
                     className="text-black w-full whitespace-break-spaces xl:whitespace-nowrap hover:text-white"
-                    href={'/home/thrive-institute'}
+                    href={'/home/thriveInstitute'}
                   >
                     The Thrive Institute
                   </Link>
