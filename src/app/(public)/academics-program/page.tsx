@@ -84,7 +84,7 @@ export default function Academicsprogram() {
                 className=" self-center bg-[#5373fe] w-96 rounded-3xl p-1 border-2 border-primary"
               >
                 <Link
-                  href={'/iblossom-private-academy'}
+                  href={'/home/iblossom-private-academy'}
                   className=" p-2   rounded-3xl px-5   text-white  w-full text-base lg:text-xl whitespace-nowrap"
                 >
                   <p className=" text-base lg:text-xl whitespace-nowrap ">
@@ -97,7 +97,7 @@ export default function Academicsprogram() {
                 className=" self-center w-96 bg-[#5373fe] rounded-3xl p-1 border-2 border-primary"
               >
                 <Link
-                  href={'/flex-accredited'}
+                  href={'/home/flex-accredited'}
                   className=" p-2   rounded-3xl px-5   text-white  w-full "
                 >
                   <p className=" text-base lg:text-xl whitespace-nowrap">
@@ -110,7 +110,7 @@ export default function Academicsprogram() {
                 className=" self-center w-96 bg-[#5373fe] rounded-3xl p-1 border-2 border-primary"
               >
                 <Link
-                  href={'/ibinstitute'}
+                  href={'/home/ibinstitute'}
                   className=" p-2   rounded-3xl px-5   text-white  w-full "
                 >
                   <p className=" text-base lg:text-xl whitespace-nowrap">

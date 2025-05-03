@@ -1,66 +1,127 @@
+'use client';
+import { ENUM_PAGE_BUILDER_TYPE } from '@/components/PageBuilder/interface.pagebuilder';
+import LoadingSkeleton from '@/components/ui/Loading/LoadingSkeleton';
 import SupportDonateHelpDesk from '@/components/widgets/SupportDonate';
+import { useGetAllPageBuilderQuery } from '@/redux/api/adminApi/pageBuilderApi';
+import fileObjectToLink from '@/utils/fileObjectToLink';
+import { Empty } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const page = () => {
+const FlexAccredited = () => {
+  const { data, isLoading } = useGetAllPageBuilderQuery({
+    pageType: ENUM_PAGE_BUILDER_TYPE.flexAccreditedK12,
+  });
+  if (isLoading) {
+    return <LoadingSkeleton />;
+  }
+  const value = data?.data?.length ? data?.data[0] : null;
+  if (!value) {
+    return <Empty></Empty>;
+  }
   return (
     <div className="">
       <div className="">
-        <div className="relative">
-          <Image
-            src={'/flexBanner.jpeg'}
-            width={1900}
-            height={750}
-            alt=""
-            className="mx-auto h-full w-full overflow-auto lg:h-[75vh] lg:w-[100vw]"
-          />
-          <div>
+        <div className="">
+          <div className="relative">
+            <Image
+              // src={'/banner/about-us.png'}
+              src={fileObjectToLink(value.bannerImage)}
+              width={1900}
+              height={750}
+              alt=""
+              className="h-full w-full overflow-auto bg-cover bg-no-repeat lg:h-[75vh] lg:w-[100vw]"
+              unoptimized
+            />
+            <div>
+              <h1
+                //   data-aos="zoom-out"
+                className="absolute left-1/2 top-1/2 mx-auto w-fit -translate-x-1/2 -translate-y-1/2 transform whitespace-nowrap rounded-[35px] bg-white bg-opacity-50 px-5 py-3 text-center text-xl text-black lg:right-1/2 lg:px-16 lg:text-2xl"
+              >
+                {/* About Us */}
+                {value.heading}
+              </h1>
+            </div>
+          </div>
+          <div className="h-10 bg-primary"></div>
+          <div className=" flex flex-col items-center justify-center space-y-5 px-5 py-7 text-center lg:space-y-12 lg:px-28 ">
             <h1
-              //   data-aos="zoom-out"
-              className="absolute left-1/2 top-1/2 mx-auto w-fit -translate-x-1/2 -translate-y-1/2 transform whitespace-nowrap rounded-[35px] bg-white bg-opacity-50 px-5 py-3 text-center text-xl text-black lg:px-14 lg:text-2xl"
+              data-aos="zoom-in"
+              className="mt-2 text-3xl font-bold lg:mt-6 lg:text-4xl"
             >
-              Flex Accredited K12
+              {/* About Us */}
+              {value.heading}
             </h1>
+            {value?.firstParagraphs?.map((value, i) => {
+              return (
+                <p
+                  key={i}
+                  data-aos={i % 2 == 0 ? 'zoom-in' : 'zoom-out'}
+                  className="bodyText lg:pb-6"
+                >
+                  {value?.h1}
+                </p>
+              );
+            })}
           </div>
-        </div>
-        <div className="h-10 bg-primary"></div>
-        <div className="mb-20 space-y-5 px-5 py-7 text-center lg:px-40">
-          <h1
-            //data-aos="zoom-in"
-            className="bodyHeaderText mt-2 lg:mt-6"
-          >
-            Flex Accredited K12
-          </h1>
-          <p data-aos="zoom-in" className="bodyText lg:pb-6">
-            {
-              'Flex Education is an excellent approach to homeschool independently. It offers a flexible, personalized learning experience that allows students to progress at their own pace while receiving comprehensive support tailored to their individual needs.'
-            }
-            {
-              'At iBlossomLearn, we provide K-12 learners with an accredited core curriculum ensuring all educational bases are covered. Our self-paced classes allow your child to progress at their own speed, whether fast or slow. In addition to our affordable core program, we offer various electives and language courses as add-ons at a low cost. Students earn their high school diploma upon completion, which serves as proof of their eligibility to attend college or pursue another area of study.'
-            }
-            {
-              "We partner with parents to support the unique homeschooling journey, whether it's traditional homeschooling, roadschooling, worldschooling, unschooling, eclectic homeschooling, classical homeschooling, Montessori homeschooling, or homeschooling with unit studies. iBlossomLearn Flex  ensures a personalized and flexible educational experience for your child."
-            }
-          </p>
-          <div className="mb-3 flex items-center justify-center">
-            <Link
-              href={'https://forms.gle/o9zrFTfqqXsR4V7C7'}
-              className="w-fit rounded-3xl border-2 border-primary p-1 text-lg text-white"
+          {value?.actionButton?.link && (
+            <div className="flex justify-center items-center ">
+              <Link href={value?.actionButton?.link} target="_blank">
+                <div className="  self-center  w-fit  mt-6 rounded-3xl p-1 border-2 border-primary">
+                  <button className="bg-primary p-2 rounded-3xl px-5  text-[12px] lg:text-base text-white  w-full ">
+                    <p className="text-xl">
+                      {value?.actionButton?.title || 'Ready, Set, Go'}
+                    </p>
+                  </button>
+                </div>
+              </Link>
+            </div>
+          )}
+          {value?.firstItems?.length ? (
+            <div
+              // data-aos="zoom-out"
+              className="bg-black p-5 py-10 text-start text-white lg:py-24"
             >
-              <button className="rounded-3xl bg-primary p-1 px-12">
-                iBLossomLearn Flex K12
-              </button>
-            </Link>
-          </div>
+              <ul className="list-outside list-disc space-y-5 px-5 text-lg lg:px-28 2xl:text-xl">
+                <h1 data-aos="zoom-in">{value.firstItemTitle}</h1>
+                {value?.firstItems?.map((value, i) => {
+                  let strongText = '';
+                  let remaning = '';
+                  const valueSprite = value?.h1?.split(':');
 
-          <p data-aos="zoom-in" className="bodyText mt-3 lg:pb-6">
-            {
-              'Perfect for Traveling Students Stay on top of your young learner’s core classes, electives, and state testing while traveling anywhere in the USA or around the world. All you need is access to our curriculum.'
-            }
-            {
-              'Ideal for Unschoolers iBlossomLearn provides engaging courses that keep your child ready to learn more, while allowing their educational passion to shine. Our electives cater to your child’s unique learning path.'
-            }
-          </p>
+                  if (valueSprite?.length > 0) {
+                    strongText = valueSprite[0];
+                    remaning = valueSprite.splice(1).join(':');
+                  }
+                  return (
+                    <li
+                      key={i}
+                      data-aos={i % 2 == 0 ? 'zoom-in' : 'zoom-out'}
+                      className=""
+                    >
+                      <strong>{strongText} : </strong>
+                      <strong>{remaning}</strong>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ) : null}
+          <div data-aos="zoom-out" className="my-10 px-5 lg:my-16 lg:px-28">
+            <p className="bodyText text-center">
+              {value?.secondParagraphs?.map((value, i) => {
+                return (
+                  <p
+                    key={i}
+                    data-aos={i % 2 == 0 ? 'zoom-in' : 'zoom-out'}
+                    className="bodyText lg:pb-6"
+                  >
+                    {value?.h1}
+                  </p>
+                );
+              })}
+            </p>
+          </div>
         </div>
         <div className="-mt-16 flex flex-col items-center">
           <div className="w-full bg-black text-white">
@@ -91,7 +152,7 @@ const page = () => {
   );
 };
 
-export default page;
+export default FlexAccredited;
 
 /* 
 <div>
