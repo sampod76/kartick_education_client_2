@@ -85,6 +85,7 @@
     "tailwind-merge": "^2.5.4",
     "tailwind-scrollbar-hide": "^1.1.7",
     "typescript": "5.2.2",
+    "typewriter-effect": "^2.22.0",
     "use-sound": "^4.0.3",
     "yup": "^1.4.0"
   },

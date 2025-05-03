@@ -5,7 +5,6 @@ import { Button, Dropdown, MenuProps } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import CustomImageTag from '../CustomTag/CustomImageTag';
 const UserAvatarUI = () => {
   const router = useRouter();
   const { setRefetch, userInfo } = useGlobalContext();
@@ -58,9 +57,9 @@ const UserAvatarUI = () => {
         // marginLeft: "24px",
       }}
     >
-      <Link href={`/${userInfo?.role}/chat`}>
+      {/* <Link href={`/${userInfo?.role}/chat`}>
         <CustomImageTag className="w-10" src={'/chaticon.png'} width={100} height={100} />
-      </Link>
+      </Link> */}
       <Dropdown
         menu={{ items }}
         overlayStyle={{

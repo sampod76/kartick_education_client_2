@@ -29,6 +29,7 @@ const UniversalPageBuilderCom = ({
   const { data, isLoading } = useGetSinglePageBuilderQuery(id);
   let iniValue = { ...data?.data };
 
+  console.log('🚀 ~ iniValue:', iniValue);
   const [form] = Form.useForm();
 
   const [updatePageBuilder, { isLoading: uloading }] = useUpdatePageBuilderMutation();
@@ -101,6 +102,7 @@ const UniversalPageBuilderCom = ({
       onFinish={handleFinish}
       initialValues={iniValue._id ? { ...iniValue } : {}}
       layout="vertical"
+      className="space-y-4"
     >
       <h1 className="text-center text-3xl py-1 underline">{iniValue.heading}</h1>
       <fieldset className="border-2 border-gray-300 rounded-md p-3">
@@ -219,6 +221,30 @@ const UniversalPageBuilderCom = ({
             </>
           )}
         </Form.List>
+      </fieldset>
+      <fieldset
+        style={{
+          border: '2px solid #ddd',
+          padding: '10px',
+          borderRadius: '5px',
+        }}
+      >
+        <legend style={{ fontWeight: 'bold', padding: '0 10px' }}>Action Button</legend>
+        <Form.Item label="Action Button Title" name={['actionButton', 'title']}>
+          <Input placeholder="Enter action button title" />
+        </Form.Item>
+        <Form.Item
+          label="Action Button Url"
+          name={['actionButton', 'link']}
+          rules={[
+            {
+              type: 'url',
+              message: 'Please enter a valid URL',
+            },
+          ]}
+        >
+          <Input placeholder="Enter action button URL" />
+        </Form.Item>
       </fieldset>
       <fieldset
         style={{

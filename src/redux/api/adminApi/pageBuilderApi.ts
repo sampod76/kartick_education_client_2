@@ -109,25 +109,10 @@ export interface IAllPageBuilder {
   htmlText?: string;
   status?: string;
   isDelete?: string;
-
+  actionButton?: {
+    link?: string;
+    title?: string;
+  };
   createdAt?: Date;
   updatedAt?: Date;
-}
-export enum ENUM_PAGE_BUILDER_TYPE {
-  aboutUs = 'aboutUs',
-  boardOrTrustees = 'boardOrTrustees',
-  leaderShip = 'leaderShip',
-  staff = 'staff',
-  careerOpportunities = 'careerOpportunities',
-  academicsProgram = 'academicsProgram',
-  inclusionApproach = 'inclusionApproach',
-  transitionToHighSchool = 'transitionToHighSchool',
-  elibrary = 'elibrary',
-  supplementalActivities = 'supplementalActivities',
-  theLearningArcTutoring = 'theLearningArcTutoring',
-  professionalDevelopment = 'professionalDevelopment',
-  podcast = 'podcast',
-  theLearningArcTuring = 'theLearningArcTuring',
-  support = 'support',
-  privacyPolicy = 'privacyPolicy',
 }

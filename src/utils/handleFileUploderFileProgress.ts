@@ -60,7 +60,7 @@ const singleFileUploaderInS3 = async (
       });
     };
     if (fileData.mimetype.includes('image')) {
-      if (uploadFile?.size > 2 * 1024 * 1024) {
+      if (uploadFile?.size > 5 * 1024 * 1024) {
         // 2mb up image resize
         resizedImageFile = await resizeImage(uploadFile);
       } else {

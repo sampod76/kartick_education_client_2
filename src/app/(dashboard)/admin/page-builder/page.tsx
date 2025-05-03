@@ -8,6 +8,7 @@ import { Button, Input, Select, Space, TableProps, Tooltip } from 'antd';
 import { useState } from 'react';
 
 import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
+import { IPageType } from '@/components/PageBuilder/interface.pagebuilder';
 import ActionBar from '@/components/ui/ActionBar';
 import CustomImageTag from '@/components/ui/CustomTag/CustomImageTag';
 import UMTable from '@/components/ui/UMTable';
@@ -96,8 +97,21 @@ export default function PageBuilderListPage() {
       title: 'Action',
       key: '_id',
       width: 120,
-      render: (record: any) => {
+      render: (record: { pageType: IPageType; _id: string }) => {
         switch (record.pageType) {
+          case 'iBLossomLearnLanguageInstitute':
+            return (
+              <div>
+                <Space size="middle">
+                  <Link href={'/home/ibinstitute'}>View</Link>
+                  <Link
+                    href={`/${userInfo?.role}/page-builder/${record.pageType}/${record._id}`}
+                  >
+                    Edit
+                  </Link>
+                </Space>
+              </div>
+            );
           case 'aboutUs':
             return (
               <div>
