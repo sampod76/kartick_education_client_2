@@ -1,14 +1,11 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 'use client';
-import ActionBar from '@/components/ui/ActionBar';
 import UMTable from '@/components/ui/UMTable';
 import { useDebounced } from '@/redux/hooks';
-import { ReloadOutlined } from '@ant-design/icons';
-import { Button, Drawer, DrawerProps, Dropdown, Input, Menu, Space, message } from 'antd';
+import { Dropdown, Menu, Space } from 'antd';
 import Link from 'next/link';
 import { useState } from 'react';
 
-import UMModal from '@/components/ui/UMModal';
 import dayjs from 'dayjs';
 
 import { Error_model_hook, Success_model, confirm_modal } from '@/utils/modalHook';
@@ -22,35 +19,25 @@ import {
   useDeleteSingleQuizMutation,
   useGetAllSingleQuizQuery,
 } from '@/redux/api/adminApi/singleQuizApi';
-import { useGetAllCategoryChildrenQuery } from '@/redux/api/categoryChildrenApi';
-import { IDecodedInfo, getUserInfo } from '@/services/auth.service';
-import SelectCategoryChildren from '../Forms/GeneralField/SelectCategoryChildren';
 import { useGlobalContext } from '../ContextApi/GlobalContextApi';
-const SingleQuizList = () => {
+const SingleQuizList = ({
+  categoryId,
+  courseId,
+  milestoneId,
+  moduleId,
+  lessonId,
+  quizId,
+}: {
+  categoryId?: string;
+  courseId?: string;
+  milestoneId?: string;
+  moduleId?: string;
+  lessonId?: string;
+  lessonTitle?: string;
+  quizId?: string;
+}) => {
   const { userInfo } = useGlobalContext();
-  //
-  const [openDrawer, setOpenDrawer] = useState(false);
-  const [placement, setPlacement] = useState<DrawerProps['placement']>('right');
-  //
-  //----------------------------------------------------------------
-  const [category, setCategory] = useState<{ _id?: string; title?: string }>({});
-  const [course, setCourse] = useState<{ _id?: string; title?: string }>({});
-  const [milestone, setmilestone] = useState<{ _id?: string; title?: string }>({});
-  const [module, setmodule] = useState<{ _id?: string; title?: string }>({});
-  const [lesson, setlesson] = useState<{ _id?: string; title?: string }>({});
-  const [quiz, setquiz] = useState<{ _id?: string; title?: string }>({});
 
-  const queryCategory: Record<string, any> = {};
-  queryCategory['children'] = 'course-milestone-module-lessons-quiz';
-  if (userInfo?.role !== 'admin') {
-    queryCategory['author'] = userInfo?.id;
-  }
-  //! for Category options selection
-  const { data: Category, isLoading: categoryLoading } = useGetAllCategoryChildrenQuery({
-    ...queryCategory,
-  });
-  const categoryData: any = Category?.data;
-  //----------------------------------------------------------------
   const [deleteSingleQuiz, { isLoading: deleteSingleLoading }] =
     useDeleteSingleQuizMutation();
   const [page, setPage] = useState<number>(1);
@@ -68,12 +55,12 @@ const SingleQuizList = () => {
   query['sortOrder'] = sortOrder;
   query['status'] = ENUM_STATUS.ACTIVE;
   //
-  query['category'] = category?._id;
-  query['course'] = course?._id;
-  query['milestone'] = milestone?._id;
-  query['module'] = module?._id;
-  query['lesson'] = lesson?._id;
-  query['quiz'] = quiz?._id;
+  query['category'] = categoryId;
+  query['course'] = courseId;
+  query['milestone'] = milestoneId;
+  query['module'] = moduleId;
+  query['lesson'] = lessonId;
+  query['quiz'] = quizId;
   //
   if (userInfo?.role !== 'admin') {
     query['author'] = userInfo?.id;
@@ -253,30 +240,7 @@ const SingleQuizList = () => {
     setSortOrder('');
     setSearchTerm('');
   };
-  const deleteSIngleQuizHandler = async (id: string) => {
-    console.log('🚀 ~ file: page.tsx:194 ~ deleteSIngleQuizHandler ~ id:', id);
 
-    // console.log(id);
-    try {
-      const res = await deleteSingleQuiz(id);
-      if (res) {
-        message.success('Milstone Successfully Deleted!');
-        setOpen(false);
-      }
-    } catch (error: any) {
-      Error_model_hook(error.message);
-    }
-  };
-
-  //---------------------------------
-  const showDrawer = () => {
-    setOpenDrawer(true);
-  };
-  const onClose = () => {
-    setOpenDrawer(false);
-  };
-
-  //--------------------------------
   return (
     <div
       style={{
@@ -300,29 +264,6 @@ const SingleQuizList = () => {
         ]}
       /> */}
       <HeadingUI>Single Quiz List</HeadingUI>
-      <ActionBar>
-        <Input
-          size="large"
-          placeholder="Search"
-          onChange={(e) => setSearchTerm(e.target.value)}
-          style={{
-            width: '20%',
-          }}
-        />
-        <div>
-          <Button type="default" style={{ marginRight: '5px' }} onClick={showDrawer}>
-            Filter
-          </Button>
-          <Link href={`/${userInfo?.role}/single-quiz/create`}>
-            <Button type="default">Create Single Quiz</Button>
-          </Link>
-          {(!!sortBy || !!sortOrder || !!searchTerm) && (
-            <Button style={{ margin: '0px 5px' }} type="default" onClick={resetFilters}>
-              <ReloadOutlined />
-            </Button>
-          )}
-        </div>
-      </ActionBar>
 
       <UMTable
         loading={isLoading}
@@ -335,86 +276,6 @@ const SingleQuizList = () => {
         onTableChange={onTableChange}
         showPagination={true}
       />
-
-      <UMModal
-        title="Remove singleQuized"
-        isOpen={open}
-        closeModal={() => setOpen(false)}
-        handleOk={() => deleteSIngleQuizHandler(singleQuizData?._id)}
-      >
-        <p className="my-5">Do you want to remove this single Quize?</p>
-      </UMModal>
-      <Drawer
-        title={
-          <div className="flex items-center justify-between">
-            <p>Filter</p>{' '}
-            <button
-              onClick={onClose}
-              className="rounded px-5 text-lg text-red-500 hover:bg-red-600 hover:text-white"
-            >
-              X
-            </button>
-          </div>
-        }
-        placement={placement}
-        closable={false}
-        onClose={onClose}
-        open={openDrawer}
-        key={placement}
-        size="large"
-      >
-        <SelectCategoryChildren
-          lableText="Select category"
-          setState={setCategory}
-          isLoading={isLoading}
-          categoryData={categoryData}
-        />
-
-        <SelectCategoryChildren
-          lableText="Select courses"
-          setState={setCourse}
-          categoryData={
-            //@ts-ignore
-            category?.courses || []
-          }
-        />
-
-        <SelectCategoryChildren
-          lableText="Select milestones"
-          setState={setmilestone}
-          categoryData={
-            //@ts-ignore
-            course?.milestones || []
-          }
-        />
-
-        <SelectCategoryChildren
-          lableText="Select module"
-          setState={setmodule}
-          categoryData={
-            //@ts-ignore
-            milestone?.modules || []
-          }
-        />
-
-        <SelectCategoryChildren
-          lableText="Select lesson"
-          setState={setlesson}
-          categoryData={
-            //@ts-ignore
-            module?.lessons || []
-          }
-        />
-
-        <SelectCategoryChildren
-          lableText="Select quiz"
-          setState={setquiz}
-          categoryData={
-            //@ts-ignore
-            lesson?.quizzes || []
-          }
-        />
-      </Drawer>
     </div>
   );
 };

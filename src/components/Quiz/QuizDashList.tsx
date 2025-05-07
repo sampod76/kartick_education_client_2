@@ -158,11 +158,6 @@ const QuizDashList = ({
       dataIndex: 'title',
       ellipsis: true,
     },
-    // {
-    //   title: "Description",
-    //   dataIndex: "short_description",
-    //   ellipsis: true,
-    // },
     {
       title: 'Passing Grade',
       dataIndex: 'passingGrade',
@@ -200,7 +195,11 @@ const QuizDashList = ({
                   <Menu.Item key="edit">
                     <Link href={`/${userInfo?.role}/quiz/edit/${record._id}`}>Edit</Link>
                   </Menu.Item>
-
+                  <Menu.Item key="Material">
+                    <Link href={`/${userInfo?.role}/quiz/material/${record._id}`}>
+                      Material
+                    </Link>
+                  </Menu.Item>
                   <Menu.Item
                     key="delete"
                     onClick={() => {
@@ -265,13 +264,13 @@ const QuizDashList = ({
     },
   ];
   const onPaginationChange = (page: number, pageSize: number) => {
-    //  //// console.log("Page:", page, "PageSize:", pageSize);
+    // console.log("Page:", page, "PageSize:", pageSize);
     setPage(page);
     setSize(pageSize);
   };
   const onTableChange = (pagination: any, filter: any, sorter: any) => {
     const { order, field } = sorter;
-    //// console.log(order, field);
+    // console.log(order, field);
     setSortBy(field as string);
     setSortOrder(order === 'ascend' ? 'asc' : 'desc');
   };
@@ -283,7 +282,7 @@ const QuizDashList = ({
   };
 
   const deleteAdminHandler = async (id: string) => {
-    //// console.log(id);
+    // console.log(id);
     try {
       const res = await deleteQuiz(id);
       if (res) {
@@ -305,18 +304,6 @@ const QuizDashList = ({
         padding: '1rem',
       }}
     >
-      {/* <UMBreadCrumb
-        items={[
-          {
-            label: `${userInfo?.role}`,
-            link: `/${userInfo?.role}`,
-          },
-          {
-            label: `Quiz`,
-            link: `/${userInfo?.role}/quiz`,
-          },
-        ]}
-      /> */}
       <HeadingUI>Quiz List</HeadingUI>
 
       <UMTable

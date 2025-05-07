@@ -18,15 +18,12 @@ import AnswerFind from '@/components/Forms/answer/AnswerFind';
 import AnswerMultiple from '@/components/Forms/answer/AnswerMultiple';
 import AnswerSInlge from '@/components/Forms/answer/AnswerSingle';
 import FormTimePicker from '@/components/Forms/FormTimePicker';
-import SelectCategoryChildren from '@/components/Forms/GeneralField/SelectCategoryChildren';
 import LabelUi from '@/components/ui/dashboardUI/LabelUi';
 import ButtonLoading from '@/components/ui/Loading/ButtonLoading';
 import UploadAudioFile from '@/components/ui/UploadAudio';
 import UploadMultipalImage from '@/components/ui/UploadMultipalImage';
 import { removeNullUndefinedAndFalsey } from '@/hooks/removeNullUndefinedAndFalsey';
 import timeDurationToMilliseconds from '@/hooks/stringToMiliSecend';
-import { useGetSingleSellerQuery } from '@/redux/api/adminApi/sellerApi';
-import { useGetAllCategoryChildrenQuery } from '@/redux/api/categoryChildrenApi';
 import { IQuizType } from '@/types/quiz/singleQuizType';
 import dynamic from 'next/dynamic';
 const TextEditor = dynamic(() => import('@/components/shared/TextEditor/TextEditor'), {
@@ -38,18 +35,28 @@ const TextEditor = dynamic(() => import('@/components/shared/TextEditor/TextEdit
   ),
 });
 
-const CreateSingleQuiz = () => {
+const CreateSingleQuiz = ({
+  categoryId,
+  courseId,
+  milestoneId,
+  moduleId,
+  lessonId,
+  quizId,
+}: {
+  categoryId?: string;
+  courseId?: string;
+  milestoneId?: string;
+  moduleId?: string;
+  lessonId?: string;
+  lessonTitle?: string;
+  quizId?: string;
+}) => {
   const { userInfo, userInfoLoading } = useGlobalContext();
   const id = userInfo?.roleBaseUserId;
   let disable = true;
   if (userInfo?.role === 'seller') {
     disable = false;
   }
-  const { data: findSeller, isLoading: sellerLoading } = useGetSingleSellerQuery(id, {
-    skip: disable,
-  });
-
-  //
 
   const [quizType, setQuizTypes] = useState<IQuizType>('select'); // !  tag selection
 
@@ -62,31 +69,13 @@ const CreateSingleQuiz = () => {
 
   const [singleAnswer, setSingleAnswerInput] = useState<string>(''); ///! for input
   //
-  const [category, setCategory] = useState<{ _id?: string; title?: string }>({});
-  const [course, setCourse] = useState<{ _id?: string; title?: string }>({});
-  const [milestone, setmilestone] = useState<{ _id?: string; title?: string }>({});
-  const [module, setmodule] = useState<{ _id?: string; title?: string }>({});
-  const [lesson, setlesson] = useState<{ _id?: string; title?: string }>({});
-  const [quiz, setquiz] = useState<{ _id?: string; title?: string }>({});
-
-  const query: Record<string, any> = {};
-  query['children'] = 'course-milestone-module-lessons-quiz';
-  if (userInfo?.role !== 'admin') {
-    query['author'] = userInfo?.id;
-  }
-  //! for Category options selection
-  const { data: Category, isLoading } = useGetAllCategoryChildrenQuery({
-    ...query,
-  });
-  const categoryData: any = Category?.data;
-  //
 
   const [addSingleQuiz, { isLoading: serviceLoading }] = useAddSingleQuizMutation();
 
   const onSubmit = async (values: any) => {
     console.log('🚀 ~ onSubmit ~ values:', values);
     // console.log("🚀 ~ onSubmit ~ values:", values);
-    if (!quiz?._id) {
+    if (!quizId) {
       Error_model_hook('Please ensure your are selected quiz');
       return;
     }
@@ -109,12 +98,12 @@ const CreateSingleQuiz = () => {
     }
     const singleQuizDat: object = {
       ...values,
-      category: category?._id,
-      course: course?._id,
-      milestone: milestone?._id,
-      module: module?._id,
-      lesson: lesson?._id,
-      quiz: quiz?._id,
+      category: categoryId,
+      course: courseId,
+      milestone: milestoneId,
+      module: moduleId,
+      lesson: lessonId,
+      quiz: quizId,
       type: quizType,
     };
     removeNullUndefinedAndFalsey(singleQuizDat);
@@ -140,83 +129,7 @@ const CreateSingleQuiz = () => {
 
   return (
     <div>
-      <div
-        style={{
-          boxShadow:
-            '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-          borderRadius: '1rem',
-          backgroundColor: 'white',
-          padding: '1rem',
-          marginBottom: '1rem',
-        }}
-      >
-        <div className="my-3 rounded-lg border-2 border-blue-500 p-5">
-          <h1 className="mb-2 border-spacing-4 border-b-2 text-xl font-bold">
-            At fast Filter
-          </h1>
-          <Row gutter={[16, 16]}>
-            <Col xs={24} md={12}>
-              <SelectCategoryChildren
-                lableText="Select category"
-                setState={setCategory}
-                isLoading={isLoading}
-                categoryData={categoryData}
-              />
-            </Col>
-            <Col xs={24} md={12}>
-              <SelectCategoryChildren
-                lableText="Select courses"
-                setState={setCourse}
-                categoryData={
-                  //@ts-ignore
-                  category?.courses || []
-                }
-              />
-            </Col>
-            <Col xs={24} lg={12}>
-              <SelectCategoryChildren
-                lableText="Select milestones"
-                setState={setmilestone}
-                categoryData={
-                  //@ts-ignore
-                  course?.milestones || []
-                }
-              />
-            </Col>
-            <Col xs={24} lg={12}>
-              <SelectCategoryChildren
-                lableText="Select module"
-                setState={setmodule}
-                categoryData={
-                  //@ts-ignore
-                  milestone?.modules || []
-                }
-              />
-            </Col>
-            <Col xs={24} lg={12}>
-              <SelectCategoryChildren
-                lableText="Select lesson"
-                setState={setlesson}
-                categoryData={
-                  //@ts-ignore
-                  module?.lessons || []
-                }
-              />
-            </Col>
-            <Col xs={24} lg={12}>
-              <SelectCategoryChildren
-                lableText="Select quiz"
-                setState={setquiz}
-                categoryData={
-                  //@ts-ignore
-                  lesson?.quizzes || []
-                }
-              />
-            </Col>
-          </Row>
-        </div>
-      </div>
-      {quiz?._id ? (
+      {quizId ? (
         <div
           style={{
             boxShadow:
