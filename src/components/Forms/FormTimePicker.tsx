@@ -44,7 +44,7 @@ export default function FormTimePicker({ name, label }: FormTimePickerProps) {
               <TimePicker
                 locale={customLocale as any}
                 size="large"
-                defaultValue={dayjs(field.value ? defaultTime : '00:10:00', 'HH:mm:ss')}
+                defaultValue={dayjs(field.value ? defaultTime : '00:30:00', 'HH:mm:ss')}
                 format={'HH:mm:ss'}
                 onChange={(el, value) => {
                   setValue(name, value);

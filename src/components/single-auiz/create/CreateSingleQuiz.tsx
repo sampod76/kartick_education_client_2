@@ -95,7 +95,10 @@ const CreateSingleQuiz = ({
 
     if (values?.time_duration) {
       values.time_duration = timeDurationToMilliseconds(values.time_duration);
+    } else {
+      values.time_duration = 1800000;
     }
+
     const singleQuizDat: object = {
       ...values,
       category: categoryId,
@@ -230,53 +233,6 @@ const CreateSingleQuiz = ({
                   <FormTimePicker name="time_duration" label="Time Duration" />
                 </Col>
 
-                {/* <Col
-                  className="gutter-row"
-                  xs={12}
-                  md={8}
-                  style={{
-                    marginBottom: '10px',
-                    marginTop: '8px',
-                  }}
-                >
-                  <FormSelectField
-                    size="large"
-                    name="status"
-                    options={courseStatusOptions as any}
-                    // defaultValue={priceTypeOptions[0]}
-                    label="status"
-                    // placeholder="Select"
-                    required={true}
-                  />
-                </Col> */}
-                {/* <Col
-                  className="gutter-row"
-                  hidden={quizType === 'audio' ? true : false}
-                  xs={24}
-                  style={{
-                    marginBottom: '10px',
-                  }}
-                >
-                  <DemoVideoUI
-                    // videoType={videoType as any}
-                    // setVideoType={setVideoType}
-                    // videoUrl={videoUrl}
-                    // setVideoUrl={setVideoUrl}
-                    options={['youtube', 'vimeo']}
-                    label="Preview Video"
-                  />
-                </Col> */}
-                {/* <Col
-                  hidden={quizType === 'audio' ? true : false}
-                  className="gutter-row"
-                  xs={24}
-                  style={{
-                    marginBottom: '10px',
-                  }}
-                >
-                  <TagsSelectUI />
-                </Col> */}
-
                 <Col
                   hidden={quizType === 'audio' ? true : false}
                   className="gutter-row"
@@ -308,44 +264,6 @@ const CreateSingleQuiz = ({
                   />
                 </Col>
               </Row>
-              {/* <Col
-                className="gutter-row"
-                xs={24}
-                style={{
-                  marginBottom: '10px',
-                }}
-              >
-                <FormTextArea
-                  label="Short Description"
-                  name="short_description"
-                />
-              </Col> */}
-              {/* <Col
-                className="gutter-row"
-                xs={24}
-                style={{
-                  marginBottom: '10px',
-                }}
-              >
-                <FormTextArea
-                  name="hints"
-                  label="hints"
-                  placeholder="Give hints for Answer"
-                />
-              </Col> */}
-
-              {/* <Col className="gutter-row" xs={24} style={{}}>
-                <div
-                  style={{
-                    borderTopWidth: '2px',
-                  }}
-                >
-                  <p className="my-3 text-center text-xl font-bold">
-                    Description
-                  </p>
-                  <TextEditor isReset={isReset} />
-                </div>
-              </Col> */}
 
               <Row
                 gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}
