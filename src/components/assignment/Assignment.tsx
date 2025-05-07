@@ -1,16 +1,15 @@
-import { useAddPdfMutation } from '@/redux/api/fileUpload';
-import { ILessonData } from '@/types/lessonType';
-import { Error_model_hook, Success_model } from '@/utils/modalHook';
-import { UploadOutlined } from '@ant-design/icons';
-import { Button, Form, Input, InputNumber, message, Upload } from 'antd';
-import { useEffect, useState } from 'react';
-import { useGlobalContext } from '../ContextApi/GlobalContextApi';
-import LoadingSkeleton from '../ui/Loading/LoadingSkeleton';
-import { FilePdfOutlined } from '@ant-design/icons';
 import {
   useAddAssignmentMutation,
   useUpdateAssignmentMutation,
 } from '@/redux/api/assernmentApi';
+import { useAddPdfMutation } from '@/redux/api/fileUpload';
+import { ILessonData } from '@/types/lessonType';
+import { Error_model_hook } from '@/utils/modalHook';
+import { FilePdfOutlined, UploadOutlined } from '@ant-design/icons';
+import { Button, Form, Input, InputNumber, message, Upload } from 'antd';
+import { useState } from 'react';
+import { useGlobalContext } from '../ContextApi/GlobalContextApi';
+import LoadingSkeleton from '../ui/Loading/LoadingSkeleton';
 
 const AssignmentUpload = ({
   lessonData,
@@ -68,7 +67,7 @@ const AssignmentUpload = ({
           module: lessonData?.module?._id || (lessonData?.module as string),
           milestone: lessonData.milestone,
           course: lessonData.course,
-          category: lessonData.category,
+          category: lessonData?.category,
           author: userInfo?.id,
         };
       } else {

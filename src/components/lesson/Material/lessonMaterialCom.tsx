@@ -4,19 +4,18 @@ import LoadingSkeleton from '@/components/ui/Loading/LoadingSkeleton';
 import { Tabs } from 'antd';
 
 import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
-import CreateModule from '@/components/module/create/CreateModule';
-import ModuleDashList from '@/components/module/ModuleDashList';
-import ModuleSerialUpdate from '@/components/module/ModulSerialUpdate';
-import { useGetSingleMilestoneQuery } from '@/redux/api/adminApi/milestoneApi';
+import QuizDashList from '@/components/Quiz/QuizDashList';
+import CreateQuiz from '@/components/Quiz/create/CreateQuiz';
+import { useGetSingleLessonQuery } from '@/redux/api/adminApi/lessoneApi';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-export default function MilestoneMaterialCom({ milestoneId }: { milestoneId: string }) {
+export default function LessonMaterialCom({ lessonId }: { lessonId: string }) {
   const router = useRouter();
   const path = usePathname();
   const searchQuery = useSearchParams();
   const mainTab = searchQuery.get('mainTab');
   const secondTab = searchQuery.get('secondTab');
   const { userInfo } = useGlobalContext();
-  const { data, isLoading } = useGetSingleMilestoneQuery(milestoneId);
+  const { data, isLoading } = useGetSingleLessonQuery(lessonId);
   console.log('🚀 ~ MilestoneMaterialCom ~ data:', data);
 
   if (isLoading) {
@@ -31,7 +30,7 @@ export default function MilestoneMaterialCom({ milestoneId }: { milestoneId: str
     // },
     {
       key: '1',
-      label: 'Modules',
+      label: 'Quizzes',
       children: (
         <div>
           <Tabs
@@ -40,45 +39,43 @@ export default function MilestoneMaterialCom({ milestoneId }: { milestoneId: str
             items={[
               {
                 key: '1',
-                label: 'Module List',
+                label: 'Quizzes List',
                 children: (
-                  <ModuleDashList
-                    queryObject={{
-                      course: data?.course?._id,
-                      category: data?.category,
-                      milestone: milestoneId,
-                      sortBy: 'module_number',
-                      setSortOrder: 'asc',
-                    }}
+                  <QuizDashList
+                    categoryId={data?.category?._id || data?.category}
+                    courseId={data?.course?._id || data?.course}
+                    milestoneId={data?.milestone?._id || data?.milestone}
+                    moduleId={data?.module?._id || data?.module}
+                    lessonId={lessonId || data?._id}
                   />
                 ),
               },
               {
                 key: '3',
-                label: 'Create module',
+                label: 'Create Quiz',
                 children: (
-                  <CreateModule
-                    categoryId={data?.category}
-                    courseTitle={data?.course?.title}
-                    courseId={data?.course?._id}
-                    milestoneId={milestoneId}
-                    milestoneTitle={data?.title}
+                  <CreateQuiz
+                    categoryId={data?.category?._id || data?.category}
+                    courseId={data?.course?._id || data?.course}
+                    milestoneId={data?.milestone._id || data?.milestone}
+                    moduleId={data?.module?._id || data.module}
+                    lessonId={lessonId || data?._id}
                   />
                 ),
               },
-              {
-                key: '2',
-                label: 'Module Position Update',
-                children: (
-                  <ModuleSerialUpdate
-                    queryObject={{
-                      course: data?.course?._id,
-                      category: data?.category,
-                      milestone: milestoneId,
-                    }}
-                  />
-                ),
-              },
+              // {
+              //   key: '2',
+              //   label: 'Module Position Update',
+              //   children: (
+              //     <ModuleSerialUpdate
+              //       queryObject={{
+              //         course: data?.course?._id,
+              //         category: data?.category,
+              //         milestone: milestoneId,
+              //       }}
+              //     />
+              //   ),
+              // },
             ]}
           />
         </div>
@@ -94,7 +91,7 @@ export default function MilestoneMaterialCom({ milestoneId }: { milestoneId: str
     <div>
       {/* <CourseCardMaterial course={data} /> */}
       <div>
-        <h1 className="text-center">Milestone title: {data?.title}</h1>
+        <h1 className="text-center">Lesson title: {data?.title}</h1>
       </div>
       <Tabs
         onChange={handleMainTabChange}

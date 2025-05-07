@@ -67,7 +67,7 @@ export default function CourseMaterialCom({ courseId }: { courseId: string }) {
                   <MileStoneList
                     queryObject={{
                       course: courseId,
-                      category: data.category?._id,
+                      category: data?.category?._id,
                       sortBy: 'milestone_number',
                       setSortOrder: 'asc',
                     }}
@@ -80,7 +80,7 @@ export default function CourseMaterialCom({ courseId }: { courseId: string }) {
                 children: (
                   <CreateMilestone
                     courseId={courseId}
-                    categoryId={data.category?._id}
+                    categoryId={data?.category?._id}
                     title={data.title}
                   />
                 ),
@@ -90,7 +90,7 @@ export default function CourseMaterialCom({ courseId }: { courseId: string }) {
                 label: 'Milestone Position Update',
                 children: (
                   <MilestoneSerialUpdate
-                    queryObject={{ course: courseId, category: data.category?._id }}
+                    queryObject={{ course: courseId, category: data?.category?._id }}
                   />
                 ),
               },
@@ -100,7 +100,7 @@ export default function CourseMaterialCom({ courseId }: { courseId: string }) {
                 label: 'Module Transfer',
                 children: (
                   <MilestoneToModuleTransfer
-                    queryObject={{ course: courseId, category: data.category?._id }}
+                    queryObject={{ course: courseId, category: data?.category?._id }}
                   />
                 ),
               },

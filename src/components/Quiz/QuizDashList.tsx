@@ -1,24 +1,11 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 'use client';
-import ActionBar from '@/components/ui/ActionBar';
 import UMTable from '@/components/ui/UMTable';
 import { useDebounced } from '@/redux/hooks';
-import { ReloadOutlined } from '@ant-design/icons';
-import {
-  Button,
-  Drawer,
-  DrawerProps,
-  Dropdown,
-  Form,
-  Input,
-  Menu,
-  Space,
-  message,
-} from 'antd';
+import { Button, Dropdown, Form, Input, Menu, Space, message } from 'antd';
 import Link from 'next/link';
 import { useState } from 'react';
 
-import UMModal from '@/components/ui/UMModal';
 import dayjs from 'dayjs';
 
 import { Error_model_hook, Success_model, confirm_modal } from '@/utils/modalHook';
@@ -28,41 +15,31 @@ import { AllImage } from '@/assets/AllImge';
 import HeadingUI from '@/components/ui/dashboardUI/HeadingUI';
 import { USER_ROLE } from '@/constants/role';
 import { useDeleteQuizMutation, useGetAllQuizQuery } from '@/redux/api/adminApi/quizApi';
-import { useGetAllCategoryChildrenQuery } from '@/redux/api/categoryChildrenApi';
 import { useDeleteUpdateSubmitQuizMutation } from '@/redux/api/quizSubmitApi';
 import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
 import { useGlobalContext } from '../ContextApi/GlobalContextApi';
-import SelectCategoryChildren from '../Forms/GeneralField/SelectCategoryChildren';
 import ModalComponent from '../Modal/ModalComponents';
 
-const QuizDashList = () => {
+const QuizDashList = ({
+  categoryId,
+  courseId,
+  milestoneId,
+  moduleId,
+  lessonId,
+}: {
+  categoryId?: string;
+  courseId?: string;
+  milestoneId?: string;
+  moduleId?: string;
+  lessonId?: string;
+  lessonTitle?: string;
+}) => {
   const { userInfo, userInfoLoading } = useGlobalContext();
   const screens = useBreakpoint();
-  //----------------------------------------------------------------
-  const [openDrawer, setOpenDrawer] = useState(false);
-  const [placement, setPlacement] = useState<DrawerProps['placement']>('right');
-  //----------------------------------------------------------------
-  const [category, setCategory] = useState<{ _id?: string; title?: string }>({});
-  const [course, setCourse] = useState<{ _id?: string; title?: string }>({});
-  const [milestone, setmilestone] = useState<{ _id?: string; title?: string }>({});
-  const [module, setmodule] = useState<{ _id?: string; title?: string }>({});
-  const [lesson, setlesson] = useState<{ _id?: string; title?: string }>({});
 
-  const categoryQuery: Record<string, any> = {};
-  categoryQuery['children'] = 'course-milestone-module-lessons';
-  if (userInfo?.role !== USER_ROLE.ADMIN) {
-    categoryQuery['author'] = userInfo?.id;
-  }
-  //
   const [deleteUpdateSubmitQuiz, { isLoading: deleteSubmitQuiz }] =
     useDeleteUpdateSubmitQuizMutation();
-  //! for Category options selection
-  const { data: Category, isLoading: categoryLoading } = useGetAllCategoryChildrenQuery({
-    ...categoryQuery,
-  });
 
-  const categoryData: any = Category?.data;
-  // console.log("🚀 ~ QuizDashList ~ categoryData:", categoryData);
   //---------------------------------------------------------
 
   const [deleteQuiz] = useDeleteQuizMutation();
@@ -82,11 +59,11 @@ const QuizDashList = () => {
   query['sortBy'] = sortBy;
   query['sortOrder'] = sortOrder;
   query['status'] = 'active';
-  query['category'] = category?._id;
-  query['course'] = course?._id;
-  query['milestone'] = milestone?._id;
-  query['module'] = module?._id;
-  query['lesson'] = lesson?._id;
+  query['category'] = categoryId;
+  query['course'] = courseId;
+  query['milestone'] = milestoneId;
+  query['module'] = moduleId;
+  query['lesson'] = lessonId;
 
   if (filterValue) {
     query['lesson'] = filterValue;
@@ -318,13 +295,6 @@ const QuizDashList = () => {
     }
   };
   //----------------------------------------------------------------
-  const showDrawer = () => {
-    setOpenDrawer(true);
-  };
-  const onClose = () => {
-    setOpenDrawer(false);
-  };
-  //----------------------------------------------------------------
   return (
     <div
       style={{
@@ -348,36 +318,6 @@ const QuizDashList = () => {
         ]}
       /> */}
       <HeadingUI>Quiz List</HeadingUI>
-      <ActionBar>
-        <div className="flex gap-2">
-          <Input
-            size="large"
-            placeholder="Search"
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{
-              width: '300px',
-            }}
-          />
-          {/* <FilterLesson
-            filterValue={filterValue}
-            setFilterValue={setFilterValue}
-          /> */}
-        </div>
-        <div>
-          <Button type="default" style={{ marginRight: '5px' }} onClick={showDrawer}>
-            Filter
-          </Button>
-
-          <Link href={`/${userInfo?.role}/quiz/create`}>
-            <Button>Create Quiz</Button>
-          </Link>
-          {(!!sortBy || !!sortOrder || !!searchTerm) && (
-            <Button style={{ margin: '0px 5px' }} type="default" onClick={resetFilters}>
-              <ReloadOutlined />
-            </Button>
-          )}
-        </div>
-      </ActionBar>
 
       <UMTable
         loading={isLoading}
@@ -390,77 +330,6 @@ const QuizDashList = () => {
         onTableChange={onTableChange}
         showPagination={true}
       />
-
-      <UMModal
-        title="Remove admin"
-        isOpen={open}
-        closeModal={() => setOpen(false)}
-        handleOk={() => deleteAdminHandler(adminId)}
-      >
-        <p className="my-5">Do you want to remove this admin?</p>
-      </UMModal>
-      <Drawer
-        title={
-          <div className="flex justify-between items-center ">
-            <p>Filter</p>{' '}
-            <button
-              onClick={onClose}
-              className="text-lg text-red-500 rounded hover:text-white px-5  hover:bg-red-600"
-            >
-              X
-            </button>
-          </div>
-        }
-        placement={placement}
-        closable={false}
-        onClose={onClose}
-        open={openDrawer}
-        key={placement}
-        size="large"
-      >
-        <SelectCategoryChildren
-          lableText="Select category"
-          setState={setCategory}
-          isLoading={categoryLoading}
-          categoryData={categoryData}
-        />
-
-        <SelectCategoryChildren
-          lableText="Select courses"
-          setState={setCourse}
-          categoryData={
-            //@ts-ignore
-            category?.courses || []
-          }
-        />
-
-        <SelectCategoryChildren
-          lableText="Select milestones"
-          setState={setmilestone}
-          categoryData={
-            //@ts-ignore
-            course?.milestones || []
-          }
-        />
-
-        <SelectCategoryChildren
-          lableText="Select module"
-          setState={setmodule}
-          categoryData={
-            //@ts-ignore
-            milestone?.modules || []
-          }
-        />
-
-        <SelectCategoryChildren
-          lableText="Select lesson"
-          setState={setlesson}
-          categoryData={
-            //@ts-ignore
-            module?.lessons || []
-          }
-        />
-      </Drawer>
     </div>
   );
 };

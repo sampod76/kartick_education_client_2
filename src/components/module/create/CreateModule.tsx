@@ -2,7 +2,6 @@
 
 // import TextEditor from "@/components/shared/TextEditor/TextEditor";
 import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
-import SelectCategoryChildren from '@/components/Forms/GeneralField/SelectCategoryChildren';
 import LoadingSkeleton from '@/components/ui/Loading/LoadingSkeleton';
 import { courseStatusOptions } from '@/constants/global';
 import { ENUM_STATUS, ENUM_YN } from '@/constants/globalEnums';
@@ -11,7 +10,6 @@ import {
   useAddModuleMutation,
   useGetAllModuleQuery,
 } from '@/redux/api/adminApi/moduleApi';
-import { useGetAllCategoryChildrenQuery } from '@/redux/api/categoryChildrenApi';
 import { Error_model_hook, Success_model } from '@/utils/modalHook';
 import { Button, Col, Form, Input, Row, Select, Spin } from 'antd';
 import dynamic from 'next/dynamic';
@@ -32,34 +30,23 @@ export default function CreateModule({
   milestoneId,
   milestoneTitle,
   courseTitle,
+  categoryId,
+  categoryTitle,
 }: {
+  categoryId: string;
+  categoryTitle?: string;
   courseId: string;
   courseTitle?: string;
   milestoneId: string;
   milestoneTitle: string;
 }) {
+  const [form] = Form.useForm();
   const { userInfo } = useGlobalContext();
   //
   const [textEditorValue, setTextEditorValue] = useState('');
-  const [category, setCategory] = useState<{ _id?: string; title?: string }>({});
-  const [course, setCourse] = useState<{ _id?: string; title?: string }>({});
-  const [milestone, setMilestone] = useState<{ _id?: string; title?: string }>({});
+
   const [isReset, setIsReset] = useState(false);
 
-  const query: Record<string, any> = {};
-  query['children'] = 'course-milestone';
-  if (userInfo?.role !== 'admin') {
-    query['author'] = userInfo?.id;
-  }
-  //! for Category options selection
-  const { data: Category, isLoading } = useGetAllCategoryChildrenQuery(
-    {
-      ...query,
-    },
-    { skip: Boolean(milestoneId) },
-  );
-  const categoryData: any = Category?.data;
-  //
   // const [textEditorValue, setTextEditorValue] = useState("");
   const [addModule, { isLoading: serviceLoading }] = useAddModuleMutation();
   const { data: existModule, isLoading: ModuleNumLoadingg } = useGetAllModuleQuery({
@@ -67,23 +54,23 @@ export default function CreateModule({
     isDelete: ENUM_YN.NO,
     sortOrder: 'desc',
     limit: 1,
-    course: course?._id,
+    course: courseId,
     // details: textEditorValue,
-    milestone: milestone?._id,
+    milestone: milestoneId,
   });
 
   const onSubmit = async (values: any) => {
-    if (!milestone?._id && !course?._id) {
-      Error_model_hook('Please ensure your are selected milestone,course');
+    if (!milestoneId && !courseId && !categoryId) {
+      Error_model_hook('Please ensure your are selected milestone,course,category');
       return;
     }
     removeNullUndefinedAndFalsey(values);
     const ModuleData: object = {
       ...values,
-      category: category?._id,
-      course: course?._id,
+      category: categoryId,
+      course: courseId,
       details: textEditorValue,
-      milestone: milestone?._id,
+      milestone: milestoneId,
     };
     removeNullUndefinedAndFalsey(ModuleData);
     try {
@@ -94,6 +81,7 @@ export default function CreateModule({
       } else {
         Success_model('Successfully added Module');
         setIsReset(true);
+        form.resetFields();
       }
       // console.log(res);
     } catch (error: any) {
@@ -105,59 +93,10 @@ export default function CreateModule({
   if (ModuleNumLoadingg) {
     return <LoadingSkeleton />;
   }
-  const roundedModuleNumber = Number(existModule?.data[0]?.module_number || 0);
-  // Add 0.1 to the rounded number and use toFixed again when logging
-  const preModule_number = Math.floor(roundedModuleNumber) + 1;
 
   return (
     <>
-      <div
-        style={{
-          boxShadow:
-            '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-          borderRadius: '1rem',
-          backgroundColor: 'white',
-          padding: '1rem',
-          marginBottom: '1rem',
-        }}
-      >
-        <div className="my-3 rounded-lg border-2 border-blue-500 p-5">
-          <h1 className="mb-2 border-spacing-4 border-b-2 text-xl font-bold">
-            At fast Filter
-          </h1>
-          <Row gutter={[16, 16]}>
-            <Col xs={24} md={6}>
-              <SelectCategoryChildren
-                lableText="Select category"
-                setState={setCategory}
-                isLoading={isLoading}
-                categoryData={categoryData}
-              />
-            </Col>
-            <Col xs={24} md={6}>
-              <SelectCategoryChildren
-                lableText="Select courses"
-                setState={setCourse}
-                categoryData={
-                  //@ts-ignore
-                  category?.courses || []
-                }
-              />
-            </Col>
-            <Col xs={24} lg={12}>
-              <SelectCategoryChildren
-                lableText="Select milestones"
-                setState={setMilestone}
-                categoryData={
-                  //@ts-ignore
-                  course?.milestones || []
-                }
-              />
-            </Col>
-          </Row>
-        </div>
-      </div>
-      {category?._id && course?._id && milestone?._id ? (
+      {milestoneId ? (
         <div
           style={{
             boxShadow:
@@ -169,8 +108,9 @@ export default function CreateModule({
         >
           <div>
             <Form
+              form={form}
               onFinish={onSubmit}
-              initialValues={{ module_number: Number(preModule_number) }}
+              initialValues={{ status: 'active' }}
               layout="vertical"
               style={{
                 border: '1px solid #d9d9d9',
@@ -195,30 +135,7 @@ export default function CreateModule({
                     <Input size="large" />
                   </Form.Item>
                 </Col>
-                <Col xs={24} md={4}>
-                  <Form.Item
-                    name="module_number"
-                    label={`Module No`}
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please enter a milestone number',
-                      },
-                      {
-                        validator: (_, value) => {
-                          if (!value || value <= 0 || !Number.isInteger(Number(value))) {
-                            return Promise.reject(
-                              new Error('Please enter a positive integer'),
-                            );
-                          }
-                          return Promise.resolve();
-                        },
-                      },
-                    ]}
-                  >
-                    <Input type="number" size="large" />
-                  </Form.Item>
-                </Col>
+
                 <Col xs={24} md={8} lg={4}>
                   <Form.Item
                     label="Select  status"
