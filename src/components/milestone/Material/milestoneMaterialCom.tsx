@@ -52,6 +52,21 @@ export default function MilestoneMaterialCom({ milestoneId }: { milestoneId: str
                 ),
               },
               {
+                key: '3',
+                label: 'Create module',
+                children: (
+                  <ModuleDashList
+                    queryObject={{
+                      course: data?.course?._id,
+                      category: data.category,
+                      milestone: milestoneId,
+                      sortBy: 'module_number',
+                      setSortOrder: 'asc',
+                    }}
+                  />
+                ),
+              },
+              {
                 key: '2',
                 label: 'Module Position Update',
                 children: (

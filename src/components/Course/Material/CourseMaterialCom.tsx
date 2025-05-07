@@ -1,6 +1,7 @@
 'use client';
 
 import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
+import CreateMilestone from '@/components/milestone/create/createAndUpdateMilestoned';
 import MileStoneList from '@/components/milestone/MilestoneDashList';
 import MilestoneSerialUpdate from '@/components/milestone/MilestoneSerialUpdate';
 import MilestoneToModuleTransfer from '@/components/milestone/MilestoneToModuleTransfer';
@@ -74,6 +75,17 @@ export default function CourseMaterialCom({ courseId }: { courseId: string }) {
                 ),
               },
               {
+                key: '21',
+                label: 'Create Milestone',
+                children: (
+                  <CreateMilestone
+                    courseId={courseId}
+                    categoryId={data.category?._id}
+                    title={data.title}
+                  />
+                ),
+              },
+              {
                 key: '2',
                 label: 'Milestone Position Update',
                 children: (
@@ -82,6 +94,7 @@ export default function CourseMaterialCom({ courseId }: { courseId: string }) {
                   />
                 ),
               },
+
               {
                 key: '3',
                 label: 'Module Transfer',

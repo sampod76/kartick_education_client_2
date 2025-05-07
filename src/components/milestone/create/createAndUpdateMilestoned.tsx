@@ -29,7 +29,8 @@ const TextEditor = dynamic(() => import('@/components/shared/TextEditor/TextEdit
   ),
 });
 // courseId -->For update
-const CreateMilestone = ({ setOpen, courseId, title }: any) => {
+const CreateMilestone = ({ courseId, categoryId, title }: any) => {
+  console.log('🚀 ~ CreateMilestone ~ courseId:', courseId);
   const { userInfo, userInfoLoading } = useGlobalContext();
   // console.log('🚀 ~ CreateMilestone ~ userInfo:', userInfo);
 
@@ -64,7 +65,7 @@ const CreateMilestone = ({ setOpen, courseId, title }: any) => {
     removeNullUndefinedAndFalsey(values);
     const MilestoneData: object = {
       ...values,
-      category: category?._id,
+      category: category?._id || categoryId,
       course: courses._id || courseId,
     };
     // console.log(MilestoneData);
@@ -77,7 +78,7 @@ const CreateMilestone = ({ setOpen, courseId, title }: any) => {
       } else {
         Success_model('Successfully added Milestone');
         // setTextEditorValue("");
-        setOpen(false);
+
         setIsReset(true);
       }
       // console.log(res);
@@ -126,7 +127,7 @@ const CreateMilestone = ({ setOpen, courseId, title }: any) => {
           padding: '1rem',
         }}
       >
-        {courses?._id ? (
+        {courses?._id || courseId ? (
           <div>
             {/* resolver={yupResolver(adminSchema)} */}
             {/* resolver={yupResolver(IServiceSchema)} */}

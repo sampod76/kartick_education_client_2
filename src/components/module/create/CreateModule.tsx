@@ -27,7 +27,17 @@ const TextEditorNotSetForm = dynamic(
     ),
   },
 );
-export default function CreateModule() {
+export default function CreateModule({
+  courseId,
+  milestoneId,
+  milestoneTitle,
+  courseTitle,
+}: {
+  courseId: string;
+  courseTitle?: string;
+  milestoneId: string;
+  milestoneTitle: string;
+}) {
   const { userInfo } = useGlobalContext();
   //
   const [textEditorValue, setTextEditorValue] = useState('');
@@ -42,9 +52,12 @@ export default function CreateModule() {
     query['author'] = userInfo?.id;
   }
   //! for Category options selection
-  const { data: Category, isLoading } = useGetAllCategoryChildrenQuery({
-    ...query,
-  });
+  const { data: Category, isLoading } = useGetAllCategoryChildrenQuery(
+    {
+      ...query,
+    },
+    { skip: Boolean(milestoneId) },
+  );
   const categoryData: any = Category?.data;
   //
   // const [textEditorValue, setTextEditorValue] = useState("");
