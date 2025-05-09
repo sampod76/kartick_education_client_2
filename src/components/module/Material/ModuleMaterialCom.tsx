@@ -4,6 +4,7 @@ import LoadingSkeleton from '@/components/ui/Loading/LoadingSkeleton';
 import { Tabs } from 'antd';
 
 import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
+import CreateLesson from '@/components/lesson/CreateLesson';
 import LessonDashList from '@/components/lesson/LessonDashList';
 import LessonSerialUpdate from '@/components/lesson/LessonSerialUpdate';
 import { useGetSingleModuleQuery } from '@/redux/api/adminApi/moduleApi';
@@ -17,6 +18,7 @@ export default function ModuleMaterialCom({ moduleId }: { moduleId: string }) {
   const secondTab = searchQuery.get('secondTab');
   const { userInfo } = useGlobalContext();
   const { data, isLoading } = useGetSingleModuleQuery(moduleId);
+  console.log('🚀 ~ ModuleMaterialCom ~ data:', data);
 
   if (isLoading) {
     return <LoadingSkeleton />;
@@ -54,13 +56,29 @@ export default function ModuleMaterialCom({ moduleId }: { moduleId: string }) {
                 ),
               },
               {
+                key: '3',
+                label: 'Lesson Create',
+                children: (
+                  <CreateLesson
+                    categoryId={data?.category?._id || data?.category}
+                    categoryTitle={' dd'}
+                    courseId={data?.course?._id || data.course}
+                    courseTitle={data?.course?.title}
+                    milestoneId={data?.milestone?._id || data.milestone}
+                    milestoneTitle={data?.milestone?.title}
+                    moduleId={moduleId || data?._id}
+                    moduleTitle={data?.title}
+                  />
+                ),
+              },
+              {
                 key: '2',
                 label: 'Lesson Position Update',
                 children: (
                   <LessonSerialUpdate
                     queryObject={{
                       // course: data?.course?._id,
-                      // category: data.category,
+                      // category: data?.category,
                       module: moduleId,
                     }}
                   />

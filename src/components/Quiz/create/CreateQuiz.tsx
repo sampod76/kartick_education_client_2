@@ -3,9 +3,7 @@
 import { useAddQuizMutation } from '@/redux/api/adminApi/quizApi';
 
 import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
-import SelectCategoryChildren from '@/components/Forms/GeneralField/SelectCategoryChildren';
 import { removeNullUndefinedAndFalsey } from '@/hooks/removeNullUndefinedAndFalsey';
-import { useGetAllCategoryChildrenQuery } from '@/redux/api/categoryChildrenApi';
 import { Error_model_hook, Success_model } from '@/utils/modalHook';
 import { Button, Col, Form, Input, InputNumber, Row } from 'antd';
 import dynamic from 'next/dynamic';
@@ -18,39 +16,36 @@ const TextEditor = dynamic(() => import('@/components/shared/TextEditor/TextEdit
     </div>
   ),
 });
-const CreateQuiz = () => {
+const CreateQuiz = ({
+  categoryId,
+  courseId,
+  milestoneId,
+  moduleId,
+  lessonId,
+}: {
+  categoryId?: string;
+  courseId?: string;
+  milestoneId?: string;
+  moduleId?: string;
+  lessonId?: string;
+  lessonTitle?: string;
+}) => {
   const [form] = Form.useForm();
   const { userInfo } = useGlobalContext();
-  const [category, setCategory] = useState<{ _id?: string; title?: string }>({});
-  const [course, setCourse] = useState<{ _id?: string; title?: string }>({});
-  const [milestone, setmilestone] = useState<{ _id?: string; title?: string }>({});
-  const [module, setmodule] = useState<{ _id?: string; title?: string }>({});
-  const [lesson, setlesson] = useState<{ _id?: string; title?: string }>({});
+
   const [isReset, setIsReset] = useState(false);
 
-  const query: Record<string, any> = {};
-  query['children'] = 'course-milestone-module-lessons';
-  //! for Category options selection
-  if (userInfo?.role !== 'admin') {
-    query['author'] = userInfo?.id;
-  }
-  const { data: Category, isLoading } = useGetAllCategoryChildrenQuery({
-    ...query,
-  });
-
-  const categoryData: any = Category?.data;
-  //
   const [addQuiz, { isLoading: quizLoading }] = useAddQuizMutation();
 
   const onSubmit = async (values: any) => {
     removeNullUndefinedAndFalsey(values);
     const createQuizeData: object = {
       ...values,
-      category: category?._id,
-      course: course?._id,
-      milestone: milestone?._id,
-      module: module?._id,
-      lesson: lesson?._id,
+      category: categoryId,
+      course: courseId,
+      milestone: milestoneId,
+      module: moduleId,
+      lesson: lessonId,
     };
     // console.log(LessonData);
     try {
@@ -61,6 +56,7 @@ const CreateQuiz = () => {
       } else {
         Success_model('Successfully added Quiz');
         setIsReset(true);
+        form.resetFields();
       }
       // console.log(res);
     } catch (error: any) {
@@ -75,73 +71,7 @@ const CreateQuiz = () => {
 
   return (
     <>
-      <div
-        style={{
-          boxShadow:
-            '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-          borderRadius: '1rem',
-          backgroundColor: 'white',
-          padding: '1rem',
-          marginBottom: '1rem',
-        }}
-      >
-        <div className="my-3 rounded-lg border-2 border-blue-500 p-5">
-          <h1 className="mb-2 border-spacing-4 border-b-2 text-xl font-bold">
-            At fast Filter
-          </h1>
-          <Row gutter={[16, 16]}>
-            <Col xs={24} md={6}>
-              <SelectCategoryChildren
-                lableText="Select category"
-                setState={setCategory}
-                isLoading={isLoading}
-                categoryData={categoryData}
-              />
-            </Col>
-            <Col xs={24} md={6}>
-              <SelectCategoryChildren
-                lableText="Select courses"
-                setState={setCourse}
-                categoryData={
-                  //@ts-ignore
-                  category?.courses || []
-                }
-              />
-            </Col>
-            <Col xs={24} lg={12}>
-              <SelectCategoryChildren
-                lableText="Select milestones"
-                setState={setmilestone}
-                categoryData={
-                  //@ts-ignore
-                  course?.milestones || []
-                }
-              />
-            </Col>
-            <Col xs={24} lg={12}>
-              <SelectCategoryChildren
-                lableText="Select module"
-                setState={setmodule}
-                categoryData={
-                  //@ts-ignore
-                  milestone?.modules || []
-                }
-              />
-            </Col>
-            <Col xs={24} lg={12}>
-              <SelectCategoryChildren
-                lableText="Select lesson"
-                setState={setlesson}
-                categoryData={
-                  //@ts-ignore
-                  module?.lessons || []
-                }
-              />
-            </Col>
-          </Row>
-        </div>
-      </div>
-      {lesson?._id ? (
+      {lessonId ? (
         <div
           style={{
             boxShadow:

@@ -1,6 +1,7 @@
 'use client';
 
 import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
+import CreateMilestone from '@/components/milestone/create/createAndUpdateMilestoned';
 import MileStoneList from '@/components/milestone/MilestoneDashList';
 import MilestoneSerialUpdate from '@/components/milestone/MilestoneSerialUpdate';
 import MilestoneToModuleTransfer from '@/components/milestone/MilestoneToModuleTransfer';
@@ -66,10 +67,21 @@ export default function CourseMaterialCom({ courseId }: { courseId: string }) {
                   <MileStoneList
                     queryObject={{
                       course: courseId,
-                      category: data.category?._id,
+                      category: data?.category?._id,
                       sortBy: 'milestone_number',
                       setSortOrder: 'asc',
                     }}
+                  />
+                ),
+              },
+              {
+                key: '21',
+                label: 'Create Milestone',
+                children: (
+                  <CreateMilestone
+                    courseId={courseId}
+                    categoryId={data?.category?._id}
+                    title={data.title}
                   />
                 ),
               },
@@ -78,16 +90,17 @@ export default function CourseMaterialCom({ courseId }: { courseId: string }) {
                 label: 'Milestone Position Update',
                 children: (
                   <MilestoneSerialUpdate
-                    queryObject={{ course: courseId, category: data.category?._id }}
+                    queryObject={{ course: courseId, category: data?.category?._id }}
                   />
                 ),
               },
+
               {
                 key: '3',
                 label: 'Module Transfer',
                 children: (
                   <MilestoneToModuleTransfer
-                    queryObject={{ course: courseId, category: data.category?._id }}
+                    queryObject={{ course: courseId, category: data?.category?._id }}
                   />
                 ),
               },

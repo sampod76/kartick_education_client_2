@@ -10,8 +10,6 @@ import FormTextArea from '@/components/Forms/FormTextArea';
 
 import ButtonSubmitUI from '@/components/ui/ButtonSubmitUI';
 
-import DemoVideoUI from '@/components/ui/dashboardUI/DemoVideoUI';
-
 import TagsSelectUI from '@/components/ui/dashboardUI/TagsSelectUI';
 import { courseStatusOptions } from '@/constants/global';
 
@@ -23,7 +21,6 @@ import {
 import { Error_model_hook, Success_model } from '@/utils/modalHook';
 
 import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
-import SelectCategoryChildren from '@/components/Forms/GeneralField/SelectCategoryChildren';
 import LoadingSkeleton from '@/components/ui/Loading/LoadingSkeleton';
 import UploadMultipalImage from '@/components/ui/UploadMultipalImage';
 import SubHeadingUI from '@/components/ui/dashboardUI/SubHeadingUI';
@@ -158,58 +155,6 @@ export default function EditQuiz({ quizId }: { quizId: string }) {
           }}
         >
           <div>
-            <Row gutter={[16, 16]} style={{ marginBottom: '1rem' }}>
-              <Col xs={24} md={6}>
-                <SelectCategoryChildren
-                  lableText="For change Select category"
-                  setState={setCategory}
-                  isLoading={isLoading}
-                  categoryData={categoryData}
-                />
-              </Col>
-              <Col xs={24} md={6}>
-                <SelectCategoryChildren
-                  lableText="For change Select courses"
-                  setState={setCourses}
-                  categoryData={
-                    //@ts-ignore
-                    category?.courses || []
-                  }
-                />
-              </Col>
-              <Col xs={24} lg={12}>
-                <SelectCategoryChildren
-                  lableText="For change Select milestones"
-                  setState={setmilestone}
-                  categoryData={
-                    //@ts-ignore
-                    courses?.milestones || []
-                  }
-                />
-              </Col>
-              <Col xs={24} lg={12}>
-                <SelectCategoryChildren
-                  lableText="For change Select module"
-                  setState={setmodule}
-                  categoryData={
-                    //@ts-ignore
-                    milestone?.modules || []
-                  }
-                />
-              </Col>
-              <Col xs={24} lg={12}>
-                <SelectCategoryChildren
-                  lableText="Select lesson"
-                  setState={setlesson}
-                  categoryData={
-                    //@ts-ignore
-                    module?.lessons || []
-                  }
-                />
-              </Col>
-            </Row>
-            {/* resolver={yupResolver(adminSchema)} */}
-            {/* resolver={yupResolver(IServiceSchema)} */}
             <Form
               submitHandler={onSubmit}
               defaultValues={{ ...data, lesson: data?.lesson?._id }}
@@ -254,13 +199,7 @@ export default function EditQuiz({ quizId }: { quizId: string }) {
                       // placeholder="Select"
                     />
                   </Col>
-                  <Col className="gutter-row" xs={24} style={{}}>
-                    <DemoVideoUI
-                      options={['youtube', 'vimeo']}
-                      label="Preview Video"
-                      defaultValue={data?.demo_video}
-                    />
-                  </Col>
+
                   <Col
                     className="gutter-row"
                     xs={24}

@@ -214,6 +214,11 @@ export default function LessonDashList({
                       Edit
                     </Link>
                   </Menu.Item>
+                  <Menu.Item key="Material">
+                    <Link href={`/${userInfo?.role}/lesson/material/${record._id}`}>
+                      Material
+                    </Link>
+                  </Menu.Item>
                   {/* <Menu.Item key="add_milestone">
                     <Link
                       href={`/${userInfo?.role}/lesson/create/quiz/${record?._id}?lessonName=${record?.title}`}

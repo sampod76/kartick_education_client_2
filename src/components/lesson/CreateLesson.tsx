@@ -1,24 +1,17 @@
 /* eslint-disable react/jsx-no-undef */
 'use client';
 
-import SelectCategoryChildren from '@/components/Forms/GeneralField/SelectCategoryChildren';
-
-import {
-  useAddLessonMutation,
-  useGetAllLessonQuery,
-} from '@/redux/api/adminApi/lessoneApi';
-import { useGetAllCategoryChildrenQuery } from '@/redux/api/categoryChildrenApi';
+import { useAddLessonMutation } from '@/redux/api/adminApi/lessoneApi';
 
 import { Error_model_hook, Success_model } from '@/utils/modalHook';
 
-import { ENUM_MIMETYPE, ENUM_STATUS, ENUM_YN } from '@/constants/globalEnums';
-import { USER_ROLE } from '@/constants/role';
+import { ENUM_MIMETYPE } from '@/constants/globalEnums';
 import { removeNullUndefinedAndFalsey } from '@/hooks/removeNullUndefinedAndFalsey';
 import { IFileAfterUpload } from '@/types/globalType';
 import { multipleFilesUploaderS3 } from '@/utils/handelFileUploderS3';
 import { isValidJson } from '@/utils/jsonUtls';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Col, Form, Input, InputNumber, Row, Select, Upload } from 'antd';
+import { Button, Col, Form, Input, Select, Upload } from 'antd';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { useGlobalContext } from '../ContextApi/GlobalContextApi';
@@ -41,7 +34,25 @@ interface Video {
   link: string;
 }
 const { Option } = Select;
-const CreateLesson = () => {
+const CreateLesson = ({
+  categoryId,
+  categoryTitle,
+  courseId,
+  courseTitle,
+  milestoneId,
+  milestoneTitle,
+  moduleId,
+  moduleTitle,
+}: {
+  categoryId: string;
+  courseId: string;
+  milestoneId: string;
+  moduleId: string;
+  moduleTitle: string;
+  courseTitle: string;
+  milestoneTitle: string;
+  categoryTitle: string;
+}) => {
   const [customVideo, setCustomVideo] = useState<any>('');
   const [textEditorValue, setTextEditorValue] = useState('');
   const [form] = Form.useForm();
@@ -49,30 +60,11 @@ const CreateLesson = () => {
   const [videos, setVideos] = useState<Video[]>([{ platform: 'vimeo', link: '' }]);
   //----------------------------------------------------------------
   const [loading, setLoading] = useState(false);
-  const [category, setCategory] = useState<{ _id?: string; title?: string }>({});
-  const [course, setCourse] = useState<{ _id?: string; title?: string }>({});
-  const [milestone, setmilestone] = useState<{ _id?: string; title?: string }>({});
-  const [module, setmodule] = useState<{ _id?: string; title?: string }>({});
-  //! for Category options selection
-  const query: Record<string, any> = {};
-  query['children'] = 'course-milestone-module';
-  if (userInfo?.role !== USER_ROLE.ADMIN) {
-    query['author'] = userInfo?.id;
-  }
-  const { data: Category, isLoading } = useGetAllCategoryChildrenQuery({
-    ...query,
-  });
-  const categoryData: any = Category?.data;
-  //----------------------------------------------------------------
 
   const [addLesson, { isLoading: addLoading }] = useAddLessonMutation();
 
-  const { data: existLesson, isLoading: GetLessionLoading } = useGetAllLessonQuery(
-    { module: module?._id, isDelete: ENUM_YN.NO, status: ENUM_STATUS.ACTIVE },
-    { skip: !Boolean(module?._id) },
-  );
   const onSubmit = async (values: any) => {
-    if (!module?._id || !milestone?._id || !course?._id || !category?._id) {
+    if (!moduleId || !milestoneId || !courseId || !categoryId) {
       Error_model_hook(
         'Please ensure your are selected Lesson/milestone/course/category',
       );
@@ -91,13 +83,12 @@ const CreateLesson = () => {
       delete values?.files; // !after all error req to large
     }
 
-    values.lesson_number = values?.lesson_number && Number(values?.lesson_number);
     const LessonData: any = {
       ...values,
-      category: category?._id,
-      course: course?._id,
-      milestone: milestone?._id,
-      module: module?._id,
+      category: categoryId,
+      course: courseId,
+      milestone: milestoneId,
+      module: moduleId,
       files: files,
       videos: videos.length ? videos.filter((v) => v.link) : [],
     };
@@ -114,6 +105,7 @@ const CreateLesson = () => {
       Success_model('Successfully added Lesson s');
       form.resetFields();
       setVideos([]);
+      setCustomVideo('');
     } catch (error: any) {
       Error_model_hook(error?.message);
       // console.log(error);
@@ -138,80 +130,15 @@ const CreateLesson = () => {
     setVideos(newVideos);
   };
 
-  // if (GetLessionLoading) {
-  //   return <LoadingSkeleton></LoadingSkeleton>;
-  // }
-  const roundedNumber = Number(existLesson?.data[0]?.lesson_number || 0);
-  // Add 0.1 to the rounded number and use toFixed again when logging
-  const prelesson_number = roundedNumber + 1;
-
   return (
     <div>
-      <div>
-        <div
-          style={{
-            boxShadow:
-              '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-            borderRadius: '1rem',
-            backgroundColor: 'white',
-            padding: '1rem',
-            marginBottom: '1rem',
-          }}
-        >
-          <div className="my-3 rounded-lg border-2 border-blue-500 p-5">
-            <h1 className="mb-2 border-spacing-4 border-b-2 text-xl font-bold">
-              At fast Filter
-            </h1>
-            <Row gutter={[16, 16]}>
-              <Col xs={24} lg={12}>
-                <SelectCategoryChildren
-                  lableText="Select category"
-                  setState={setCategory}
-                  isLoading={isLoading}
-                  categoryData={categoryData}
-                />
-              </Col>
-              <Col xs={24} lg={12}>
-                <SelectCategoryChildren
-                  lableText="Select courses"
-                  setState={setCourse}
-                  categoryData={
-                    //@ts-ignore
-                    category?.courses || []
-                  }
-                />
-              </Col>
-              <Col xs={24} lg={12}>
-                <SelectCategoryChildren
-                  lableText="Select milestones"
-                  setState={setmilestone}
-                  categoryData={
-                    //@ts-ignore
-                    course?.milestones || []
-                  }
-                />
-              </Col>
-              <Col xs={24} lg={12}>
-                <SelectCategoryChildren
-                  lableText="Select module"
-                  setState={setmodule}
-                  categoryData={
-                    //@ts-ignore
-                    milestone?.modules || []
-                  }
-                />
-              </Col>
-            </Row>
-          </div>
-        </div>
-      </div>
-      {module?._id ? (
+      {moduleId ? (
         <div className="rounded-lg bg-white p-5 shadow-xl">
           {/* resolver={yupResolver(adminSchema)} */}
           {/* resolver={yupResolver(IServiceSchema)} */}
 
           <Form
-            initialValues={{ lesson_number: prelesson_number }}
+            initialValues={{ status: 'active' }}
             className="p-5"
             layout="vertical"
             onFinish={onSubmit}
@@ -223,35 +150,9 @@ const CreateLesson = () => {
                 label="Lesson Title"
                 name="title"
                 rules={[{ required: true, message: 'Please enter the lesson title' }]}
-                className="col-span-10"
+                className="col-span-12"
               >
                 <Input placeholder="Please enter.." />
-              </Form.Item>
-              <Form.Item
-                label="Lesson No"
-                name="lesson_number"
-                className="col-span-2"
-                // initialValue={1} // Set as a number instead of a string
-                rules={[
-                  { required: true, message: 'Please enter the lesson number' },
-                  {
-                    validator: (_, value) => {
-                      if (!value) {
-                        return Promise.reject(
-                          new Error('Please enter the lesson number'),
-                        );
-                      }
-                      if (!Number.isInteger(value) || value <= 0) {
-                        return Promise.reject(
-                          new Error('Please enter a positive integer'),
-                        );
-                      }
-                      return Promise.resolve();
-                    },
-                  },
-                ]}
-              >
-                <InputNumber className="w-28" placeholder="1" type="number" min={1} />
               </Form.Item>
             </div>
             <fieldset
@@ -376,7 +277,7 @@ const CreateLesson = () => {
             </Col>
             <div className="flex justify-center items-center my-2">
               <Button
-                disabled={GetLessionLoading || isLoading}
+                // disabled={isLoading}
                 type="primary"
                 style={{ marginTop: '1rem' }}
                 htmlType="submit"
