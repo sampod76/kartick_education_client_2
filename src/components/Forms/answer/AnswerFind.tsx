@@ -1,6 +1,8 @@
-import { multipleFilesUploaderS3 } from '@/utils/handelFileUploderS3';
+import { FileProgress } from '@/components/ui/FileUploader/FileUploaderUi';
+import { FilProgressMultipleFilesUploaderS3 } from '@/utils/handleFileUploderFileProgress';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Image, Input, Radio, Select, Upload } from 'antd';
+import { UploadChangeParam, UploadFile } from 'antd/es/upload/interface';
 import { useState } from 'react';
 import SubHeadingUI from '../../ui/dashboardUI/SubHeadingUI';
 
@@ -19,6 +21,7 @@ interface AnswerInputListProps {
 
 const AnswerFind: React.FC<AnswerInputListProps> = ({ answersFind, setAnswersFind }) => {
   // console.log("🚀 ~ answersFind:", answersFind)
+  const [fileProgressList, setFileProgressList] = useState<FileProgress[]>([]);
   const [isLoading, setIsLoading] = useState<{
     loading: boolean;
     index: number;
@@ -118,43 +121,82 @@ const AnswerFind: React.FC<AnswerInputListProps> = ({ answersFind, setAnswersFin
             </Radio.Group>
             {/* quiz uploader */}
             <div className="flex flex-wrap items-center justify-start gap-2">
-              <Upload
-                listType="picture"
-                style={{ textAlign: 'start' }}
-                showUploadList={true}
-                multiple={false}
-                // multiple
-                beforeUpload={async (file) => {
-                  setIsLoading({ loading: true, index: index });
-                  // console.log(
-                  //   "🚀 ~ file: DynamicFormFiled.tsx:110 ~ beforeUpload={ ~ file:",
-                  //   file
-                  // );
-                  // You can add custom logic before uploading, e.g., checking file type or size
-                  const images = answer?.imgs;
-                  const img = await multipleFilesUploaderS3([file]);
-                  console.log('🚀 ~ beforeUpload={ ~ img:', img);
-                  setIsLoading({ loading: false, index: index });
-                  // console.log('img', img);
-                  if (img.length) {
-                    images.push(img[0]?.url);
-                  }
-
-                  handleChange(index, {
-                    ...answer,
-                    // imgs: [...answer.imgs,imgUrl],
-                    imgs: images,
-                  });
-                  return false; // Prevent default upload behavior
-                }}
-              >
-                <Button
-                  loading={isLoading.index === index && isLoading.loading}
+              <div className="flex flex-wrap items-center justify-start gap-2">
+                <Upload
+                  listType="picture"
                   style={{ textAlign: 'start' }}
+                  showUploadList={true}
+                  multiple={false}
+                  // multiple
+                  // beforeUpload={async (file) => {
+                  //   setIsLoading({ loading: true, index: index });
+
+                  //   const images = answer?.imgs;
+                  //   const image = await FilProgressMultipleFilesUploaderS3(
+                  //     [file],
+                  //     setFileProgressList,
+                  //   );
+                  //   setIsLoading({ loading: false, index: index });
+                  //   if (image.length > 0) {
+                  //     const imgUrl = image[0].url;
+                  //     images.push(imgUrl);
+                  //   }
+                  //   // console.log(images,imgUrl, answer);
+
+                  //   handleChange(index, {
+                  //     ...answer,
+                  //     // imgs: [...answer.imgs,imgUrl],
+                  //     imgs: images,
+                  //   });
+                  //   return false; // Prevent default upload behavior
+                  // }}
+                  accept="image/*"
+                  onChange={async (info: UploadChangeParam<UploadFile>) => {
+                    console.log('🚀 ~ onChange={ ~ info:', info);
+                    //@ts-ignore
+                    const images = answer?.imgs;
+                    if (info.fileList.length === 0) {
+                      handleChange(index, {
+                        ...answer,
+                        // imgs: [...answer.imgs,imgUrl],
+                        imgs: images,
+                      });
+                    } else {
+                      setIsLoading({ loading: true, index: index });
+                      const result = await FilProgressMultipleFilesUploaderS3(
+                        info.fileList,
+                        setFileProgressList,
+                      );
+                      console.log('🚀 ~ onChange={ ~ result:', result);
+                      handleChange(index, {
+                        ...answer,
+                        // imgs: [...answer.imgs,imgUrl],
+                        imgs: result.map((img) => img.url),
+                      });
+                      setIsLoading({ loading: false, index: index });
+                    }
+                  }}
+                  beforeUpload={() => false}
                 >
-                  Answer Image +
-                </Button>
-              </Upload>
+                  <Button
+                    // disabled={answer?.imgs?.length > 0}
+                    loading={isLoading.index === index && isLoading.loading}
+                    style={{ textAlign: 'start' }}
+                  >
+                    Answer Image +
+                  </Button>
+                </Upload>
+                {answer?.imgs?.map((img, key) => (
+                  <Image
+                    key={key}
+                    className="h-10 w-10 rounded"
+                    src={img}
+                    width={50}
+                    height={40}
+                    alt=""
+                  />
+                ))}
+              </div>
               {answer.imgs.map((img, key) => (
                 <Image
                   key={key}

@@ -1,11 +1,10 @@
+import { FileProgress } from '@/components/ui/FileUploader/FileUploaderUi';
+import { FilProgressMultipleFilesUploaderS3 } from '@/utils/handleFileUploderFileProgress';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Image, Input, Radio, Upload } from 'antd';
+import { UploadChangeParam, UploadFile } from 'antd/es/upload/interface';
 import { useState } from 'react';
-import { Button, Input, Radio, Select, Space, Upload, message } from 'antd';
-import { PlusOutlined, MinusCircleOutlined, UploadOutlined } from '@ant-design/icons';
-import HeadingUI from '../../ui/dashboardUI/HeadingUI';
 import SubHeadingUI from '../../ui/dashboardUI/SubHeadingUI';
-import uploadImgBB from '@/hooks/UploadSIngleImgBB';
-import uploadImgCloudinary from '@/hooks/UploadSIngleCloudinary';
-import { Image } from 'antd';
 
 interface Answer {
   title: string;
@@ -21,6 +20,7 @@ interface AnswerInputListProps {
 }
 
 const AnswerSInlge: React.FC<AnswerInputListProps> = ({ answers, setAnswers }) => {
+  const [fileProgressList, setFileProgressList] = useState<FileProgress[]>([]);
   const [isLoading, setIsLoading] = useState<{
     loading: boolean;
     index: number;
@@ -49,8 +49,6 @@ const AnswerSInlge: React.FC<AnswerInputListProps> = ({ answers, setAnswers }) =
   };
 
   const handleChange = (index: number, updatedAnswer: Answer) => {
-    // console.log(updatedAnswer,"🚀 ~ file: AnswerSingle.tsx:51 ~ handleChange ~ index:", index)
-
     let updatedAnswers = [...answers];
     updatedAnswers[index] = updatedAnswer;
     // If the selected answer is correct, set other answers to incorrect
@@ -139,26 +137,58 @@ const AnswerSInlge: React.FC<AnswerInputListProps> = ({ answers, setAnswers }) =
                 showUploadList={true}
                 multiple={false}
                 // multiple
-                beforeUpload={async (file) => {
-                  setIsLoading({ loading: true, index: index });
+                // beforeUpload={async (file) => {
+                //   setIsLoading({ loading: true, index: index });
 
+                //   const images = answer?.imgs;
+                //   const image = await FilProgressMultipleFilesUploaderS3(
+                //     [file],
+                //     setFileProgressList,
+                //   );
+                //   setIsLoading({ loading: false, index: index });
+                //   if (image.length > 0) {
+                //     const imgUrl = image[0].url;
+                //     images.push(imgUrl);
+                //   }
+                //   // console.log(images,imgUrl, answer);
+
+                //   handleChange(index, {
+                //     ...answer,
+                //     // imgs: [...answer.imgs,imgUrl],
+                //     imgs: images,
+                //   });
+                //   return false; // Prevent default upload behavior
+                // }}
+                accept="image/*"
+                onChange={async (info: UploadChangeParam<UploadFile>) => {
+                  console.log('🚀 ~ onChange={ ~ info:', info);
+                  //@ts-ignore
                   const images = answer?.imgs;
-                  const imgUrl = await uploadImgCloudinary(file);
-                  setIsLoading({ loading: false, index: index });
-                  if (imgUrl) {
-                    images.push(imgUrl);
+                  if (info.fileList.length === 0) {
+                    handleChange(index, {
+                      ...answer,
+                      // imgs: [...answer.imgs,imgUrl],
+                      imgs: images,
+                    });
+                  } else {
+                    setIsLoading({ loading: true, index: index });
+                    const result = await FilProgressMultipleFilesUploaderS3(
+                      info.fileList,
+                      setFileProgressList,
+                    );
+                    console.log('🚀 ~ onChange={ ~ result:', result);
+                    handleChange(index, {
+                      ...answer,
+                      // imgs: [...answer.imgs,imgUrl],
+                      imgs: result.map((img) => img.url),
+                    });
+                    setIsLoading({ loading: false, index: index });
                   }
-                  // console.log(images,imgUrl, answer);
-
-                  handleChange(index, {
-                    ...answer,
-                    // imgs: [...answer.imgs,imgUrl],
-                    imgs: images,
-                  });
-                  return false; // Prevent default upload behavior
                 }}
+                beforeUpload={() => false}
               >
                 <Button
+                  // disabled={answer?.imgs?.length > 0}
                   loading={isLoading.index === index && isLoading.loading}
                   style={{ textAlign: 'start' }}
                 >
@@ -198,14 +228,14 @@ const AnswerSInlge: React.FC<AnswerInputListProps> = ({ answers, setAnswers }) =
             </div>
 
             {/* select status */}
-            <Select
+            {/* <Select
               style={{ width: 120 }}
               onChange={(value) => handleChange(index, { ...answer, status: value })}
               defaultValue={answer.status}
             >
               <Select.Option value="active">Active</Select.Option>
               <Select.Option value="deactivate">Deactivate</Select.Option>
-            </Select>
+            </Select> */}
           </div>
         </div>
       ))}

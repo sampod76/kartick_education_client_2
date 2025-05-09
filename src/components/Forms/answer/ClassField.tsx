@@ -1,15 +1,11 @@
 'use client';
-import { useState } from 'react';
-import { Button, Input, Radio, Select, Space, Upload, message, Typography } from 'antd';
-import { PlusOutlined, MinusCircleOutlined, UploadOutlined } from '@ant-design/icons';
-import HeadingUI from '../../ui/dashboardUI/HeadingUI';
-import SubHeadingUI from '../../ui/dashboardUI/SubHeadingUI';
-import uploadImgBB from '@/hooks/UploadSIngleImgBB';
-import uploadImgCloudinary from '@/hooks/UploadSIngleCloudinary';
-import { Image } from 'antd';
-import { useGetAllCourseQuery } from '@/redux/api/adminApi/courseApi';
 import { ENUM_STATUS, ENUM_YN } from '@/constants/globalEnums';
-import LabelUi from '@/components/ui/dashboardUI/LabelUi';
+import uploadImgCloudinary from '@/hooks/UploadSIngleCloudinary';
+import { useGetAllCourseQuery } from '@/redux/api/adminApi/courseApi';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Image, Input, Select, Upload } from 'antd';
+import { useState } from 'react';
+import SubHeadingUI from '../../ui/dashboardUI/SubHeadingUI';
 
 interface Answer {
   title: string;
@@ -51,7 +47,7 @@ const CLassField: React.FC<ClassFieldProps> = ({ ClassData, setClassData }) => {
   };
 
   const handleChange = (index: number, updatedAnswer: Answer) => {
-    let updatedClassData = [...ClassData];
+    const updatedClassData = [...ClassData];
     updatedClassData[index] = updatedAnswer;
     setClassData(updatedClassData);
   };
