@@ -73,8 +73,6 @@ const CreateSingleQuiz = ({
   const [addSingleQuiz, { isLoading: serviceLoading }] = useAddSingleQuizMutation();
 
   const onSubmit = async (values: any) => {
-    console.log('🚀 ~ onSubmit ~ values:', values);
-    // console.log("🚀 ~ onSubmit ~ values:", values);
     if (!quizId) {
       Error_model_hook('Please ensure your are selected quiz');
       return;

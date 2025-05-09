@@ -5,7 +5,6 @@ import { IAnswer } from '@/types/quiz/singleQuizType';
 import TextToSpeech from '@/utils/TextToSpeech';
 import { Checkbox, Radio } from 'antd';
 import Image from 'next/image';
-import React from 'react';
 
 export default function ViewSIngleQuizDash({ singleQuizId }: { singleQuizId: string }) {
   const { data: quiz, isLoading } = useGetSingleOneQuizQuery(singleQuizId);
@@ -44,7 +43,7 @@ export default function ViewSIngleQuizDash({ singleQuizId }: { singleQuizId: str
                 src={img}
                 width={700}
                 height={700}
-                className={'w-96 lg:w-full max-h-44 lg:max-h-48 m-3'}
+                className={' m-3'}
                 alt=""
               ></Image>
             ))}

@@ -1,31 +1,11 @@
-import uploadImgCloudinary from '@/hooks/UploadSIngleCloudinary';
-import { Error_model_hook } from '@/utils/modalHook';
+import { FilProgressMultipleFilesUploaderS3 } from '@/utils/handleFileUploderFileProgress';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { Image, Upload } from 'antd';
+import { Image, Progress, Upload } from 'antd';
 import type { UploadChangeParam } from 'antd/es/upload';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { useCallback, useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import Resizer from 'react-image-file-resizer';
-
-const getBase64 = (img: RcFile, callback: (url: string) => void) => {
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result as string));
-  reader.readAsDataURL(img);
-};
-
-const beforeUpload = (file: RcFile) => {
-  const isJpgOrPng =
-    file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg';
-  if (!isJpgOrPng) {
-    Error_model_hook('You can only upload JPG/PNG file!');
-  }
-  // const isLt2M = file.size / 1024 / 1024 < 5;
-  // if (!isLt2M) {
-  //   Error_model_hook("Image must smaller than 2MB!");
-  // }
-  return isJpgOrPng;
-};
+import { FileProgress } from './FileUploader/FileUploaderUi';
 
 type ImageUploadProps = {
   name: string;
@@ -44,38 +24,33 @@ const UploadMultipalImage = ({
   isImageloading = false,
   multiple = false,
 }: ImageUploadProps) => {
+  const [fileProgressList, setFileProgressList] = useState<FileProgress[]>([]);
+
   const [loading, setLoading] = useState(false);
 
   const [imagesUrl, setImagesUrl] = useState<string[]>(defaultImage);
+
   const { setValue } = useFormContext();
   useEffect(() => {
     setValue(name, imagesUrl);
   }, [imagesUrl, name, setValue]);
+
   const handleImageProcessing = useCallback(
     async (file: any) => {
       try {
-        // Resize the image
-        const resizedImage = await new Promise((resolve) => {
-          Resizer.imageFileResizer(
-            file,
-            700, // width
-            500, // height
-            'JPEG', // format
-            100, // quality
-            0, // rotation
-            (uri: unknown) => {
-              resolve(uri);
-            },
-            'file', // output type (file, blob, base64)
-          );
-        });
+        setLoading(true);
+        if (Array.isArray(file) && file.length === 0) {
+          return;
+        }
 
         // Get the compressed image URL
-        const imgUrl = await uploadImgCloudinary(resizedImage);
-        console.log('🚀 ~ handleImageProcessing ~ imgUrl:', imgUrl);
+        const result = await FilProgressMultipleFilesUploaderS3(
+          Array.isArray(file) ? file : [file],
+          setFileProgressList,
+        );
 
         // setImagesUrl((prevImages) => [...prevImages, imgUrl]);
-        setImagesUrl((prevImages) => [imgUrl]);
+        setImagesUrl(result.map((item) => item.url));
         setLoading(false);
         if (isImageloading) {
           isImageloading(true);
@@ -86,6 +61,8 @@ const UploadMultipalImage = ({
         if (isImageloading) {
           isImageloading(true);
         }
+      } finally {
+        setLoading(false);
       }
     },
     [isImageloading],
@@ -94,16 +71,21 @@ const UploadMultipalImage = ({
   const handleChange: UploadProps['onChange'] = async (
     info: UploadChangeParam<UploadFile>,
   ) => {
-    if (info.file.status === 'uploading') {
-      setLoading(true);
-      if (isImageloading) {
-        isImageloading(true);
-      }
-      return;
-    }
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      await handleImageProcessing(info.file.originFileObj);
+    // console.log('🚀 ~ info:', info);
+    // if (info.file.status === 'uploading') {
+    //   setLoading(true);
+    //   if (isImageloading) {
+    //     isImageloading(true);
+    //   }
+    //   return;
+    // }
+    // if (info.file.status === 'done') {
+    //   // Get this url from response in real world.
+    // }
+    if (info.fileList.length === 0) {
+      setImagesUrl([]);
+    } else {
+      await handleImageProcessing(info.fileList);
     }
   };
 
@@ -141,12 +123,33 @@ const UploadMultipalImage = ({
         showUploadList={true}
         multiple={multiple}
         maxCount={5}
-        action="/api/file"
-        beforeUpload={customChange ? customChange : beforeUpload}
+        // action="/api/file"
+        accept="image/*"
+        beforeUpload={() => false}
         onChange={handleChange}
       >
         {uploadButton}
       </Upload>
+      <div>
+        {loading && <LoadingOutlined />}
+        {fileProgressList.map((file) => (
+          <div key={file.uid} style={{ marginBottom: 16 }}>
+            <div>{file.name}</div>
+            <div className="flex justify-between items-center gap-1">
+              <Progress
+                percent={file.progress}
+                status={
+                  file.status === 'uploading'
+                    ? 'active'
+                    : file.status === 'done'
+                      ? 'success'
+                      : 'exception'
+                }
+              />
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
