@@ -36,6 +36,7 @@ export default function ViewSIngleQuizDash({ singleQuizId }: { singleQuizId: str
               Question : {quiz?.title}
             </p>
           </div>
+          {/*  */}
           <div className="flex flex-wrap mx-5">
             {quiz?.imgs?.map((img: string, key: number, allimages: any[]) => (
               <Image
