@@ -1,22 +1,17 @@
 import {
   AccountBookFilled,
-  AlignCenterOutlined,
-  BookOutlined,
   BorderOuterOutlined,
   ContactsFilled,
   ContactsOutlined,
   ContainerOutlined,
   CreditCardOutlined,
   CreditCardTwoTone,
-  DatabaseOutlined,
   FileTextOutlined,
   HomeOutlined,
   PayCircleFilled,
   PicLeftOutlined,
   ProfileOutlined,
   ShoppingCartOutlined,
-  ThunderboltFilled,
-  ThunderboltOutlined,
   UsergroupDeleteOutlined,
   UserOutlined,
   UserSwitchOutlined,
@@ -159,153 +154,153 @@ export const dashboardItems = (role: string, setCollapsed?: any) => {
         },
       ],
     },
-    {
-      label: ' Milestone',
-      key: 'manage-Milestone',
-      icon: <BookOutlined />,
-      children: [
-        {
-          label: (
-            <Link
-              onClick={() => (setCollapsed ? setCollapsed(false) : null)}
-              href={`/${role}/milestone/create`}
-            >
-              Create Milestone
-            </Link>
-          ),
-          key: `/${role}/milestone/create`,
-        },
+    // {
+    //   label: ' Milestone',
+    //   key: 'manage-Milestone',
+    //   icon: <BookOutlined />,
+    //   children: [
+    //     {
+    //       label: (
+    //         <Link
+    //           onClick={() => (setCollapsed ? setCollapsed(false) : null)}
+    //           href={`/${role}/milestone/create`}
+    //         >
+    //           Create Milestone
+    //         </Link>
+    //       ),
+    //       key: `/${role}/milestone/create`,
+    //     },
 
-        {
-          label: (
-            <Link
-              onClick={() => (setCollapsed ? setCollapsed(false) : null)}
-              href={`/${role}/milestone`}
-            >
-              Milestone List
-            </Link>
-          ),
-          key: `/${role}/milestone`,
-        },
-      ],
-    },
-    {
-      label: ' Module',
-      key: 'manage-Module',
-      icon: <DatabaseOutlined />,
-      children: [
-        {
-          label: (
-            <Link
-              onClick={() => (setCollapsed ? setCollapsed(false) : null)}
-              href={`/${role}/module/create`}
-            >
-              Create modules
-            </Link>
-          ),
-          key: `/${role}/module/create`,
-        },
-        {
-          label: (
-            <Link
-              onClick={() => (setCollapsed ? setCollapsed(false) : null)}
-              href={`/${role}/module`}
-            >
-              Modules List
-            </Link>
-          ),
-          key: `/${role}/module`,
-        },
-      ],
-    },
-    {
-      label: ' Lesson',
-      key: 'manage-lesson',
-      icon: <AlignCenterOutlined />,
-      children: [
-        {
-          label: (
-            <Link
-              onClick={() => (setCollapsed ? setCollapsed(false) : null)}
-              href={`/${role}/lesson/create`}
-            >
-              Create Lesson
-            </Link>
-          ),
-          key: `/${role}/lesson/create`,
-        },
-        {
-          label: (
-            <Link
-              onClick={() => (setCollapsed ? setCollapsed(false) : null)}
-              href={`/${role}/lesson`}
-            >
-              lesson List
-            </Link>
-          ),
-          key: `/${role}/lesson`,
-        },
-      ],
-    },
-    {
-      label: ' Quiz',
-      key: 'manage-quiz',
-      icon: <ThunderboltOutlined />,
-      children: [
-        {
-          label: (
-            <Link
-              onClick={() => (setCollapsed ? setCollapsed(false) : null)}
-              href={`/${role}/quiz/create`}
-            >
-              Create Quiz
-            </Link>
-          ),
-          key: `/${role}/quiz/create`,
-        },
-        {
-          label: (
-            <Link
-              onClick={() => (setCollapsed ? setCollapsed(false) : null)}
-              href={`/${role}/quiz`}
-            >
-              Quiz List
-            </Link>
-          ),
-          key: `/${role}/quiz`,
-        },
-      ],
-    },
+    //     {
+    //       label: (
+    //         <Link
+    //           onClick={() => (setCollapsed ? setCollapsed(false) : null)}
+    //           href={`/${role}/milestone`}
+    //         >
+    //           Milestone List
+    //         </Link>
+    //       ),
+    //       key: `/${role}/milestone`,
+    //     },
+    //   ],
+    // },
+    // {
+    //   label: ' Module',
+    //   key: 'manage-Module',
+    //   icon: <DatabaseOutlined />,
+    //   children: [
+    //     {
+    //       label: (
+    //         <Link
+    //           onClick={() => (setCollapsed ? setCollapsed(false) : null)}
+    //           href={`/${role}/module/create`}
+    //         >
+    //           Create modules
+    //         </Link>
+    //       ),
+    //       key: `/${role}/module/create`,
+    //     },
+    //     {
+    //       label: (
+    //         <Link
+    //           onClick={() => (setCollapsed ? setCollapsed(false) : null)}
+    //           href={`/${role}/module`}
+    //         >
+    //           Modules List
+    //         </Link>
+    //       ),
+    //       key: `/${role}/module`,
+    //     },
+    //   ],
+    // },
+    // {
+    //   label: ' Lesson',
+    //   key: 'manage-lesson',
+    //   icon: <AlignCenterOutlined />,
+    //   children: [
+    //     {
+    //       label: (
+    //         <Link
+    //           onClick={() => (setCollapsed ? setCollapsed(false) : null)}
+    //           href={`/${role}/lesson/create`}
+    //         >
+    //           Create Lesson
+    //         </Link>
+    //       ),
+    //       key: `/${role}/lesson/create`,
+    //     },
+    //     {
+    //       label: (
+    //         <Link
+    //           onClick={() => (setCollapsed ? setCollapsed(false) : null)}
+    //           href={`/${role}/lesson`}
+    //         >
+    //           lesson List
+    //         </Link>
+    //       ),
+    //       key: `/${role}/lesson`,
+    //     },
+    //   ],
+    // },
+    // {
+    //   label: ' Quiz',
+    //   key: 'manage-quiz',
+    //   icon: <ThunderboltOutlined />,
+    //   children: [
+    //     {
+    //       label: (
+    //         <Link
+    //           onClick={() => (setCollapsed ? setCollapsed(false) : null)}
+    //           href={`/${role}/quiz/create`}
+    //         >
+    //           Create Quiz
+    //         </Link>
+    //       ),
+    //       key: `/${role}/quiz/create`,
+    //     },
+    //     {
+    //       label: (
+    //         <Link
+    //           onClick={() => (setCollapsed ? setCollapsed(false) : null)}
+    //           href={`/${role}/quiz`}
+    //         >
+    //           Quiz List
+    //         </Link>
+    //       ),
+    //       key: `/${role}/quiz`,
+    //     },
+    //   ],
+    // },
 
-    {
-      label: 'Single Quiz',
-      key: 'manage-single-quiz',
-      icon: <ThunderboltFilled />,
-      children: [
-        {
-          label: (
-            <Link
-              onClick={() => (setCollapsed ? setCollapsed(false) : null)}
-              href={`/${role}/single-quiz/create`}
-            >
-              Create Single Quiz
-            </Link>
-          ),
-          key: `/${role}/single-quiz/create`,
-        },
-        {
-          label: (
-            <Link
-              onClick={() => (setCollapsed ? setCollapsed(false) : null)}
-              href={`/${role}/single-quiz`}
-            >
-              Single Quiz List
-            </Link>
-          ),
-          key: `/${role}/single-quiz`,
-        },
-      ],
-    },
+    // {
+    //   label: 'Single Quiz',
+    //   key: 'manage-single-quiz',
+    //   icon: <ThunderboltFilled />,
+    //   children: [
+    //     {
+    //       label: (
+    //         <Link
+    //           onClick={() => (setCollapsed ? setCollapsed(false) : null)}
+    //           href={`/${role}/single-quiz/create`}
+    //         >
+    //           Create Single Quiz
+    //         </Link>
+    //       ),
+    //       key: `/${role}/single-quiz/create`,
+    //     },
+    //     {
+    //       label: (
+    //         <Link
+    //           onClick={() => (setCollapsed ? setCollapsed(false) : null)}
+    //           href={`/${role}/single-quiz`}
+    //         >
+    //           Single Quiz List
+    //         </Link>
+    //       ),
+    //       key: `/${role}/single-quiz`,
+    //     },
+    //   ],
+    // },
   ];
   const adminSidebarItems: MenuProps['items'] = [
     ...defaultSidebarItems,
