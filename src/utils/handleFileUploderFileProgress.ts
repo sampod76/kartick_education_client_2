@@ -22,6 +22,7 @@ const singleFileUploaderInS3 = async (
                 progress,
                 status: progress === 100 ? 'done' : 'uploading',
                 url: progress === 100 && fileObjectToLink(fileData as any),
+                fullFile: fileData,
               };
             } else {
               return item;
