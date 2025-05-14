@@ -12,6 +12,7 @@ export interface FileProgress {
   progress: number;
   status: 'uploading' | 'done' | 'error';
   url?: string;
+  fullFile?: any;
 }
 
 export const FileUploaderUi = () => {
@@ -28,7 +29,7 @@ export const FileUploaderUi = () => {
         setFileProgressList,
       );
       // console.log('🚀 ~ handleUpload ~ data:', data);
-      const res = await addFileList({ files: data }).unwrap();
+      // const res = await addFileList({ files: data }).unwrap();
       setLoading(false);
       Success_model('Successful upload');
     } catch (error) {
@@ -45,9 +46,19 @@ export const FileUploaderUi = () => {
       progress: 0,
       status: 'uploading',
       url: '',
+      fullFile: {},
     }));
     setFileList(info.fileList);
     setFileProgressList(newFiles);
+  };
+
+  const uploadFile = async (fullFile: any) => {
+    try {
+      const res = await addFileList({ files: [fullFile] }).unwrap();
+      console.log('🚀 ~ uploadFile ~ res:', res);
+    } catch (error) {
+      ErrorModal(error);
+    }
   };
 
   return (
@@ -72,36 +83,41 @@ export const FileUploaderUi = () => {
           </Upload>
         </Form.Item>
         <div>
-          {fileProgressList.map((file) => (
-            <div key={file.uid} style={{ marginBottom: 16 }}>
-              <div>{file.name}</div>
-              <div className="flex justify-between items-center gap-1">
-                <Progress
-                  percent={file.progress}
-                  status={
-                    file.status === 'uploading'
-                      ? 'active'
-                      : file.status === 'done'
-                        ? 'success'
-                        : 'exception'
-                  }
-                />
-                {file.url && (
-                  <p
-                    className="cursor-pointer"
-                    onClick={() => {
-                      if (file.url) {
-                        navigator.clipboard.writeText(file.url);
-                      }
-                      message.success('Link Copy Success');
-                    }}
-                  >
-                    <MdContentCopy />
-                  </p>
-                )}
+          {fileProgressList.map((file) => {
+            if (file.status === 'done') {
+              uploadFile(file.fullFile);
+            }
+            return (
+              <div key={file.uid} style={{ marginBottom: 16 }}>
+                <div>{file.name}</div>
+                <div className="flex justify-between items-center gap-1">
+                  <Progress
+                    percent={file.progress}
+                    status={
+                      file.status === 'uploading'
+                        ? 'active'
+                        : file.status === 'done'
+                          ? 'success'
+                          : 'exception'
+                    }
+                  />
+                  {file.url && (
+                    <p
+                      className="cursor-pointer"
+                      onClick={() => {
+                        if (file.url) {
+                          navigator.clipboard.writeText(file.url);
+                        }
+                        message.success('Link Copy Success');
+                      }}
+                    >
+                      <MdContentCopy />
+                    </p>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
         <div className="flex items-center gap-2">
           <Form.Item>
