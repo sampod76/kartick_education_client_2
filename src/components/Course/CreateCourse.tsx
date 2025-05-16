@@ -24,6 +24,7 @@ import { ENUM_MIMETYPE, ENUM_STATUS } from '@/constants/globalEnums';
 import { USER_ROLE } from '@/constants/role';
 import { useGetAllCategoryQuery } from '@/redux/api/adminApi/categoryApi';
 import { useGetAllCourse_labelQuery } from '@/redux/api/adminApi/courseLevelApi';
+import { useGetAllGradeLevelQuery } from '@/redux/api/adminApi/gradeLevelApi';
 import { useGetSingleSellerQuery } from '@/redux/api/adminApi/sellerApi';
 import { useGetAllUsersQuery } from '@/redux/api/adminApi/usersApi';
 import { multipleFilesUploaderS3 } from '@/utils/handelFileUploderS3';
@@ -53,6 +54,7 @@ const CreateCourse = ({ setOpen }: any) => {
   const { data: findSeller, isLoading: sellerLoading } = useGetSingleSellerQuery(id, {
     skip: disable,
   });
+  const { data: getAllGrade, isLoading: gradeLoading } = useGetAllGradeLevelQuery({});
   // console.log(findSeller, 'findSeller');
   const [category, setCategory] = useState('');
   const [textEditorValue, setTextEditorValue] = useState('');
@@ -172,6 +174,12 @@ const CreateCourse = ({ setOpen }: any) => {
     return {
       label: item?.category?.title,
       value: item?.category._id,
+    };
+  });
+  const getAllGradeLevel = getAllGrade?.data?.map((item: any) => {
+    return {
+      label: item?.title,
+      value: item?._id,
     };
   });
 
@@ -312,29 +320,9 @@ const CreateCourse = ({ setOpen }: any) => {
                     onChange={(value) => setCategory(value)}
                     options={CategoryOptions?.length ? CategoryOptions : SellerCategory}
                   />
-                  {/* {CategoryOptions?.length
-                        ? CategoryOptions?.map((data: any) => (
-                            <Select.Option
-                              allowClear
-                              value={data.value}
-                              key={data.value}
-                            >
-                              {data.label}
-                            </Select.Option>
-                          ))
-                        : SellerCategory?.map((data: any) => (
-                            <Select.Option
-                              allowClear
-                              value={data.value}
-                              key={data.value}
-                            >
-                              {data.label}
-                            </Select.Option>
-                          ))}
-                    </Select> */}
                 </Form.Item>
-                {/* //! category 10 */}
               </Col>
+
               <Col xs={24} md={12} lg={12} style={{}}>
                 {/* <Form.Item label="Course level" name="level">
                     <Input size="large" placeholder="Course level" />
@@ -356,6 +344,16 @@ const CreateCourse = ({ setOpen }: any) => {
                   </Select>
                 </Form.Item>
               </Col>
+              <Col xs={24} md={12} lg={12} style={{}}>
+                <Form.Item label="Select Grade level" name="grade_level_id">
+                  <Select
+                    size="large"
+                    loading={gradeLoading}
+                    placeholder="Select your grade level"
+                    options={getAllGradeLevel?.length ? getAllGradeLevel : []}
+                  />
+                </Form.Item>
+              </Col>
               {userInfo?.role === 'admin' && (
                 <Col xs={24} md={12} lg={8} style={{}}>
                   {/* <SelectAuthorField /> */}
@@ -375,9 +373,6 @@ const CreateCourse = ({ setOpen }: any) => {
                       placeholder="Select course trainer"
                       allowClear
                     >
-                      {/* <Select.Option value="" key={0}>
-                        Select author
-                      </Select.Option> */}
                       {AuthorOptions?.map((data: any) => (
                         <Select.Option value={data.value} key={data.value}>
                           {data.label}

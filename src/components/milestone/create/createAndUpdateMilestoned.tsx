@@ -1,123 +1,74 @@
 'use client';
 
-import Form from '@/components/Forms/Form';
+import {
+  useAddMilestoneMutation,
+  useGetSingleMilestoneQuery,
+} from '@/redux/api/adminApi/milestoneApi';
 
-import FormInput from '@/components/Forms/FormInput';
-
-import ButtonSubmitUI from '@/components/ui/ButtonSubmitUI';
-
-import { useAddMilestoneMutation } from '@/redux/api/adminApi/milestoneApi';
-
-import { Error_model_hook, Success_model } from '@/utils/modalHook';
-
-import { Col, Row, Spin } from 'antd';
-import dynamic from 'next/dynamic';
+import { Button, Col, Form, Input, message, Row, Select, Spin } from 'antd';
 import { useState } from 'react';
 
 import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
-import SelectCategoryChildren from '@/components/Forms/GeneralField/SelectCategoryChildren';
-import { ENUM_STATUS } from '@/constants/globalEnums';
+import ModalComponent from '@/components/Modal/ModalComponents';
+import CreateGradeLevel from '@/components/gradeLevel/CreateGradeLevel';
 import { removeNullUndefinedAndFalsey } from '@/hooks/removeNullUndefinedAndFalsey';
-import { useGetAllCategoryChildrenQuery } from '@/redux/api/categoryChildrenApi';
+import { useGetAllGradeLevelQuery } from '@/redux/api/adminApi/gradeLevelApi';
 //
-const TextEditor = dynamic(() => import('@/components/shared/TextEditor/TextEditor'), {
-  ssr: false,
-  loading: () => (
-    <div className="flex items-center justify-center h-32">
-      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-600"></div>
-    </div>
-  ),
-});
+
 // courseId -->For update
-const CreateMilestone = ({ courseId, categoryId, title }: any) => {
-  console.log('🚀 ~ CreateMilestone ~ courseId:', courseId);
+const CreateMilestone = ({ courseId, categoryId, title, milestoneId }: any) => {
+  const [form] = Form.useForm();
+  const { data: getAllGrade, isLoading: gradeLoading } = useGetAllGradeLevelQuery({});
+  const { data: getMilestone, isLoading } = useGetSingleMilestoneQuery(milestoneId);
+  const getAllGradeLevel = getAllGrade?.data?.map((item: any) => {
+    return {
+      label: item?.title,
+      value: item?._id,
+    };
+  });
   const { userInfo, userInfoLoading } = useGlobalContext();
-  // console.log('🚀 ~ CreateMilestone ~ userInfo:', userInfo);
 
-  //
   const [isReset, setIsReset] = useState(false);
-  const [category, setCategory] = useState<{ _id?: string }>({});
-  const [courses, setCourses] = useState<{ _id?: string }>({});
-
-  const query: Record<string, any> = {};
-  query['children'] = 'course';
-  query['status'] = ENUM_STATUS.ACTIVE;
-  if (userInfo?.role !== 'admin') {
-    query['author'] = userInfo?.id;
-  }
-
-  //! for Category options selection for filtering
-  const { data: Category, isLoading } = useGetAllCategoryChildrenQuery(
-    {
-      ...query,
-    },
-    { skip: Boolean(courseId) },
-  );
-  const categoryData: any = Category?.data;
 
   const [addMilestone, { isLoading: serviceLoading }] = useAddMilestoneMutation();
 
   const onSubmit = async (values: any) => {
-    if (!courses._id && !courseId) {
-      Error_model_hook('Course must be select');
+    console.log('🚀 ~ onSubmit ~ values:', values);
+    if (!courseId) {
+      message.error('Course must be selected');
       return;
     }
+
     removeNullUndefinedAndFalsey(values);
-    const MilestoneData: object = {
+
+    const MilestoneData: any = {
       ...values,
-      category: category?._id || categoryId,
-      course: courses._id || courseId,
+      category: categoryId,
+      course: courseId,
     };
-    // console.log(MilestoneData);
+    if (values.milestone_number) {
+      MilestoneData['milestone_number'] = Number(values.milestone_number);
+    }
+
     removeNullUndefinedAndFalsey(MilestoneData);
+
     try {
       const res = await addMilestone(MilestoneData).unwrap();
-
-      if (res?.success == false) {
-        Error_model_hook(res?.message);
+      if (res?.success === false) {
+        message.error(res?.message);
       } else {
-        Success_model('Successfully added Milestone');
-        // setTextEditorValue("");
-
+        message.success('Successfully added Milestone');
         setIsReset(true);
+        form.resetFields();
       }
-      // console.log(res);
     } catch (error: any) {
-      Error_model_hook(error?.message);
+      message.error(error?.message);
     }
   };
 
   return (
     <>
-      {!courseId ? (
-        <div className="my-3 rounded-lg border-2 border-blue-300 bg-white p-5 shadow-lg">
-          <h1 className="mb-2 border-spacing-4 border-b-2 text-xl font-bold">
-            At fast Filter
-          </h1>
-          <Row gutter={[16, 16]}>
-            <Col xs={24} md={6}>
-              <SelectCategoryChildren
-                lableText="Select category"
-                setState={setCategory}
-                isLoading={isLoading}
-                categoryData={categoryData}
-              />
-            </Col>
-            <Col xs={24} md={12}>
-              <SelectCategoryChildren
-                lableText="Select courses"
-                setState={setCourses}
-                categoryData={
-                  //@ts-ignore
-                  category?.courses || []
-                }
-              />
-            </Col>
-          </Row>
-        </div>
-      ) : (
-        <h1 className="text-base font-normal">Course: {title}</h1>
-      )}
+      <h1 className="text-base font-normal">Course: {title}</h1>
       <div
         style={{
           boxShadow:
@@ -127,10 +78,8 @@ const CreateMilestone = ({ courseId, categoryId, title }: any) => {
           padding: '1rem',
         }}
       >
-        {courses?._id || courseId ? (
+        {courseId ? (
           <div>
-            {/* resolver={yupResolver(adminSchema)} */}
-            {/* resolver={yupResolver(IServiceSchema)} */}
             <h1 className="my-2 text-xl font-bold">
               Create Milestone <br />
               <span className="text-base text-red-500">
@@ -140,9 +89,10 @@ const CreateMilestone = ({ courseId, categoryId, title }: any) => {
             </h1>
 
             <Form
-              submitHandler={onSubmit}
-              isReset={isReset}
-              // defaultValues={{ status: ENUM_STATUS.ACTIVE }}
+              form={form}
+              layout="vertical"
+              onFinish={onSubmit}
+              initialValues={getMilestone ? { ...getMilestone } : {}}
             >
               <div
                 style={{
@@ -151,86 +101,60 @@ const CreateMilestone = ({ courseId, categoryId, title }: any) => {
                   padding: '15px',
                 }}
               >
-                <Row gutter={[12, 12]}>
-                  <hr className="my-2 border-2" />
-                  <Col className="gutter-row" xs={24} style={{}}>
-                    <FormInput
-                      type="text"
-                      name="title"
-                      size="large"
-                      label="Milestone Title"
-                      placeholder="Please enter a milestone title"
-                      required={true}
-                    />
-                  </Col>
-                  <Col className="gutter-row" xs={4} style={{}}>
-                    <FormInput
-                      type="number"
-                      name="milestone_number"
-                      size="large"
-                      label="Milestone No"
-                      placeholder="Please enter a milestone No"
-                      // required={true}
-                      defaultValue={1}
-                    />
-                  </Col>
-
-                  {/* <Col className="gutter-row" xs={24} md={12} lg={8} style={{}}>
-                <SelectAuthorField />
-              </Col> */}
-
-                  {/* <Col className="gutter-row" xs={24} style={{}}>
-                    <TagsSelectUI />
-                  </Col>
-                  <Col className="gutter-row" xs={24} style={{}}>
-                    <UploadMultipalImage isReset={isReset} name="imgs" />
-                  </Col>
-                  <Col className="gutter-row" xs={24} style={{}}>
-                    <div>
-                      <FormTextArea
-                        name="short_description"
-                        label="Short description"
-                        rows={5}
-                        placeholder="Please enter short description"
+                <div className="flex flex-wrap items-center gap-3">
+                  <Col xs={24} md={12} lg={12} style={{}}>
+                    <Form.Item label="Select Grade level" name="grade_level_id">
+                      <Select
+                        size="large"
+                        loading={gradeLoading}
+                        placeholder="Select your grade level"
+                        options={getAllGradeLevel?.length ? getAllGradeLevel : []}
                       />
-                    </div>
+                    </Form.Item>
                   </Col>
-                  <Col className="gutter-row" xs={24} style={{}}>
-                    <div
-                      style={{
-                        borderTopWidth: '2px',
-                      }}
+                  <Col xs={24} md={4} lg={4} style={{}}>
+                    <ModalComponent buttonText="Add grade level">
+                      <CreateGradeLevel />
+                    </ModalComponent>
+                  </Col>
+                </div>
+
+                <Row gutter={[12, 12]}>
+                  <Col xs={24}>
+                    <Form.Item
+                      name="title"
+                      label="Milestone Title"
+                      rules={[
+                        { required: true, message: 'Please enter a milestone title' },
+                      ]}
                     >
-                      <p className="my-3 text-center text-xl font-bold">
-                        Description
-                      </p>
-                      <TextEditor isReset={isReset} />
-                    </div>
-                  </Col> */}
+                      <Input placeholder="Please enter a milestone title" size="large" />
+                    </Form.Item>
+                  </Col>
+
+                  <Col xs={4}>
+                    <Form.Item name="milestone_number" label="Milestone No">
+                      <Input type="number" placeholder="Milestone No" size="large" />
+                    </Form.Item>
+                  </Col>
                 </Row>
               </div>
-              <div className="mx-auto w-fit">
+
+              <div className="mx-auto w-fit mt-4 text-center">
                 {serviceLoading ? (
                   <Spin />
                 ) : (
-                  <div className="text-center">
-                    <ButtonSubmitUI>Create Milestone</ButtonSubmitUI>
-                  </div>
+                  <Button type="primary" htmlType="submit">
+                    Create Milestone
+                  </Button>
                 )}
               </div>
-              {/* <FloatButton
-      shape="square"
-        type="default"
-      style={{ right: "40%" ,width:"9rem",fontSize:"2rem"}}
-      description="Create Milestone"
-    
-    /> */}
             </Form>
           </div>
         ) : (
           <div className="flex min-h-64 w-full animate-pulse items-center justify-center">
             <h1 className="text-center text-2xl font-semibold text-red-600">
-              First select your Course by filtering{' '}
+              First select your Course by filtering
             </h1>
           </div>
         )}
