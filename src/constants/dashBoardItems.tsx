@@ -125,6 +125,24 @@ export const dashboardItems = (role: string, setCollapsed?: any) => {
       ],
     },
     {
+      label: 'Grade label',
+      key: 'Leveldd',
+      icon: <CreditCardOutlined />,
+      children: [
+        {
+          label: (
+            <Link
+              onClick={() => (setCollapsed ? setCollapsed(false) : null)}
+              href={`/${role}/gradeLevel`}
+            >
+              Grade label list
+            </Link>
+          ),
+          key: `/${role}/gradeLevel`,
+        },
+      ],
+    },
+    {
       label: ' Course',
       key: 'manage-Course',
       icon: <FileTextOutlined />,

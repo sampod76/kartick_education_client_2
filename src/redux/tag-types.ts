@@ -15,6 +15,7 @@ export enum tagTypes {
   admin = 'admin',
   trainer = 'trainer',
   category = 'category',
+  GradeLevel = 'GradeLevel',
   milestone = 'milestone',
   ChatMessage = 'ChatMessage',
   module = 'module',
