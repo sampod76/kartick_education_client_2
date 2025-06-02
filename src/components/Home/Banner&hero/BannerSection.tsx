@@ -1,56 +1,22 @@
 'use client';
-import React, { useState } from 'react';
+import { useState } from 'react';
 // import bannerBG from "@/assets/banner/bannerBG.png";
 import bannerBG from '@/assets/banner/header.png';
 import StudentVoicesUnited from '@/components/ui/Button/StudentVoicesUnited';
 import CustomImageTag from '@/components/ui/CustomTag/CustomImageTag';
-import {
-  addBannerSearchValue,
-  clearBannerSearchValue,
-} from '@/redux/features/bannerCourseSlice';
-import { useAppDispatch, useAppSelector, useDebounced } from '@/redux/hooks';
 import { Tooltip } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
 const BannerSection = () => {
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [resetValue, setResetValue] = useState<boolean>(false);
-  const { searchValue } = useAppSelector((state) => state.bannerSearch);
-  const dispatch = useAppDispatch();
-  const debouncedSearchTerm = useDebounced({
-    searchQuery: searchTerm,
-    delay: 10,
-  });
-  // let searchData = ''
-  // useEffect(() => {
-  //     if (!!debouncedSearchTerm) {
-  //       dispatch(addBannerSearchValue(debouncedSearchTerm));
-  //     }
-  //   }, [debouncedSearchTerm, dispatch,searchTerm]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  //  if (!!debouncedSearchTerm) {
-  //       dispatch(addBannerSearchValue(debouncedSearchTerm));
-  //     }
-
-  // console.log('searchTerm', searchTerm, 'resetValue', resetValue, 'searchValue', searchValue)
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // const text: string = e.target.value
-    setSearchTerm(e.target.value);
-    dispatch(addBannerSearchValue(searchTerm));
-    if (!resetValue) {
-      setSearchTerm('');
-    }
-    if (e.target.value?.length < 1) {
-      dispatch(clearBannerSearchValue(null));
-    }
-
-    setResetValue(true);
+  const handleHover = () => {
+    setIsModalOpen(true);
+    // setTimeout(() => setIsModalOpen(false), 5000);
   };
 
-  const handleReset = () => {
-    setSearchTerm('');
-    dispatch(clearBannerSearchValue(null));
-    setResetValue(false);
+  const handleClose = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -75,10 +41,35 @@ const BannerSection = () => {
               src={bannerBG}
               className="h-[70%] w-full pr-5 lg:h-[300px]"
             />
-
+            <div
+              data-aos="zoom-in-right"
+              className="mx-auto flex justify-end  items-center animate-bounce w-full mt:1 lg:mt-5 "
+              onMouseEnter={handleHover}
+            >
+              <Tooltip>
+                <Link
+                  href={
+                    'https://docs.google.com/forms/d/e/1FAIpQLSdZM5iX_fEYMswQ5VGY4LdkZyD49RC_TXJha9w5brvoUPGIUw/viewform?usp=sharing&ouid=116144235359474354275'
+                  }
+                  target="_blank"
+                  className="flex justify-center items-center "
+                >
+                  <CustomImageTag
+                    //@ts-ignore
+                    style={{ animationDuration: '20s' }}
+                    src={'/summerprogmar.png'}
+                    className="lg:w-12 w-5 animate-spin "
+                  />{' '}
+                  <StudentVoicesUnited
+                    className="text-xs leading-4 -tracking-tighter"
+                    text="Summer Program Registration (25% off)"
+                  />
+                </Link>
+              </Tooltip>
+            </div>
             <div
               data-aos="zoom-in-left"
-              className="mx-auto flex justify-end  items-center animate-bounce w-full mt-5"
+              className="mx-auto flex justify-end  items-center animate-bounce w-full mt-5 "
             >
               <Tooltip title="Join our community on Discord">
                 <Link
@@ -90,12 +81,21 @@ const BannerSection = () => {
                     //@ts-ignore
                     style={{ animationDuration: '2s' }}
                     src={'/voiceicon.png'}
-                    className="w-10 animate-ping "
+                    className="lg:w-10 w-5 animate-ping "
                   />{' '}
-                  <StudentVoicesUnited />
+                  <StudentVoicesUnited text="Student Voices United" />
                 </Link>
               </Tooltip>
             </div>
+            {/* <Modal
+              title="Special Offer"
+              open={isModalOpen}
+              onCancel={handleClose}
+              footer={null}
+              width={500}
+            >
+              <p>sampods</p>
+            </Modal> */}
           </div>
         </div>
       </div>
