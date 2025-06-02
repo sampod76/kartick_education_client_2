@@ -51,17 +51,32 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
+      # 2) Use dorny/paths-filter to detect changes to package.json or yarn.lock
+      - name: Detect dependency‐related changes
+        id: deps_changes
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            dependencies:
+              - 'package.json'
+              - 'yarn.lock'
+
+      # 3) Set up Node.js and enable caching for yarn
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 23.x
           cache: 'yarn'
-      - name: Change Directory
-        run: cd /home/sampod/actions-runner-client/_work/kartick_education_client_2/kartick_education_client_2
+          # The cache key automatically uses the contents of package.json + yarn.lock,
+          # so when those haven’t changed, yarn install will restore from cache.
+
+      # 4) Install dependencies only if package.json or yarn.lock changed this push
       - name: Install Dependencies
+        if: steps.deps_changes.outputs.dependencies == 'true'
         run: yarn install
-      # - name: Unzip environment
-      #   run: 7z x .env.local.zip -p"${{ secrets.ZIP_PASS }}" -o./ -y
+
+      # 5) Build the project (you probably want to build even if deps didn’t change—
+      #    else guard this too if, for example, only code changes should trigger a build)
       - name: Build the Project
         run: yarn build
       - name: Check if education-client is running and restart or start accordingly
