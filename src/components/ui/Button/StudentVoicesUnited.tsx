@@ -2,11 +2,17 @@
 //@ts-nocheck
 import styled from 'styled-components';
 
-const StudentVoicesUnited = () => {
+const StudentVoicesUnited = ({
+  text,
+  className,
+}: {
+  text: string;
+  className?: string;
+}) => {
   return (
     <StyledWrapper>
-      <button type="button" className="btn" aria-label="Student Voices United">
-        <strong> Student Voices United</strong>
+      <button type="button" className="btn" aria-label={`${text}`}>
+        <strong className={`${className || 'text-sm'}`}> {text}</strong>
         <div id="container-stars">
           <div id="stars" />
         </div>
