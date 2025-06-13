@@ -1,17 +1,16 @@
 'use client';
-import { useMemo, useState } from 'react';
-import { Button, Modal, message } from 'antd';
-import QuizQuestionCard from './QuizQuestionCard';
-import { useAppSelector } from '@/redux/hooks';
 import {
   useGetSubmitUserQuizQuery,
   useSubmitQuizMutation,
 } from '@/redux/api/quizSubmitApi';
-import { Animation_model_hook, Error_model_hook, Success_model } from '@/utils/modalHook';
-import TopBarLoading from '../ui/Loading/TopBarLoading';
-import { ISubmittedUserQuizData } from '@/types/quiz/submittedQuizType';
+import { useAppSelector } from '@/redux/hooks';
 import { ISingleQuizData } from '@/types/quiz/singleQuizType';
-import DragQUizTest from '../dragCustom/DragQuiz';
+import { ISubmittedUserQuizData } from '@/types/quiz/submittedQuizType';
+import { Animation_model_hook, Error_model_hook, Success_model } from '@/utils/modalHook';
+import { Button, Modal } from 'antd';
+import { useMemo, useState } from 'react';
+import TopBarLoading from '../ui/Loading/TopBarLoading';
+import QuizQuestionCard from './QuizQuestionCard';
 export default function QuizTestPage({
   quizData,
   quizId,
@@ -42,14 +41,6 @@ export default function QuizTestPage({
   // ! For Test is submitted Answer is CorrectAnswer;
 
   const checkAnswers = (responseData: ISubmittedUserQuizData): boolean => {
-    // const allCorrect = responseData?.submitAnswers.every((answerId: string) => {
-    //   const submittedAnswer = responseData?.singleQuiz?.answers?.find(
-    //     (answer: any) => answer.id === answerId
-    //   );
-    //   return submittedAnswer && submittedAnswer.correct;
-    // });
-
-    // return allCorrect;
     if (responseData?.singleQuiz?.type === 'input') {
       const isCorrectInput =
         responseData?.singleQuiz?.single_answer === responseData?.submitAnswers[0]
@@ -58,6 +49,7 @@ export default function QuizTestPage({
       return isCorrectInput;
     } else if (
       responseData?.singleQuiz?.type === 'select' ||
+      responseData?.singleQuiz?.type === 'math' ||
       responseData?.singleQuiz?.type === 'multiple_select' ||
       responseData?.singleQuiz?.type === 'find' ||
       responseData?.singleQuiz?.type === 'drag' ||
@@ -74,13 +66,6 @@ export default function QuizTestPage({
 
     return false;
   };
-
-  // const [isCorrectAnswer, setIsCorrectAnswer] = useState(false);
-
-  // console.log(submittedDefaultData, "ccccccccccccccccc", isCorrectAnswer);
-  // if (submittedDefaultData?.submitAnswers) {
-  //   setIsCorrectAnswer(checkAnswers(submittedDefaultData));
-  // };
 
   const submitAnswer = async () => {
     if (currentAnswer?.singleQuiz !== submittedDefaultData?.singleQuiz?._id) {
@@ -132,12 +117,6 @@ export default function QuizTestPage({
   // ! For Next quiz and submit Quiz
   const handleNext = () => {
     submitAnswer();
-    // console.log(currentStep,"qu !== ?.length",quizAnswerData?.length)
-
-    // if (currentStep + 1 !== quizData?.length) {
-    //   console.log('equal............' )
-    //   return setCurrentStep((prevStep) => prevStep + 1);
-    // }
   };
 
   // console.log(userAnswers)
@@ -169,9 +148,6 @@ export default function QuizTestPage({
     userAnswers,
   ]);
 
-  // console.log(isDisabledNext, 'isDisabledNext')
-  // console.log(quizData?.length, "and", quizAnswerData);
-
   // ! for result Show modal
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -187,9 +163,6 @@ export default function QuizTestPage({
     setIsModalOpen(false);
   };
   const handleFinishQuiz = () => {
-    // console.log(userAnswers);
-    // submitAnswer();
-    // message.success("Quiz Finished successfully!")
     showModal();
   };
 
@@ -210,6 +183,7 @@ export default function QuizTestPage({
         if (
           singleQuiz?.type === 'select' ||
           singleQuiz?.type === 'multiple_select' ||
+          singleQuiz?.type === 'math' ||
           singleQuiz?.type === 'find' ||
           singleQuiz?.type === 'drag' ||
           singleQuiz?.type === 'audio'
@@ -250,19 +224,14 @@ export default function QuizTestPage({
     return { correctAnswers, incorrectAnswers };
   }
 
-  // console.log(userSubmitData)
-
-  // Example usage with the provided submittedData
   const result = analyzeQuizAnswers(userSubmitData);
-  // console.log('result', result);
-  // console.log(currentAnswer, 'submittedANswer', userSubmitData, quizData)
+
   return (
     <div className="w-full  mx-aut my-5 lg:my-0 ">
       <div className="flex flex-col justify-start  gap-3 mt-4  w-[80 ">
         {/* Render quiz based on the current step */}
         {isLoading && <TopBarLoading />}
         {quizData.length > 0 && (
-          // renderQuizQuestion(quizData[currentStep], currentStep);
           <QuizQuestionCard
             quiz={quizData[currentStep]}
             index={currentStep}
@@ -331,19 +300,6 @@ export default function QuizTestPage({
             </h2>
           </div>
         </Modal>
-        {/*         
-        <Steps
-        current={currentStep}
-        items={quizData?.map((quiz: any, index: number) => ({
-          key: quiz?.title,
-          title: `Quiz${index} `,
-        }))}
-      ></Steps> */}
-
-        {/* Display timer */}
-        {/* <div className="text-center mt-4">
-          <p>Time Remaining: {timer} seconds</p>
-        </div> */}
       </div>
     </div>
   );

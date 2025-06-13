@@ -12,6 +12,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/*  */
+
+.MathJax_Display {
+  text-align: start !important;
+}
+
 .sc-kOHUsU {
   padding: 1em;
   width: 1000px;

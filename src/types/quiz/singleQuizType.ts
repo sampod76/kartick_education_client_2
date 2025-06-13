@@ -11,6 +11,7 @@ export type IAnswer = {
 
 export type IQuizType =
   | 'input'
+  | 'math'
   | 'select'
   | 'multiple_select'
   | 'text'
