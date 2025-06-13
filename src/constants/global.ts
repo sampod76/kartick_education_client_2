@@ -154,6 +154,7 @@ export const serviceStatus = ['available', 'upcoming', 'unavailable'];
 export const singleQuizTypes = [
   'select',
   'multiple_select',
+  'math',
   'input',
   'find',
   'drag',

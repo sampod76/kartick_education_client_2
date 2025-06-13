@@ -1,20 +1,17 @@
 import { addAnswer } from '@/redux/features/quizSlice';
 import { useAppDispatch } from '@/redux/hooks';
-import { IAnswer, ISingleQuizData } from '@/types/quiz/singleQuizType';
+import { ISingleQuizData } from '@/types/quiz/singleQuizType';
+import { ISubmittedUserQuizData } from '@/types/quiz/submittedQuizType';
 import TextToSpeech from '@/utils/TextToSpeech';
-import { Card, Checkbox, Input, Radio, Select, Space, message } from 'antd';
-import React, { useEffect, useState } from 'react';
-import QuizTimer from './QuizTimer';
+import { Checkbox, Input, Radio, Select } from 'antd';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ISubmittedUserQuizData } from '@/types/quiz/submittedQuizType';
 import DragQUizTest from '../dragCustom/DragQuiz';
-import DndQuizCard from '../dnd/DndBeutyFull';
+import QuizTimer from './QuizTimer';
 // import {PauseCircleOutlined} from "@and"
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
-import { PlayCircleOutlined } from '@ant-design/icons';
-import Link from 'next/link';
+import MathDisplay from '../Utlis/MathDisplay';
 const { Option } = Select;
 export default function QuizQuestionCard({
   quiz,
@@ -64,6 +61,7 @@ export default function QuizQuestionCard({
       return isCorrectInput;
     } else if (
       responseData?.singleQuiz?.type === 'select' ||
+      responseData?.singleQuiz?.type === 'math' ||
       responseData?.singleQuiz?.type === 'multiple_select' ||
       responseData?.singleQuiz?.type === 'find' ||
       responseData?.singleQuiz?.type === 'drag' ||
@@ -208,10 +206,17 @@ export default function QuizQuestionCard({
     <div>
       <div key={quiz?._id} className={`my-4 w-full relative px-2 lg:pl-3 `}>
         {/* //! Quiz Timer */}
-        <p className={`lg:text-lg font-[550] mb-2 text-base mx-2`}>
-          <TextToSpeech text={quiz?.title} />
-          Question {index + 1} : {quiz?.title}
-        </p>
+        {quiz.type === 'math' ? (
+          <>
+            <MathDisplay content={quiz?.title} />
+          </>
+        ) : (
+          <p className={`lg:text-lg font-[550] mb-2 text-base mx-2`}>
+            <TextToSpeech text={quiz?.title} />
+            Question {index + 1} : {quiz?.title}
+          </p>
+        )}
+
         <div className="text-center mt-3 flex justify-center items-center">
           {/* <p>Time Remaining: {timer} seconds</p> */}
           <QuizTimer
@@ -322,6 +327,82 @@ export default function QuizQuestionCard({
                     <div className="flex gap-1">
                       {option?.title && <TextToSpeech text={option?.title} />}
                       <p>{option?.title}</p>
+                    </div>
+                    <div className="flex flex-wrap w-full">
+                      {option?.imgs?.map((img: string, key: number, allimages: any[]) => (
+                        <Image
+                          key={key}
+                          src={img}
+                          width={700}
+                          height={700}
+                          className={`w-96 lg:w-full  max-h-24 lg:max-h-44`}
+                          alt=""
+                        ></Image>
+                      ))}
+                    </div>
+                  </div>
+                </Radio>
+              );
+            })}
+          </Radio.Group>
+        )}
+        {quiz?.type === 'math' && (
+          <Radio.Group
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1rem',
+            }}
+            name="radiogroup"
+            disabled={
+              isDefaultValue?.is_time_up ||
+              currentAnswer?.singleQuiz === submittedDefaultData?.singleQuiz?._id
+                ? true
+                : false
+            }
+            defaultValue={submittedDefaultData?.submitAnswers[0]} // Set the default value based on isDefaultValue
+            onChange={(e) => handleAnswerChange(index + 1, e.target.value)}
+          >
+            {quiz?.answers?.map((option: any) => {
+              const isCorrect = allCorrectAnswer?.find(
+                (id: string) => id === option?._id,
+              );
+              const isSubmitted = submittedDefaultData?.submitAnswers?.find(
+                (item: string) => item === option?._id,
+              );
+
+              return (
+                <Radio
+                  key={option?._id}
+                  value={option?._id}
+                  // defaultChecked={
+                  //   submittedDefaultData?.submitAnswers[0] === option?._id &&
+                  //   true
+                  // }
+                >
+                  <div
+                    className={`border-2 rounded-xl p-2 w-full 
+                    
+                  ${
+                    submittedDefaultData?.submitAnswers[0] === option?._id
+                      ? 'bg-slate-600 text-white'
+                      : ''
+                  }
+                  ${
+                    submittedDefaultData?.singleQuiz
+                      ? isCorrect
+                        ? ' border-2 border-green-600'
+                        : isSubmitted === option?._id
+                          ? 'border-2 border-red-500 '
+                          : ''
+                      : ''
+                  }
+                  `}
+                  >
+                    <div className="flex gap-1">
+                      <>
+                        <MathDisplay content={option?.title} />
+                      </>
                     </div>
                     <div className="flex flex-wrap w-full">
                       {option?.imgs?.map((img: string, key: number, allimages: any[]) => (

@@ -1,19 +1,14 @@
 // only modula in single quiz
 'use client';
 
-import React from 'react';
-import { Card, Radio, Input, Select, Button } from 'antd';
-import QuizAside from './QuizAside';
-import UMBreadCrumb from '../ui/UMBreadCrumb';
 import { useGetAllSingleQuizQuery } from '@/redux/api/adminApi/singleQuizApi';
+import { Select } from 'antd';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React from 'react';
 import LoadingSkeleton from '../ui/Loading/LoadingSkeleton';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import TextToSpeech from '@/utils/TextToSpeech';
 // import QuizTestPage from "./QuizTestPage";
-import { ArrowLeftOutlined } from '@ant-design/icons';
-import Link from 'next/link';
 import { singleQuizTypes } from '@/constants/global';
-import { ISingleQuizData } from '@/types/quiz/singleQuizType';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 const QuizTestPage = React.lazy(() => import('./QuizTestPage'));
 
 const { Option } = Select;
@@ -38,7 +33,6 @@ export default function QuizeSinglePage({
     ...quiz_query,
     quiz: quizeId,
   });
-  console.log('quizeIdquizeId', quizeId, '🚀 ~ allSingleQuizeData:', allSingleQuizeData);
 
   const handleFinishQuiz = () => {
     // Handle quiz submission logic here

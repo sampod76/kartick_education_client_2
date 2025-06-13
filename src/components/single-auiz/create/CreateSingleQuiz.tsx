@@ -17,11 +17,13 @@ import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
 import AnswerFind from '@/components/Forms/answer/AnswerFind';
 import AnswerMultiple from '@/components/Forms/answer/AnswerMultiple';
 import AnswerSInlge from '@/components/Forms/answer/AnswerSingle';
+import MathAnswerSingle from '@/components/Forms/answer/MathAnswerSingle';
 import FormTimePicker from '@/components/Forms/FormTimePicker';
 import LabelUi from '@/components/ui/dashboardUI/LabelUi';
 import ButtonLoading from '@/components/ui/Loading/ButtonLoading';
 import UploadAudioFile from '@/components/ui/UploadAudio';
 import UploadMultipalImage from '@/components/ui/UploadMultipalImage';
+import MathDisplay from '@/components/Utlis/MathDisplay';
 import { removeNullUndefinedAndFalsey } from '@/hooks/removeNullUndefinedAndFalsey';
 import timeDurationToMilliseconds from '@/hooks/stringToMiliSecend';
 import { IQuizType } from '@/types/quiz/singleQuizType';
@@ -57,7 +59,7 @@ const CreateSingleQuiz = ({
   if (userInfo?.role === 'seller') {
     disable = false;
   }
-
+  const [mathQuestionTitle, setMathQuestion] = useState<string>('');
   const [quizType, setQuizTypes] = useState<IQuizType>('select'); // !  tag selection
 
   const [isReset, setIsReset] = useState(false);
@@ -99,6 +101,7 @@ const CreateSingleQuiz = ({
 
     const singleQuizDat: object = {
       ...values,
+      title: mathQuestionTitle || values?.title,
       category: categoryId,
       course: courseId,
       milestone: milestoneId,
@@ -109,8 +112,6 @@ const CreateSingleQuiz = ({
     };
     removeNullUndefinedAndFalsey(singleQuizDat);
 
-    // return
-
     try {
       const res = await addSingleQuiz(singleQuizDat).unwrap();
 
@@ -120,6 +121,8 @@ const CreateSingleQuiz = ({
         Success_model('Successfully added the Quiz');
         setIsReset(true);
         setAnswers([]);
+        setSingleAnswerInput('');
+        setMathQuestion('');
       }
       // console.log(res);
     } catch (error: any) {
@@ -193,13 +196,28 @@ const CreateSingleQuiz = ({
                     marginBottom: '10px',
                   }}
                 >
-                  <FormInput
-                    type="text"
-                    name="title"
-                    size="large"
-                    label="Quiz Title"
-                    required={true}
-                  />
+                  {quizType === 'math' ? (
+                    <>
+                      <label className="my-2" htmlFor="mathQuestion">
+                        Quiz Title
+                      </label>
+                      <Input.TextArea
+                        rows={3}
+                        value={mathQuestionTitle}
+                        onChange={(e) => setMathQuestion(e.target.value)}
+                        placeholder="e.g. $\\frac{1}{2} + \\frac{3}{4}$"
+                      />
+                      <MathDisplay content={mathQuestionTitle} />
+                    </>
+                  ) : (
+                    <FormInput
+                      type="text"
+                      name="title"
+                      size="large"
+                      label="Quiz Title"
+                      required={true}
+                    />
+                  )}
                 </Col>
 
                 <Col
@@ -278,6 +296,9 @@ const CreateSingleQuiz = ({
                 >
                   {quizType === 'select' && (
                     <AnswerSInlge answers={answers} setAnswers={setAnswers as any} />
+                  )}
+                  {quizType === 'math' && (
+                    <MathAnswerSingle answers={answers} setAnswers={setAnswers as any} />
                   )}
                   {quizType === 'multiple_select' && (
                     <AnswerMultiple
