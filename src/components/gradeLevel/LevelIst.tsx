@@ -8,12 +8,14 @@ import {
   useGetAllGradeLevelQuery,
 } from '@/redux/api/adminApi/gradeLevelApi';
 import { useDebounced } from '@/redux/hooks';
+import fileObjectToLink from '@/utils/fileObjectToLink';
 import { Error_model_hook, Success_model, confirm_modal } from '@/utils/modalHook';
 import { ReloadOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Input, Menu, Space } from 'antd';
 import { useState } from 'react';
 import { useGlobalContext } from '../ContextApi/GlobalContextApi';
-import CreateGradeLevel from './CreateGradeLevel';
+import PDFViewer from '../ui/PdfViewer';
+import CreateUpdateGradeLevel from './CreateUpdateGradeLevel';
 
 const GradeLevelList = ({ categoryId }: { categoryId?: string }) => {
   const query: Record<string, any> = {};
@@ -85,9 +87,21 @@ const GradeLevelList = ({ categoryId }: { categoryId?: string }) => {
     },
 
     {
-      title: 'Status',
-      dataIndex: 'status',
+      title: 'Grade Vocabulary',
       width: 80,
+      render: function (data: any) {
+        return (
+          <>
+            {data?.files && data?.files[0] ? (
+              <ModalComponent buttonText="Pdf view">
+                <PDFViewer file={fileObjectToLink(data?.files[0])} />
+              </ModalComponent>
+            ) : (
+              'N/A'
+            )}
+          </>
+        );
+      },
     },
     {
       title: 'Action',
@@ -106,6 +120,11 @@ const GradeLevelList = ({ categoryId }: { categoryId?: string }) => {
                     }}
                   >
                     Delete
+                  </Menu.Item>
+                  <Menu.Item key="update">
+                    <ModalComponent buttonText="Edit">
+                      <CreateUpdateGradeLevel id={record._id} />
+                    </ModalComponent>
                   </Menu.Item>
                 </Menu>
               }
@@ -152,7 +171,7 @@ const GradeLevelList = ({ categoryId }: { categoryId?: string }) => {
 
         <div>
           <ModalComponent buttonText="Create">
-            <CreateGradeLevel />
+            <CreateUpdateGradeLevel />
           </ModalComponent>
           {(!!sortBy || !!sortOrder || !!searchTerm) && (
             <Button style={{ margin: '0px 5px' }} type="default" onClick={resetFilters}>

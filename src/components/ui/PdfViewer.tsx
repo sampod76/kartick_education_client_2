@@ -39,8 +39,8 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
         change browser)
       </p>
       <Viewer
-        fileUrl={`/api/fetch-pdf?url=${encodeURIComponent(file)}`}
-        // fileUrl={file}
+        // fileUrl={`/api/fetch-pdf?url=${encodeURIComponent(file)}`}
+        fileUrl={file}
         plugins={[defaultLayout, search, zoom, fullScreen, pageNavigation]}
       />
     </div>

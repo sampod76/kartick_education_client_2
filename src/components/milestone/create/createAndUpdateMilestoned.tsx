@@ -10,7 +10,7 @@ import { useState } from 'react';
 
 import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
 import ModalComponent from '@/components/Modal/ModalComponents';
-import CreateGradeLevel from '@/components/gradeLevel/CreateGradeLevel';
+import CreateGradeLevel from '@/components/gradeLevel/CreateUpdateGradeLevel';
 import { removeNullUndefinedAndFalsey } from '@/hooks/removeNullUndefinedAndFalsey';
 import { useGetAllGradeLevelQuery } from '@/redux/api/adminApi/gradeLevelApi';
 //
