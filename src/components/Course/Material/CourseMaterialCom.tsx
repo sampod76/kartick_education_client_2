@@ -48,9 +48,9 @@ export default function CourseMaterialCom({ courseId }: { courseId: string }) {
     currentParams.set('secondTab', activeKey);
     router.replace(`${path}?${currentParams.toString()}`);
   };
-  if (userInfo?.role === 'admin') {
-    items.splice(2, 0, {
-      key: '3',
+  if (userInfo?.role === 'seller' || userInfo?.role === 'admin') {
+    items.unshift({
+      key: '0',
       label: 'Milestone',
       children: (
         <div>
@@ -123,8 +123,8 @@ export default function CourseMaterialCom({ courseId }: { courseId: string }) {
       <Tabs
         onChange={handleMainTabChange}
         centered
-        activeKey={mainTab || '1'}
-        defaultActiveKey="1"
+        activeKey={mainTab || '0'}
+        defaultActiveKey="0"
         items={items}
       />
     </div>
