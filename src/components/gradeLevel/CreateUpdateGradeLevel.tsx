@@ -66,8 +66,9 @@ const CreateUpdateGradeLevel = ({ id }: { id?: string }) => {
     return <Spin size="large" />;
   }
   let greadLavelData: any = {};
-  if (data?.files?.length) {
+  if (data) {
     const { files, ...rest } = data;
+
     greadLavelData = rest;
   }
 
@@ -105,7 +106,7 @@ const CreateUpdateGradeLevel = ({ id }: { id?: string }) => {
                 //   pattern: /^[\u0980-\u09FF\s]*$/,
                 //   message: "বাংলায় শুধুমাত্র অক্ষর ব্যবহার করুন",
                 // },
-                { required: true, message: 'Title is required' },
+                { required: data._id ? false : true, message: 'Title is required' },
               ]}
             >
               <Input size="large" placeholder="Grade title" />
