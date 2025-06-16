@@ -123,7 +123,7 @@ const GradeLevelList = ({ categoryId }: { categoryId?: string }) => {
                   </Menu.Item>
                   <Menu.Item key="update">
                     <ModalComponent buttonText="Edit">
-                      <CreateUpdateGradeLevel id={record._id} />
+                      <CreateUpdateGradeLevel id={record?._id} />
                     </ModalComponent>
                   </Menu.Item>
                 </Menu>
