@@ -28,7 +28,7 @@ const CreateUpdateGradeLevel = ({ id }: { id?: string }) => {
   const [updateGradeLevel, { isLoading: uisLoading }] = useUpdateGradeLevelMutation();
 
   const onFinish = async (values: any) => {
-    console.log('🚀 ~ onFinish ~ values:', values);
+    // console.log('🚀 ~ onFinish ~ values:', values);
     setGlobalLoading(true);
     const [files] = await Promise.all([
       values?.files?.length
