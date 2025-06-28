@@ -68,6 +68,7 @@ const FlexAccredited = () => {
               {value.allBottomLinks?.map((btn, index) => (
                 <a
                   key={index}
+                  data-aos={index % 2 == 0 ? 'zoom-in' : 'zoom-out'}
                   href={btn.link}
                   target="_blank"
                   rel="noopener noreferrer"
