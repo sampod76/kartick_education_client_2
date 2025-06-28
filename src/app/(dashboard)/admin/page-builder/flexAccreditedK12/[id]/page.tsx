@@ -1,9 +1,9 @@
-import UniversalPageBuilderCom from '@/components/PageBuilder/universalPageBuilder';
+import FlexAccreditedK12 from '@/components/PageBuilder/flexAccreditedK12PageBuilder';
 
 export default function page({ params }: { params: { id: string } }) {
   return (
     <div>
-      <UniversalPageBuilderCom id={params.id} />
+      <FlexAccreditedK12 id={params.id} />
     </div>
   );
 }
