@@ -85,7 +85,7 @@ const AcademicsProgram = () => {
             </div>
           )}
 
-          <div className=" flex flex-col items-center justify-center space-y-5 px-5 py-7 text-start lg:space-y-12 lg:px-28 ">
+          <div className=" flex flex-col items-center justify-center space-y-5 px-5 py-7 text-center lg:space-y-12 lg:px-28 ">
             <h1
               data-aos="zoom-in"
               className="mt-2 text-3xl font-bold lg:mt-6 lg:text-4xl"
