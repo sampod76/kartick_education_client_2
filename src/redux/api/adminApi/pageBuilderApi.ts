@@ -109,6 +109,7 @@ export interface IAllPageBuilder {
   htmlText?: string;
   status?: string;
   isDelete?: string;
+  allBottomLinks?: { title: string; link: string }[];
   actionButton?: {
     link?: string;
     title?: string;
