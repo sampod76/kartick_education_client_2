@@ -1,9 +1,9 @@
-import BoardOfTrusteesCom from '@/components/PageBuilder/boardOfTrustees';
+import FlexAccreditedK12 from '@/components/PageBuilder/flexAccreditedK12PageBuilder';
 
-export default function LeaderShip({ params }: { params: { id: string } }) {
+export default function AcademicsProgram({ params }: { params: { id: string } }) {
   return (
     <div>
-      <BoardOfTrusteesCom id={params.id} />
+      <FlexAccreditedK12 id={params.id} />
     </div>
   );
 }
