@@ -12,6 +12,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 export default function MilestoneMaterialCom({ milestoneId }: { milestoneId: string }) {
   const router = useRouter();
   const path = usePathname();
+
   const searchQuery = useSearchParams();
   const mainTab = searchQuery.get('mainTab');
   const secondTab = searchQuery.get('secondTab');

@@ -143,6 +143,19 @@ export const homeNavItems = (role: string | null): MenuProps['items'] => {
             <Link
               className="text-[14px] font-bold capitalize"
               //  href="/"
+              href="/nav/how-it-works-in-iblossomlearn"
+            >
+              How It Works in iBLossomLearn
+            </Link>
+          ),
+
+          key: '/How It Works in iBLossomLearn',
+        },
+        {
+          label: (
+            <Link
+              className="text-[14px] font-bold capitalize"
+              //  href="/"
               href="/academics-program"
             >
               Academics Program
