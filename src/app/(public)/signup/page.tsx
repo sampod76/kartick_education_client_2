@@ -43,7 +43,7 @@ const SignUpTeacherAndStudent = ({ setOpen }: any) => {
 
   const onSubmit = async (values: any) => {
     removeNullUndefinedAndFalsey(values);
-
+    values.role = 'student';
     try {
       values.name = {
         firstName: values['name.firstName'],
@@ -184,7 +184,7 @@ const SignUpTeacherAndStudent = ({ setOpen }: any) => {
                   <Input.Password placeholder="Please enter your password" />
                 </Form.Item>
               </Col>
-              <Col xs={24} md={12} lg={8}>
+              {/* <Col xs={24} md={12} lg={8}>
                 <Form.Item
                   label="Role"
                   name="role"
@@ -195,7 +195,7 @@ const SignUpTeacherAndStudent = ({ setOpen }: any) => {
                     <Option value="student">Student</Option>
                   </Select>
                 </Form.Item>
-              </Col>
+              </Col> */}
 
               <Col xs={24}>
                 <Form.Item
