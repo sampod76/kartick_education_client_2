@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable react/no-unescaped-entities */
 // 'use client';
 // import React from 'react';
 
@@ -114,7 +116,7 @@ import {
 } from 'lucide-react';
 
 // Custom Badge Component
-const Badge = ({ children, className = '', ...props }) => (
+const Badge = ({ children, className = '', ...props }: any) => (
   <span
     className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors bg-blue-100 text-blue-800 hover:bg-blue-200 ${className}`}
     {...props}
@@ -130,7 +132,7 @@ const Button = ({
   size = 'default',
   variant = 'default',
   ...props
-}) => {
+}: any) => {
   const baseClasses =
     'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50';
 
@@ -147,6 +149,7 @@ const Button = ({
 
   return (
     <button
+      //@ts-ignore
       className={`${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`}
       {...props}
     >
@@ -156,7 +159,14 @@ const Button = ({
 };
 
 // Custom Card Components
-const Card = ({ children, className = '', ...props }) => (
+import React from 'react';
+
+type CardProps = React.PropsWithChildren<{
+  className?: string;
+  [key: string]: any;
+}>;
+
+const Card: React.FC<CardProps> = ({ children, className = '', ...props }) => (
   <div
     className={`rounded-lg border bg-white text-gray-900 shadow-sm ${className}`}
     {...props}
@@ -165,13 +175,13 @@ const Card = ({ children, className = '', ...props }) => (
   </div>
 );
 
-const CardHeader = ({ children, className = '', ...props }) => (
+const CardHeader = ({ children, className = '', ...props }: any) => (
   <div className={`flex flex-col space-y-1.5 p-6 ${className}`} {...props}>
     {children}
   </div>
 );
 
-const CardTitle = ({ children, className = '', ...props }) => (
+const CardTitle = ({ children, className = '', ...props }: any) => (
   <h3
     className={`text-2xl font-semibold leading-none tracking-tight ${className}`}
     {...props}
@@ -180,7 +190,7 @@ const CardTitle = ({ children, className = '', ...props }) => (
   </h3>
 );
 
-const CardContent = ({ children, className = '', ...props }) => (
+const CardContent = ({ children, className = '', ...props }: any) => (
   <div className={`p-6 pt-0 ${className}`} {...props}>
     {children}
   </div>
