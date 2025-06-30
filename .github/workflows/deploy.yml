@@ -67,6 +67,19 @@ jobs:
         run: yarn install
       - name: Replace any existing .env with .env.live
         run: cp -f .env.live .env.local
+        # 4) Build in a temporary directory to avoid killing current process
+      - name: Build the project safely
+        run: |
+          echo "Creating temporary build..."
+          rm -rf .next_temp
+          NEXT_PUBLIC_ENV=production yarn build && mv .next .next_temp
+
+      # 5) Replace old .next with the new build
+      - name: Swap new build in
+        run: |
+          echo "Swapping old build with new one..."
+          rm -rf .next
+          mv .next_temp .next
 
       # 5) Build the project (you probably want to build even if deps didn’t change—
       #    else guard this too if, for example, only code changes should trigger a build)

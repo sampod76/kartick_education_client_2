@@ -25,3 +25,16 @@ function vimeoUrlChack(url: string) {
 }
 
 export default vimeoUrlChack;
+
+export function extractVimeoParams(url: string) {
+  try {
+    const parsedUrl = new URL(url);
+    const pathParts = parsedUrl.pathname.split('/').filter(Boolean); // removes empty strings
+    const n = pathParts[0] || null;
+    const h = pathParts[1] || null;
+
+    return { n, h };
+  } catch (e) {
+    return { n: null, h: null, error: 'Invalid URL' };
+  }
+}

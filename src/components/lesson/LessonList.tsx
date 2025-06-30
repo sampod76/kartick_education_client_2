@@ -6,7 +6,7 @@ import {
   EyeOutlined,
   RightCircleOutlined,
 } from '@ant-design/icons';
-import { Button, Collapse, Empty } from 'antd';
+import { Collapse, Empty } from 'antd';
 import Link from 'next/link';
 import { useState } from 'react';
 import LoadingSkeleton from '../ui/Loading/LoadingSkeleton';
@@ -57,16 +57,15 @@ export default function LessonList({
 
   const playerVideoFunc = (lesson: any, index?: number) => {
     if (
-      IsExistPremonitionCourse ||
-      index == 0
+      IsExistPremonitionCourse
       // || index === 0//! for first open video
     ) {
       if (lesson?.videos?.length || lesson?.files?.length) {
         return (
           <ModalComponent
             button={
-              <div className="flex items-center justify-center">
-                <Button type="primary">Click To Open</Button>
+              <div className="-ml-1 cursor-pointer">
+                <h4>🎥Click To Open video and pdf</h4>
               </div>
             }
             width={1200}
@@ -112,10 +111,8 @@ export default function LessonList({
         ),
         children: (
           <div>
-            <div className="">
-              <div className="relative my-1 flex items-center justify-center">
-                {playerVideoFunc(lesson, index)}
-              </div>
+            <div className="mx-10">
+              <div className="relative my-1 ">{playerVideoFunc(lesson, index)}</div>
 
               {lesson?.details && parse(lesson?.details)}
             </div>
@@ -128,7 +125,7 @@ export default function LessonList({
                   <Link
                     key={quiz?._id}
                     href={`/lesson/quiz/${quiz?._id}?lesson=${lesson?.title}&quiz=${quiz?.title}`}
-                    className="mx-auto mt-3 flex justify-between text-[14px] text-[#479FEC]"
+                    className="mx-10  mt-3 flex justify-between text-[14px] text-[#479FEC]"
                   >
                     <h2 className="flex justify-start gap-1 text-base font-normal">
                       <span className="mt-1">
@@ -166,7 +163,7 @@ export default function LessonList({
       return {
         key: lesson?._id,
         label: (
-          <div className="shadow-1 py-2 text-[18px] font-semibold md:px-1">
+          <div className="shadow-1 mx-10 py-2 text-[18px] font-semibold md:px-1">
             <button className="flex w-full justify-between">
               <h2 className="text-start text-base font-normal">
                 <span>Lesson {index + 1}: </span> {lesson?.title}

@@ -46,7 +46,7 @@ export default function LessonContainShow({
           data: fileObjectToLink(element),
         };
       }
-
+      // console.log(result, 'result');
       const key = index.toString();
 
       items.push({
@@ -82,6 +82,7 @@ export default function LessonContainShow({
 
   // Add files
   if (lesson?.files?.length) {
+    console.log('🚀 ~ files:', lesson?.files);
     lesson.files.forEach((file: IFileAfterUpload, index: number) => {
       const key = (items.length + index).toString();
       const application = LinkToGetExtensions(fileObjectToLink(file), [
@@ -106,7 +107,7 @@ export default function LessonContainShow({
                 />
               )}
               {file?.mimetype?.includes('pdf') && (
-                <PDFViewer file={fileObjectToLink(file)} />
+                <PDFViewer file={fileObjectToLink(file)} filename={file.filename} />
               )}
               {(application?.type === 'document' || application?.type === 'powerPoint') &&
                 (loading ? (

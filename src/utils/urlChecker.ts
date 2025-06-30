@@ -42,3 +42,10 @@ export const urlChecker = (url: string): result => {
 
   return result;
 };
+
+export function buildS3Url(cdn: string, path: string) {
+  const segments = path.split('/');
+  const filename = segments.pop(); // remove last segment
+  const encodedFilename = encodeURIComponent(filename || '');
+  return cdn.replace(/\/$/, '') + '/' + segments.join('/') + '/' + encodedFilename;
+}
