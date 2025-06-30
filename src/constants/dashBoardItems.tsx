@@ -3,7 +3,6 @@ import {
   BorderOuterOutlined,
   ContactsFilled,
   ContactsOutlined,
-  ContainerOutlined,
   CreditCardOutlined,
   CreditCardTwoTone,
   FileTextOutlined,
@@ -767,30 +766,30 @@ export const dashboardItems = (role: string, setCollapsed?: any) => {
       key: `/${role}/activePackage`,
     },
 
-    {
-      label: (
-        <Link
-          onClick={() => (setCollapsed ? setCollapsed(false) : null)}
-          href={`/${role}/assignment`}
-        >
-          Assignment
-        </Link>
-      ),
-      icon: <ContainerOutlined />,
-      key: `/${role}/assignment`,
-    },
-    {
-      label: (
-        <Link
-          onClick={() => (setCollapsed ? setCollapsed(false) : null)}
-          href={`/${role}/review`}
-        >
-          Review/Feedback History
-        </Link>
-      ),
-      icon: <AccountBookFilled />,
-      key: `/${role}/review`,
-    },
+    // {
+    //   label: (
+    //     <Link
+    //       onClick={() => (setCollapsed ? setCollapsed(false) : null)}
+    //       href={`/${role}/assignment`}
+    //     >
+    //       Assignment
+    //     </Link>
+    //   ),
+    //   icon: <ContainerOutlined />,
+    //   key: `/${role}/assignment`,
+    // },
+    // {
+    //   label: (
+    //     <Link
+    //       onClick={() => (setCollapsed ? setCollapsed(false) : null)}
+    //       href={`/${role}/review`}
+    //     >
+    //       Review/Feedback History
+    //     </Link>
+    //   ),
+    //   icon: <AccountBookFilled />,
+    //   key: `/${role}/review`,
+    // },
 
     {
       label: (
