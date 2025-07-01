@@ -167,6 +167,14 @@ const StudentListCom = ({ setOpen, author }: { setOpen: any; author?: string }) 
                     >
                       {data.status === ENUM_STATUS.ACTIVE ? 'Deactivate' : 'Active'} User
                     </Menu.Item>
+                    <Menu.Item key="dd">
+                      <Link
+                        href={`/${userInfo?.role}/manage-users/students/add-content?user_id=${id}`}
+                        className="my-1"
+                      >
+                        ➕ Add Content
+                      </Link>
+                    </Menu.Item>
                     <ModalComponent buttonText="Add package">
                       <SellerAddPackageStudent userId={data.userDetails[0]?._id} />
                     </ModalComponent>

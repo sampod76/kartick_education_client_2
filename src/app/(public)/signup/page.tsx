@@ -81,7 +81,7 @@ const SignUpTeacherAndStudent = ({ setOpen }: any) => {
       if (res?.success == false) {
         Error_model_hook(res?.message);
       } else {
-        Success_model('User created successfully');
+        Success_model('Register successfully');
         setIsReset(true);
         try {
           const res = await userLogin({

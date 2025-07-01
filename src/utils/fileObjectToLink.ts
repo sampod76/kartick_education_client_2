@@ -11,6 +11,7 @@
  */
 
 import { getBaseUrl } from '@/helpers/config/envConfig';
+import { buildS3Url } from './urlChecker';
 
 export default function fileObjectToLink(src?: {
   cdn?: string;
@@ -22,8 +23,10 @@ export default function fileObjectToLink(src?: {
   const backendBaseUrl = getBaseUrl();
 
   let imageSrc;
-  if (src?.cdn) {
-    imageSrc = src.cdn + '/' + src.path;
+  if (src?.cdn && src.path) {
+    // imageSrc = src.cdn + '/' + src.path;
+    imageSrc = buildS3Url(src.cdn, src.path);
+    console.log('🚀 ~ imageSrc:', imageSrc);
   } else if (typeof src === 'object' && src.url) {
     imageSrc = src.url;
   } else if (src?.server_url) {

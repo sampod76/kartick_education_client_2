@@ -7,13 +7,15 @@ import { fullScreenPlugin } from '@react-pdf-viewer/full-screen';
 import { pageNavigationPlugin } from '@react-pdf-viewer/page-navigation';
 import { searchPlugin } from '@react-pdf-viewer/search';
 import { zoomPlugin } from '@react-pdf-viewer/zoom';
+import { saveAs } from 'file-saver';
 import React, { useEffect } from 'react';
-
 interface PDFViewerProps {
   file: string;
+  filename?: string;
 }
 
-const PDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
+const PDFViewer: React.FC<PDFViewerProps> = ({ file, filename }) => {
+  console.log('🚀 ~ file:', file);
   // Initialize plugins
   const defaultLayout = defaultLayoutPlugin();
   const search = searchPlugin();
@@ -36,7 +38,13 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ file }) => {
     >
       <p className="text-center">
         (Note: When showing <span className="text-red-500">Failed to fetch</span> then
-        change browser)
+        change browser){' '}
+        <span
+          className="cursor-pointer underline text-blue-500"
+          onClick={() => saveAs(file, filename || 'file.pdf')}
+        >
+          Download
+        </span>
       </p>
       <Viewer
         // fileUrl={`/api/fetch-pdf?url=${encodeURIComponent(file)}`}

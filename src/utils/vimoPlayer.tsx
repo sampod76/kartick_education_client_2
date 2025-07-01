@@ -1,7 +1,7 @@
 'use client';
 import Script from 'next/script';
 import { cn } from './cn';
-import vimeoUrlChack from './vimeoUrlChecker';
+import { extractVimeoParams } from './vimeoUrlChecker';
 
 function VimeoPlayer({
   link,
@@ -35,11 +35,9 @@ function VimeoPlayer({
   //     player.unload();
   //   };
   // }, [link, autoplay]);
-  let vimeoNumber;
+  let valuObje: { n: string | null; h: string | null } = { n: null, h: null };
   if (typeof link === 'string') {
-    vimeoNumber = vimeoUrlChack(link);
-  } else if (typeof link === 'number') {
-    vimeoNumber = link;
+    valuObje = extractVimeoParams(link);
   }
   return (
     // <div className="w-full h-full flex items-center justify-center">
@@ -53,7 +51,7 @@ function VimeoPlayer({
         // style={{ padding: '56.25% 0 0 0', position: 'relative', border: '2px' }}
       >
         <iframe
-          src={`https://player.vimeo.com/video/${vimeoNumber || 1022083255}?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479`}
+          src={`https://player.vimeo.com/video/${valuObje.n}?h=${valuObje.h}&badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479`}
           frameBorder="0"
           allow="autoplay; fullscreen; picture-in-picture; clipboard-write"
           style={{

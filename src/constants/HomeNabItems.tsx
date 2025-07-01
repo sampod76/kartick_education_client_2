@@ -13,20 +13,17 @@ export const homeNavItems = (role: string | null): MenuProps['items'] => {
     },
     // {
     //   label: (
-    //     <Link className="text-[16px] 2xl:text-[20px]   font-extrabold capitalize" href="/subscription">
+    //     <Link
+    //       className="text-[16px] 2xl:text-[20px]   font-extrabold capitalize"
+    //       href="/subscription"
+    //     >
     //       subscription
     //     </Link>
     //   ),
-    //   key: "/subscription",
+    //   key: '/subscription',
     // },
     {
       label: (
-        // <Link
-        //   className="text-[16px] 2xl:text-[20px] text-black   lg:font-extrabold capitalize"
-        //   href="/"
-        // >
-        //   ABOUT
-        // </Link>
         <h1 className="text-[16px] font-extrabold capitalize text-black hover:text-black 2xl:text-[20px]">
           ABOUT
         </h1>
@@ -34,26 +31,9 @@ export const homeNavItems = (role: string | null): MenuProps['items'] => {
       key: '/sdfsd',
 
       children: [
-        // {
-        //   label: (
-        //     <Link
-        //       className="text-[14px]   font-bold capitalize"
-        //       //  href="/"
-        //       href="/meetourteam"
-        //     >
-        //       Meet our team
-        //     </Link>
-        //   ),
-
-        //   key: "/meetourteam",
-        // },
         {
           label: (
-            <Link
-              className="text-[14px] font-bold capitalize"
-              //  href="/"
-              href="/aboutUs"
-            >
+            <Link className="text-[14px] font-bold capitalize" href="/aboutUs">
               About Us
             </Link>
           ),
@@ -62,11 +42,7 @@ export const homeNavItems = (role: string | null): MenuProps['items'] => {
         },
         {
           label: (
-            <Link
-              className="text-[14px] font-bold capitalize"
-              //  href="/"
-              href="/board-of-trustees"
-            >
+            <Link className="text-[14px] font-bold capitalize" href="/board-of-trustees">
               Board Of Trustees
             </Link>
           ),
@@ -75,11 +51,7 @@ export const homeNavItems = (role: string | null): MenuProps['items'] => {
         },
         {
           label: (
-            <Link
-              className="text-[14px] font-bold capitalize"
-              //  href="/"
-              href="/leadership"
-            >
+            <Link className="text-[14px] font-bold capitalize" href="/leadership">
               Leadership
             </Link>
           ),
@@ -88,11 +60,7 @@ export const homeNavItems = (role: string | null): MenuProps['items'] => {
         },
         {
           label: (
-            <Link
-              className="text-[14px] font-bold capitalize"
-              //  href="/"
-              href="/staff"
-            >
+            <Link className="text-[14px] font-bold capitalize" href="/staff">
               Staff
             </Link>
           ),
@@ -103,7 +71,6 @@ export const homeNavItems = (role: string | null): MenuProps['items'] => {
           label: (
             <Link
               className="text-[14px] font-bold capitalize"
-              //  href="/"
               href="/career-opportunities"
             >
               Career Opportunities
@@ -114,14 +81,6 @@ export const homeNavItems = (role: string | null): MenuProps['items'] => {
         },
       ],
     },
-    // {
-    //   label: (
-    //     <Link className="text-[16px] 2xl:text-[20px]   font-extrabold capitalize" href="/">
-    //       Assessment
-    //     </Link>
-    //   ),
-    //   key: "/assessment",
-    // },
 
     {
       label: (
@@ -142,7 +101,6 @@ export const homeNavItems = (role: string | null): MenuProps['items'] => {
           label: (
             <Link
               className="text-[14px] font-bold capitalize"
-              //  href="/"
               href="/nav/how-it-works-in-iblossomlearn"
             >
               How It Works in iBLossomLearn
@@ -153,11 +111,7 @@ export const homeNavItems = (role: string | null): MenuProps['items'] => {
         },
         {
           label: (
-            <Link
-              className="text-[14px] font-bold capitalize"
-              //  href="/"
-              href="/academics-program"
-            >
+            <Link className="text-[14px] font-bold capitalize" href="/academics-program">
               Academics Program
             </Link>
           ),
@@ -166,11 +120,7 @@ export const homeNavItems = (role: string | null): MenuProps['items'] => {
         },
         {
           label: (
-            <Link
-              className="text-[14px] font-bold capitalize"
-              //  href="/"
-              href="/inclusion-approach"
-            >
+            <Link className="text-[14px] font-bold capitalize" href="/inclusion-approach">
               Inclusion Approach
             </Link>
           ),
@@ -181,7 +131,6 @@ export const homeNavItems = (role: string | null): MenuProps['items'] => {
           label: (
             <Link
               className="text-[14px] font-bold capitalize"
-              //  href="/"
               href="/transition-to-high-school"
             >
               Transition to high school
@@ -228,45 +177,22 @@ export const homeNavItems = (role: string | null): MenuProps['items'] => {
         },
       ],
     },
-    {
-      label: (
-        <Link
-          className="text-[16px] font-extrabold capitalize text-[#1d1c1c] hover:text-[#1d1c1c] 2xl:text-[20px]"
-          // href="/enroll"
-          href="/enroll"
-        >
-          COURSES
-        </Link>
-      ),
-
-      key: '/enroll',
-      // children: [
-      //   {
-      //     label: (
-      //       <Link
-      //         className="text-[14px]   font-bold capitalize"
-      //         href="/students/elibrary"
-      //       >
-      //         eLibrary
-      //       </Link>
-      //     ),
-
-      //     key: "/students/E-Library",
-      //   },
-      //   {
-      //     label: (
-      //       <Link
-      //         className="text-[14px]   font-bold capitalize"
-      //         href="/students/activities"
-      //       >
-      //         Supplemental Activities
-      //       </Link>
-      //     ),
-
-      //     key: "/students/Supplemental-Activities",
-      //   },
-      // ],
-    },
+    ...(role === 'admin'
+      ? [
+          {
+            label: (
+              <Link
+                className="text-[16px] font-extrabold capitalize text-[#1d1c1c] hover:text-[#1d1c1c] 2xl:text-[20px]"
+                // href="/enroll"
+                href="/enroll"
+              >
+                COURSES
+              </Link>
+            ),
+            key: '/enroll',
+          },
+        ]
+      : []),
     /* 
      ...(role === 'admin'
       ? [

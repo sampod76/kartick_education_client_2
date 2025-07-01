@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
-
 import { useGetAllCategoryQuery } from '@/redux/api/adminApi/categoryApi';
 
-import { Button, Select } from 'antd';
+import { Select } from 'antd';
 
 const FilterCategorySelect = ({
   filterValue,
@@ -29,12 +27,13 @@ const FilterCategorySelect = ({
   const { data: Category, isLoading } = useGetAllCategoryQuery({ ...query });
   const CategoryData = Category?.data;
   // console.log(CategoryData)
-  const CategoryOptions = CategoryData?.map((item: any) => {
-    return {
+  const CategoryOptions = [
+    { label: 'All Categories', value: '' },
+    ...(CategoryData?.map((item: any) => ({
       label: item?.title,
       value: item?._id,
-    };
-  });
+    })) || []),
+  ];
 
   return (
     <Select
