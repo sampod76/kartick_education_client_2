@@ -119,7 +119,7 @@ export default function AddContentMain() {
             AllCourse?.data?.map((course: any) => (
               <div
                 key={course._id}
-                className="flex  items-center p-2 border border-gray-200 rounded-lg shadow-sm bg-white hover:shadow-md transition-all"
+                className="flex items-center p-2 border border-gray-200 rounded-lg shadow-sm bg-white hover:shadow-md transition-all"
               >
                 <div className="rounded-md overflow-hidden w-[60px] h-[60px] mb-2">
                   <ImageAnt
@@ -132,15 +132,14 @@ export default function AddContentMain() {
 
                 <br />
                 <div>
-                  <div className=" mx-2 text-sm font-semibold line-clamp-2">
+                  <div className="mx-2 text-sm font-semibold line-clamp-2">
                     {course.title}
                   </div>
                   <button
-                    // type="primary"
-                    className="text-blue-500  mt-1 p-0 h-auto"
+                    className="text-blue-500 mt-1 p-0 h-auto"
                     onClick={() => openMilestoneModal(course)}
                   >
-                    + Add Milestones (total={course?.milestones?.length})
+                    + Add Milestones (total={(course?.milestones ?? []).length})
                   </button>
                 </div>
               </div>

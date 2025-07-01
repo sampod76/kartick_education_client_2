@@ -81,10 +81,6 @@ jobs:
           rm -rf .next
           mv .next_temp .next
 
-      # 5) Build the project (you probably want to build even if deps didn’t change—
-      #    else guard this too if, for example, only code changes should trigger a build)
-      - name: Build the Project
-        run: yarn build
       - name: Check if education-client is running and restart or start accordingly
         run: |
           # Check if the process is running
