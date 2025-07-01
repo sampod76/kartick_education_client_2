@@ -149,6 +149,7 @@ export default function AddContentMain() {
         </div>
 
         <AddMilestoneModal
+          user={id}
           visible={isModalVisible}
           selectedCourse={selectedCourse}
           selectedMilestoneIds={selectedMilestoneIds}
