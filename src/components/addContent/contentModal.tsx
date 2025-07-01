@@ -71,7 +71,8 @@ const AddMilestoneModal: React.FC<AddMilestoneModalProps> = ({
               checked={selectedMilestoneIds.includes(milestone._id)}
               onChange={(e) => handleMilestoneCheck(milestone._id, e.target.checked)}
             >
-              {milestone.title}
+              {milestone.title} - (
+              {milestone?.gradeLevelDetails[0] && milestone?.gradeLevelDetails[0]?.title})
             </Checkbox>
           ))}
         </div>
