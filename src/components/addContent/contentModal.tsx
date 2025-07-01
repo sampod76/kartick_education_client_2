@@ -25,7 +25,7 @@ const AddMilestoneModal: React.FC<AddMilestoneModalProps> = ({
 }) => {
   const { data, isLoading, isFetching } = useGetCourseToAllMilestoneInPackageQuery({
     course: selectedCourse?._id,
-    user,
+    userId: user,
   });
 
   const permissionMilestones = data?.data?.length
