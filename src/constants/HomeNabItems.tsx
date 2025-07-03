@@ -11,17 +11,17 @@ export const homeNavItems = (role: string | null): MenuProps['items'] => {
       ),
       key: '1',
     },
-    // {
-    //   label: (
-    //     <Link
-    //       className="text-[16px] 2xl:text-[20px]   font-extrabold capitalize"
-    //       href="/subscription"
-    //     >
-    //       subscription
-    //     </Link>
-    //   ),
-    //   key: '/subscription',
-    // },
+    {
+      label: (
+        <Link
+          className="text-[16px] 2xl:text-[20px]   font-extrabold capitalize"
+          href="/subscription/package"
+        >
+          SUBSCRIPTION
+        </Link>
+      ),
+      key: '/subscription',
+    },
     {
       label: (
         <h1 className="text-[16px] font-extrabold capitalize text-black hover:text-black 2xl:text-[20px]">

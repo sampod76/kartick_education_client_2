@@ -44,6 +44,7 @@ export enum tagTypes {
   course_label = 'course_label',
   seller = 'seller',
   Member = 'Member',
+  PackagesV2 = 'PackagesV2',
 }
 
 export const tagTypesList = Object.values(tagTypes);
