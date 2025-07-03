@@ -3,7 +3,7 @@
 import { USER_ROLE } from '@/constants/role';
 import { getUserInfo, isLoggedIn } from '@/services/auth.service';
 import { Error_model_hook } from '@/utils/modalHook';
-import { Drawer, Layout, Menu, Row, Space, Spin, message } from 'antd';
+import { Row, Space, Spin } from 'antd';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -15,8 +15,8 @@ const SubscriptionLayout = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    if (userInfo?.role === USER_ROLE.STUDENT) {
-      Error_model_hook('Student not available any packages or subscriptions');
+    if (userInfo?.role !== USER_ROLE.STUDENT) {
+      Error_model_hook('Another not available any packages or subscriptions');
       router.push('/');
     }
     setIsLoading(false);

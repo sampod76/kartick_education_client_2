@@ -27,6 +27,15 @@ export const paymentApi = baseApi.injectEndpoints({
         };
       },
     }),
+    getPurchasePackageLink: build.mutation({
+      query: (data) => {
+        return {
+          url: `${PAYMENT_URL2}/stripe/purchase-package-create-payment-link`,
+          method: 'POST',
+          data,
+        };
+      },
+    }),
 
     addPaypalPayment: build.mutation({
       query: (data) => {
@@ -83,4 +92,5 @@ export const {
   useGetCheckPaypalPaymentQuery,
   useAddPaypalPaymentByCourseMutation,
   useAddStripeCoursePaymentMutation,
+  useGetPurchasePackageLinkMutation,
 } = paymentApi;
