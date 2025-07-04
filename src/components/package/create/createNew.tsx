@@ -79,7 +79,14 @@ export default function AdminPackageForm() {
         message.success('✅ Packages updated successfully');
       } else {
         await addPackagesV2({
-          packages: { ...incoming, status: incoming.status ? 'active' : 'inactive' },
+          packages: {
+            ...incoming,
+            status: incoming.status ? 'active' : 'inactive',
+            plans: incoming.plans.map((p: any) => ({
+              ...p,
+              status: p.status ? 'active' : 'inactive',
+            })),
+          },
         }).unwrap();
         message.success('✅ Packages created successfully');
       }
