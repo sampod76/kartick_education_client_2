@@ -1,7 +1,6 @@
 'use client';
 
 import { getUserInfo, isLoggedIn } from '@/services/auth.service';
-import { Row, Space, Spin } from 'antd';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -13,28 +12,28 @@ const SubscriptionLayout = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   // useEffect(() => {
-  //   if (userInfo?.role !== USER_ROLE.STUDENT) {
-  //     Error_model_hook('Another not available any packages or subscriptions');
-  //     router.push('/');
-  //   }
+  //   // if (userInfo?.role !== USER_ROLE.STUDENT) {
+  //   //   Error_model_hook('Another not available any packages or subscriptions');
+  //   //   router.push('/');
+  //   // }
   //   setIsLoading(false);
   // }, [router, isLoading, userLoggedIn, userInfo?.role]);
 
-  if (isLoading) {
-    return (
-      <Row
-        justify="center"
-        align="middle"
-        style={{
-          height: '100vh',
-        }}
-      >
-        <Space>
-          <Spin size="large"></Spin>
-        </Space>
-      </Row>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <Row
+  //       justify="center"
+  //       align="middle"
+  //       style={{
+  //         height: '100vh',
+  //       }}
+  //     >
+  //       <Space>
+  //         <Spin size="large"></Spin>
+  //       </Space>
+  //     </Row>
+  //   );
+  // }
 
   return <>{children}</>;
 };
