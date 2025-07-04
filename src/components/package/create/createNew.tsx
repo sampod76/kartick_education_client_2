@@ -30,22 +30,23 @@ export default function AdminPackageForm() {
   const apiData = data?.data || [];
 
   const [addPackagesV2] = useAddPackagesV2Mutation();
-  const [updatePackagesV2] = useUpdatePackagesV2Mutation();
+  const [updatePackagesV2, { isLoading: updateLoading }] = useUpdatePackagesV2Mutation();
 
-  // ✅ Fill form and trigger Form.List UI correctly
+  // ✅ Convert `status` to boolean for UI Switch
   useEffect(() => {
     if (apiData?.length) {
       const enriched = apiData.map((pkg) => ({
         ...pkg,
+        status: pkg.status === 'active',
         plans: pkg.plans.map((p: any) => ({
           planId: p.planId || crypto.randomUUID(),
           ...p,
+          status: p.status === 'active',
         })),
       }));
 
       form.setFieldsValue({ packages: enriched });
 
-      // ✅ Ensure Form.List UI is triggered
       const currentFields = form.getFieldValue('packages');
       if (!currentFields || currentFields.length === 0) {
         enriched.forEach((item, index) => {
@@ -79,14 +80,14 @@ export default function AdminPackageForm() {
         message.success('✅ Packages updated successfully');
       } else {
         await addPackagesV2({
-          packages: {
-            ...incoming,
-            status: incoming.status ? 'active' : 'inactive',
-            plans: incoming.plans.map((p: any) => ({
+          packages: incoming.map((item: any) => ({
+            ...item,
+            status: item.status ? 'active' : 'inactive',
+            plans: item.plans.map((p: any) => ({
               ...p,
               status: p.status ? 'active' : 'inactive',
             })),
-          },
+          })),
         }).unwrap();
         message.success('✅ Packages created successfully');
       }
@@ -159,6 +160,19 @@ export default function AdminPackageForm() {
                       placeholder="e.g. Middle/High School"
                       size="small"
                       className="text-sm"
+                    />
+                  </Form.Item>
+
+                  <Form.Item
+                    {...restField}
+                    name={[name, 'status']}
+                    label="Package Status"
+                    valuePropName="checked"
+                  >
+                    <Switch
+                      checkedChildren="Active"
+                      unCheckedChildren="Inactive"
+                      size="small"
                     />
                   </Form.Item>
 
@@ -272,7 +286,7 @@ export default function AdminPackageForm() {
                               >
                                 <Switch
                                   checkedChildren="Active"
-                                  unCheckedChildren="Deactive"
+                                  unCheckedChildren="Inactive"
                                   size="small"
                                 />
                               </Form.Item>
@@ -289,7 +303,12 @@ export default function AdminPackageForm() {
         </Form.List>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit" className="mt-6 w-full text-sm">
+          <Button
+            loading={updateLoading}
+            type="primary"
+            htmlType="submit"
+            className="mt-6 w-full text-sm"
+          >
             ✅ Save Packages
           </Button>
         </Form.Item>
