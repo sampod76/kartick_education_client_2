@@ -68,6 +68,10 @@ export default function AdminPackageForm() {
               data: {
                 ...incoming[i],
                 status: incoming[i].status ? 'active' : 'inactive',
+                plans: incoming[i].plans.map((p: any) => ({
+                  ...p,
+                  status: p.status ? 'active' : 'inactive',
+                })),
               },
             }).unwrap();
           }
