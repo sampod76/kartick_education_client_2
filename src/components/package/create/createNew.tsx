@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 'use client';
 
 import LoadingSkeleton from '@/components/ui/Loading/LoadingSkeleton';
@@ -25,11 +26,13 @@ const { Option } = Select;
 
 export default function AdminPackageForm() {
   const [form] = useForm();
-  const { data, isLoading, isFetching } = useGetAllPackagesV2Query({});
+  const { data, isLoading } = useGetAllPackagesV2Query({ status: 'active' });
   const apiData = data?.data || [];
+
   const [addPackagesV2] = useAddPackagesV2Mutation();
   const [updatePackagesV2] = useUpdatePackagesV2Mutation();
 
+  // ✅ Fill form and trigger Form.List UI correctly
   useEffect(() => {
     if (apiData?.length) {
       const enriched = apiData.map((pkg) => ({
@@ -39,9 +42,18 @@ export default function AdminPackageForm() {
           ...p,
         })),
       }));
+
       form.setFieldsValue({ packages: enriched });
+
+      // ✅ Ensure Form.List UI is triggered
+      const currentFields = form.getFieldValue('packages');
+      if (!currentFields || currentFields.length === 0) {
+        enriched.forEach((item, index) => {
+          form.setFieldValue(['packages', index, 'grade'], item.grade);
+        });
+      }
     }
-  }, [isLoading, isFetching]);
+  }, [apiData, form]);
 
   const onFinish = async (values: any) => {
     const incoming = values.packages;
@@ -55,13 +67,16 @@ export default function AdminPackageForm() {
               id: existing._id,
               data: {
                 ...incoming[i],
+                status: incoming[i].status ? 'active' : 'inactive',
               },
             }).unwrap();
           }
         }
         message.success('✅ Packages updated successfully');
       } else {
-        await addPackagesV2({ packages: incoming }).unwrap();
+        await addPackagesV2({
+          packages: { ...incoming, status: incoming.status ? 'active' : 'inactive' },
+        }).unwrap();
         message.success('✅ Packages created successfully');
       }
     } catch (error: any) {
@@ -84,21 +99,20 @@ export default function AdminPackageForm() {
                   title={
                     <span className="text-base font-semibold">🎓 Package {key + 1}</span>
                   }
-                  headStyle={{ padding: '8px 12px' }}
-                  bodyStyle={{ padding: 12 }}
+                  styles={{ header: { padding: '8px 12px' }, body: { padding: 12 } }}
                   extra={
                     <Button
                       danger
                       type="link"
-                      onClick={() => {
+                      onClick={() =>
                         Modal.confirm({
                           title: 'Are you sure?',
                           content: 'Do you want to remove this package?',
                           okText: 'Yes',
                           cancelText: 'Cancel',
                           onOk: () => remove(name),
-                        });
-                      }}
+                        })
+                      }
                     >
                       ❌ Remove
                     </Button>
@@ -110,7 +124,6 @@ export default function AdminPackageForm() {
                     label="Grade Key"
                     rules={[{ required: true }]}
                   >
-                    {' '}
                     <Input placeholder="e.g. 6-12" size="small" className="text-sm" />
                   </Form.Item>
                   <Form.Item
@@ -119,7 +132,6 @@ export default function AdminPackageForm() {
                     label="Grade Label"
                     rules={[{ required: true }]}
                   >
-                    {' '}
                     <Input
                       placeholder="e.g. 6–12th Grade"
                       size="small"
@@ -132,7 +144,6 @@ export default function AdminPackageForm() {
                     label="Badge"
                     rules={[{ required: true }]}
                   >
-                    {' '}
                     <Input
                       placeholder="e.g. Middle/High School"
                       size="small"
@@ -154,8 +165,10 @@ export default function AdminPackageForm() {
                                   Plan {planKey + 1}
                                 </span>
                               }
-                              headStyle={{ padding: '6px 10px' }}
-                              bodyStyle={{ padding: 10 }}
+                              styles={{
+                                header: { padding: '6px 10px' },
+                                body: { padding: 10 },
+                              }}
                               style={{ marginBottom: 8 }}
                               extra={
                                 <MinusCircleOutlined
@@ -174,17 +187,15 @@ export default function AdminPackageForm() {
                                 label="Plan Type"
                                 rules={[{ required: true }]}
                               >
-                                {' '}
                                 <Select
                                   placeholder="Select type"
                                   size="small"
                                   className="text-sm"
                                 >
-                                  {' '}
-                                  <Option value="Subscription">Subscription</Option>{' '}
-                                  <Option value="One Year">One Year</Option>{' '}
-                                  <Option value="Lifetime">Lifetime</Option>{' '}
-                                </Select>{' '}
+                                  <Option value="Subscription">Subscription</Option>
+                                  <Option value="One Year">One Year</Option>
+                                  <Option value="Lifetime">Lifetime</Option>
+                                </Select>
                               </Form.Item>
 
                               <Form.Item
@@ -193,13 +204,12 @@ export default function AdminPackageForm() {
                                 label="Price (Amount)"
                                 rules={[{ required: true }]}
                               >
-                                {' '}
                                 <InputNumber
                                   className="w-full text-sm"
                                   placeholder="e.g. 85"
                                   min={0}
                                   size="small"
-                                />{' '}
+                                />
                               </Form.Item>
 
                               <Form.Item
@@ -208,17 +218,15 @@ export default function AdminPackageForm() {
                                 label="Billing Type"
                                 rules={[{ required: true }]}
                               >
-                                {' '}
                                 <Select
                                   placeholder="Select billing"
                                   size="small"
                                   className="text-sm"
                                 >
-                                  {' '}
-                                  <Option value="monthly">Monthly</Option>{' '}
-                                  <Option value="yearly">Yearly</Option>{' '}
-                                  <Option value="lifetime">Lifetime</Option>{' '}
-                                </Select>{' '}
+                                  <Option value="monthly">Monthly</Option>
+                                  <Option value="yearly">Yearly</Option>
+                                  <Option value="lifetime">Lifetime</Option>
+                                </Select>
                               </Form.Item>
 
                               <Form.Item
@@ -226,12 +234,11 @@ export default function AdminPackageForm() {
                                 name={[planName, 'note']}
                                 label="Note"
                               >
-                                {' '}
                                 <Input
                                   placeholder="e.g. 50% off"
                                   size="small"
                                   className="text-sm"
-                                />{' '}
+                                />
                               </Form.Item>
 
                               <Form.Item
@@ -239,12 +246,11 @@ export default function AdminPackageForm() {
                                 name={[planName, 'email']}
                                 label="Email (if any)"
                               >
-                                {' '}
                                 <Input
                                   placeholder="Email address"
                                   size="small"
                                   className="text-sm"
-                                />{' '}
+                                />
                               </Form.Item>
 
                               <Form.Item
@@ -253,12 +259,11 @@ export default function AdminPackageForm() {
                                 label="Status"
                                 valuePropName="checked"
                               >
-                                {' '}
                                 <Switch
                                   checkedChildren="Active"
                                   unCheckedChildren="Deactive"
                                   size="small"
-                                />{' '}
+                                />
                               </Form.Item>
                             </Card>
                           ),
