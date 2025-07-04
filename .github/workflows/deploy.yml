@@ -1,6 +1,3 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
 name: CLIENT
 
 on:
@@ -8,51 +5,14 @@ on:
     branches: ['main']
 
 jobs:
-  # build:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-
-  #     - name: Set up Node.js
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: 23.x
-
-  #     - name: Check if Yarn is installed
-  #       run: |
-  #         if ! command -v yarn &> /dev/null; then
-  #           echo "Yarn not found, installing..."
-  #           npm install -g yarn
-  #         else
-  #           echo "Yarn is already installed."
-  #         fi
-
-  #     - name: Cache Yarn dependencies
-  #       uses: actions/cache@v2
-  #       with:
-  #         path: ~/.yarn/cache
-  #         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-yarn-
-
-  #     - name: Clean Install Dependencies
-  #       run: yarn install --check-files
-
-  #     - name: Build the project
-  #       run: yarn build
-
-  #     - name: Upload build artifacts
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: build-output
-  #         path: . # Adjust if build output is in a specific folder
   deploy:
-    # needs: build
     runs-on: self-hosted
+
     steps:
-      - uses: actions/checkout@v4
-      # 2) Use dorny/paths-filter to detect changes to package.json or yarn.lock
-      - name: Detect dependency‐related changes
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Detect dependency-related changes
         id: deps_changes
         uses: dorny/paths-filter@v2
         with:
@@ -61,33 +21,31 @@ jobs:
               - 'package.json'
               - 'yarn.lock'
 
-      # 4) Install dependencies only if package.json or yarn.lock changed this push
       - name: Install Dependencies
+        # Uncomment the line below if you want to skip this step unless deps changed
         # if: steps.deps_changes.outputs.dependencies == 'true'
         run: yarn install
-      - name: Replace any existing .env with .env.live
-        run: cp -f .env.live .env.local
-        # 4) Build in a temporary directory to avoid killing current process
-      - name: Build the project safely
-        run: |
-          echo "Creating temporary build..."
-          rm -rf .next_temp
-          NEXT_PUBLIC_ENV=production yarn build && mv .next .next_temp
 
-      # 5) Replace old .next with the new build
-      - name: Swap new build in
+      - name: Replace .env with production version
+        run: cp -f .env.live .env.local
+
+      - name: Build the project in a temporary folder
         run: |
-          echo "Swapping old build with new one..."
-          rm -rf .next
+          echo "Starting safe build..."
+          rm -rf .next_temp
+          NEXT_PUBLIC_ENV=production yarn build
+          mv .next .next_old || true
           mv .next_temp .next
 
-      - name: Check if education-client is running and restart or start accordingly
+      - name: Restart or Start PM2 process
         run: |
-          # Check if the process is running
           if pm2 list | grep -q "education-client"; then
-            echo "education-client is already running, restarting it..."
-            pm2 restart education-client
+            echo "Restarting education-client..."
+            pm2 reload education-client --update-env
           else
-            echo "education-client is not running, starting it..."
+            echo "Starting education-client..."
             pm2 start ecosystem.config.js --env production
           fi
+
+      - name: Clean up old build
+        run: rm -rf .next_old

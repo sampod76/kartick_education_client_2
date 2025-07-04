@@ -111,7 +111,7 @@ function DynamicPackageOptions({ packages }: { packages: any[] }) {
 
               <div className="space-y-3">
                 {pkg.plans
-                  .filter((opt: any) => opt.status === 'active')
+                  // .filter((opt: any) => opt.status === 'active')
                   .map((opt: any) => {
                     const isDisabled = opt.status === 'inactive';
                     const selected = isSelected(pkg.grade, opt.type);
@@ -148,9 +148,19 @@ function DynamicPackageOptions({ packages }: { packages: any[] }) {
                           </p>
                           <p className="text-xs text-gray-500">{opt.note}</p>
                           {opt.email && (
-                            <p className="text-xs text-gray-400 pt-2 border-t mt-2">
-                              📧 {opt.email}
-                            </p>
+                            <div className="text-xs text-gray-400 pt-2 border-t mt-2 flex items-center justify-between">
+                              <span>📧 {opt.email}</span>
+                              <button
+                                className="ml-2 text-blue-500 hover:text-blue-700 text-sm"
+                                onClick={() => {
+                                  navigator.clipboard.writeText(opt.email);
+                                  message.success('Copied to clipboard!');
+                                }}
+                                title="Copy email"
+                              >
+                                📋
+                              </button>
+                            </div>
                           )}
                         </div>
                       </label>
