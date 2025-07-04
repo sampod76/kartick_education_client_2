@@ -9,6 +9,7 @@ import LoadingSkeleton from '../ui/Loading/LoadingSkeleton';
 
 export default function PackageBuilderPage() {
   const { data, isLoading } = useGetAllPackagesV2Query({ status: 'active' });
+  console.log(data, 'data');
   const apiData = data?.data || [];
 
   if (isLoading) {
@@ -109,50 +110,52 @@ function DynamicPackageOptions({ packages }: { packages: any[] }) {
               </div>
 
               <div className="space-y-3">
-                {pkg.plans.map((opt: any) => {
-                  const isDisabled = opt.status === 'inactive';
-                  const selected = isSelected(pkg.grade, opt.type);
+                {pkg.plans
+                  .filter((opt: any) => opt.status === 'active')
+                  .map((opt: any) => {
+                    const isDisabled = opt.status === 'inactive';
+                    const selected = isSelected(pkg.grade, opt.type);
 
-                  return (
-                    <label
-                      key={opt.planId}
-                      className={`flex items-start gap-3 border rounded p-3 transition text-sm ${
-                        selected
-                          ? 'bg-blue-100 border-blue-500'
-                          : 'bg-white border-gray-300'
-                      } ${!isDisabled ? 'cursor-pointer hover:bg-gray-50' : 'opacity-50 cursor-not-allowed'}`}
-                    >
-                      <input
-                        type="radio"
-                        name={`plan-${pkg.grade}`}
-                        value={opt.type}
-                        disabled={isDisabled}
-                        checked={selected}
-                        onChange={() =>
-                          !isDisabled &&
-                          handleSelect(pkg.grade, opt.type, pkg._id, opt.planId)
-                        }
-                        className="mt-1 h-4 w-4 accent-blue-600"
-                      />
-                      <div className="w-full">
-                        <p className="font-medium">{opt.type}</p>
-                        <p className="text-xs text-gray-800">
-                          {opt.billing === 'monthly'
-                            ? `$${opt.amount}/month`
-                            : opt.billing === 'yearly'
-                              ? `$${opt.amount}/year`
-                              : `One-time $${opt.amount}`}
-                        </p>
-                        <p className="text-xs text-gray-500">{opt.note}</p>
-                        {opt.email && (
-                          <p className="text-xs text-gray-400 pt-2 border-t mt-2">
-                            📧 {opt.email}
+                    return (
+                      <label
+                        key={opt.planId}
+                        className={`flex items-start gap-3 border rounded p-3 transition text-sm ${
+                          selected
+                            ? 'bg-blue-100 border-blue-500'
+                            : 'bg-white border-gray-300'
+                        } ${!isDisabled ? 'cursor-pointer hover:bg-gray-50' : 'opacity-50 cursor-not-allowed'}`}
+                      >
+                        <input
+                          type="radio"
+                          name={`plan-${pkg.grade}`}
+                          value={opt.type}
+                          disabled={isDisabled}
+                          checked={selected}
+                          onChange={() =>
+                            !isDisabled &&
+                            handleSelect(pkg.grade, opt.type, pkg._id, opt.planId)
+                          }
+                          className="mt-1 h-4 w-4 accent-blue-600"
+                        />
+                        <div className="w-full">
+                          <p className="font-medium">{opt.type}</p>
+                          <p className="text-xs text-gray-800">
+                            {opt.billing === 'monthly'
+                              ? `$${opt.amount}/month`
+                              : opt.billing === 'yearly'
+                                ? `$${opt.amount}/year`
+                                : `One-time $${opt.amount}`}
                           </p>
-                        )}
-                      </div>
-                    </label>
-                  );
-                })}
+                          <p className="text-xs text-gray-500">{opt.note}</p>
+                          {opt.email && (
+                            <p className="text-xs text-gray-400 pt-2 border-t mt-2">
+                              📧 {opt.email}
+                            </p>
+                          )}
+                        </div>
+                      </label>
+                    );
+                  })}
               </div>
             </CardContent>
           </Card>

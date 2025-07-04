@@ -455,24 +455,24 @@ export const dashboardItems = (role: string, setCollapsed?: any) => {
           label: (
             <Link
               onClick={() => (setCollapsed ? setCollapsed(false) : null)}
-              href={`/${role}/package/create`}
+              href={`/${role}/package/createNew`}
             >
-              Create Package
+              Create/edit Package
             </Link>
           ),
-          key: `/${role}/package/create`,
+          key: `/${role}/package/createNew`,
         },
-        {
-          label: (
-            <Link
-              onClick={() => (setCollapsed ? setCollapsed(false) : null)}
-              href={`/${role}/package`}
-            >
-              Package List
-            </Link>
-          ),
-          key: `/${role}/package`,
-        },
+        // {
+        //   label: (
+        //     <Link
+        //       onClick={() => (setCollapsed ? setCollapsed(false) : null)}
+        //       href={`/${role}/package`}
+        //     >
+        //       Package List
+        //     </Link>
+        //   ),
+        //   key: `/${role}/package`,
+        // },
       ],
     },
     {
