@@ -455,7 +455,7 @@ export const dashboardItems = (role: string, setCollapsed?: any) => {
           label: (
             <Link
               onClick={() => (setCollapsed ? setCollapsed(false) : null)}
-              href={`/${role}/package/create`}
+              href={`/${role}/package/createNew`}
             >
               Create Package
             </Link>
