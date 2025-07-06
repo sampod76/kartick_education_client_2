@@ -1,11 +1,15 @@
 import { useGetAllPurchaseAcceptedCourseQuery } from '@/redux/api/public/purchaseAPi';
+import { useAddMilestoneInPurchaseCourseMutation } from '@/redux/api/public/purchaseCourseApi';
 import fileObjectToLink from '@/utils/fileObjectToLink';
+import { ErrorModal, Success_model } from '@/utils/modalHook';
 import { Divider, Image as ImageAnt, Spin } from 'antd';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import AddMilestoneModal from './contentModal';
 import { useState } from 'react';
+import AddMilestoneModal from './contentModal';
 
 export default function AllContentList() {
+  const [addMilestone, { isLoading: mLoading }] =
+    useAddMilestoneInPurchaseCourseMutation();
   const [selectedCourse, setSelectedCourse] = useState<any>(null);
   const [selectedMilestoneIds, setSelectedMilestoneIds] = useState<string[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -32,6 +36,29 @@ export default function AllContentList() {
     setIsModalVisible(true);
   };
 
+  const handleModalOk = async () => {
+    try {
+      console.log('Selected Milestones:', selectedMilestoneIds);
+
+      const res = await addMilestone({
+        course: selectedCourse._id,
+        permissionMilestones: selectedMilestoneIds,
+        user: user_id,
+        packageToAdd: {
+          packageId: '65b0ca7bee87699d456ede0b',
+          purchasePackageId: '65b0ca7bee87699d456ede0b',
+        },
+      }).unwrap();
+      if (res._id) {
+        Success_model('Milestones added successfully');
+        setIsModalVisible(false);
+      }
+      console.log('🚀 ~ handleModalOk ~ res:', res);
+    } catch (error: any) {
+      console.log('🚀 ~ handleModalOk ~ error:', error);
+      ErrorModal(error?.message || 'Failed to save milestones. Please try again later.');
+    }
+  };
   return (
     <div>
       <h1 className="text-2xl font-bold">All Content List</h1>
@@ -87,7 +114,7 @@ export default function AllContentList() {
         </div>
 
         <AddMilestoneModal
-          user={id}
+          user={user_id}
           visible={isModalVisible}
           selectedCourse={selectedCourse}
           selectedMilestoneIds={selectedMilestoneIds}

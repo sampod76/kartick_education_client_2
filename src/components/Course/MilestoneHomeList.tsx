@@ -4,23 +4,36 @@
 import { ENUM_YN } from '@/constants/globalEnums';
 import { useGetSingleCourseQuery } from '@/redux/api/adminApi/courseApi';
 import { useGetAllMilestoneQuery } from '@/redux/api/adminApi/milestoneApi';
+import { useGetStudentPurchaseCoursesToMilestoneModuleQuery } from '@/redux/api/public/purchaseCourseApi';
 import { IMilestoneData } from '@/types/miestoneType';
 import { Divider } from 'antd';
 import parse from 'html-react-parser';
 import { FaBook } from 'react-icons/fa';
+import { useGlobalContext } from '../ContextApi/GlobalContextApi';
 import SingleMilestone from '../milestone/SingleMilestone';
 import ModalComponent from '../Modal/ModalComponents';
 import AnyFileViewer from '../ui/AnyFileViewer';
 import LoadingSkeleton from '../ui/Loading/LoadingSkeleton';
 const MilestoneHomeList = ({ courseId }: { courseId: string }) => {
-  // const userInfo = getUserInfo() as any;
+  const { userInfo } = useGlobalContext();
+
   // const { generateBgColor } = useAppSelector((state) => state.bannerSearch);
   const {
     data: courseData = {},
     isLoading: courseLoading,
     error,
   } = useGetSingleCourseQuery(courseId);
-  // console.log('🚀 ~ MilestoneHomeList ~ courseDataM:', courseData);
+
+  const { data: SData, isLoading: Sloading } =
+    useGetStudentPurchaseCoursesToMilestoneModuleQuery(
+      {
+        course: courseId,
+        needProperty: 'permissionMilestones,modules',
+      },
+      {
+        skip: !userInfo?.role || userInfo.role !== 'student',
+      },
+    );
 
   const query: Record<string, any> = {};
   query['limit'] = 999999;
@@ -32,13 +45,18 @@ const MilestoneHomeList = ({ courseId }: { courseId: string }) => {
     data,
     isLoading,
     error: milestoneError,
-  } = useGetAllMilestoneQuery({
-    course: courseId,
-    module: 'yes',
-    ...query,
-  });
+  } = useGetAllMilestoneQuery(
+    {
+      course: courseId,
+      module: 'yes',
+      ...query,
+    },
+    {
+      skip: !userInfo?.role || userInfo.role === 'student',
+    },
+  );
 
-  const milestoneData = data?.data || [];
+  const milestoneData = data?.data || SData?.data[0]?.permissionMilestones || [];
 
   if (error || milestoneError) {
     console.log(error, milestoneError);
@@ -46,7 +64,7 @@ const MilestoneHomeList = ({ courseId }: { courseId: string }) => {
   // console.log(courseData);
   return (
     <>
-      {isLoading || courseLoading ? (
+      {isLoading || courseLoading || Sloading || !userInfo?.role ? (
         <LoadingSkeleton number={20} />
       ) : (
         <div
