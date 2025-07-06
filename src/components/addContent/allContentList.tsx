@@ -1,59 +1,35 @@
-'use client';
-import { useGetAllCourseQuery } from '@/redux/api/adminApi/courseApi';
+import { useGetAllPurchaseAcceptedCourseQuery } from '@/redux/api/public/purchaseAPi';
 import { useAddMilestoneInPurchaseCourseMutation } from '@/redux/api/public/purchaseCourseApi';
 import fileObjectToLink from '@/utils/fileObjectToLink';
 import { ErrorModal, Success_model } from '@/utils/modalHook';
 import { Divider, Image as ImageAnt, Spin } from 'antd';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import FilterCategorySelect from '../dashboard/Filter/FilterCategory';
-import LoadingForDataFetch from '../Utlis/LoadingForDataFetch';
+import { useState } from 'react';
 import AddMilestoneModal from './contentModal';
-export default function AddContentMain() {
-  const [addMilestone, { isLoading }] = useAddMilestoneInPurchaseCourseMutation();
+
+export default function AllContentList() {
+  const [addMilestone, { isLoading: mLoading }] =
+    useAddMilestoneInPurchaseCourseMutation();
   const [selectedCourse, setSelectedCourse] = useState<any>(null);
   const [selectedMilestoneIds, setSelectedMilestoneIds] = useState<string[]>([]);
-
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [filterValue, setFilterValue] = useState('');
-
   const searchParams = useSearchParams();
   const router = useRouter();
   const path = usePathname();
-  const category = searchParams.get('category');
+  const username = searchParams.get('user_name') as string;
+  const email = searchParams.get('email') as string;
+  const user_id = searchParams.get('user_id') as string;
+  const { data, isLoading } = useGetAllPurchaseAcceptedCourseQuery({
+    userId: user_id,
+    status: 'active',
+  });
+
   const handleQueryChange = (key: string, value: string) => {
     const currentParams = new URLSearchParams(searchParams.toString());
     currentParams.set(key, value);
     // router.push(`${path}?${currentParams.toString()}`);
     router.replace(`${path}?${currentParams.toString()}`);
   };
-  const username = searchParams.get('user_name') as string;
-  const email = searchParams.get('email') as string;
-  const id = searchParams.get('user_id') as string;
-
-  const {
-    data: AllCourse,
-    isLoading: cLoading,
-    isFetching: cFetching,
-  } = useGetAllCourseQuery(
-    {
-      limit: 999999,
-      category: category || filterValue,
-      sortBy: 'showing_number',
-      sortOrder: 'asc',
-      status: 'active',
-      isMilestoneList: 'yes',
-      needProperty: 'isMilestoneList',
-    },
-    { skip: !Boolean(filterValue) },
-  );
-
-  useEffect(() => {
-    handleQueryChange('category', filterValue);
-  }, [filterValue]);
-  if (cLoading) {
-    return <LoadingForDataFetch />;
-  }
   const openMilestoneModal = (course: any) => {
     setSelectedCourse(course);
     setSelectedMilestoneIds([]); // 🔸 No pre-selected milestones
@@ -67,7 +43,7 @@ export default function AddContentMain() {
       const res = await addMilestone({
         course: selectedCourse._id,
         permissionMilestones: selectedMilestoneIds,
-        user: id,
+        user: user_id,
         packageToAdd: {
           packageId: '65b0ca7bee87699d456ede0b',
           purchasePackageId: '65b0ca7bee87699d456ede0b',
@@ -85,17 +61,9 @@ export default function AddContentMain() {
   };
   return (
     <div>
-      <div className="flex items-start justify-center gap-4">
-        <div>
-          <h1 className="text-2xl font-bold my-3">Please select a category</h1>
-          {/* Add your content here */}
-          <FilterCategorySelect
-            filterValue={filterValue}
-            setFilterValue={setFilterValue}
-          />
-        </div>
-        <div className="border p-4 rounded-lg shadow-md bg-white">
-          {/* <div className=" flex justify-center items-center border-4 border-white rounded-full overflow-hidden">
+      <h1 className="text-2xl font-bold">All Content List</h1>
+      <div className="border p-4 rounded-lg shadow-md bg-white">
+        {/* <div className=" flex justify-center items-center border-4 border-white rounded-full overflow-hidden">
             <ImageAnt
               style={{
                 height: '100px',
@@ -105,17 +73,16 @@ export default function AddContentMain() {
               alt="User mask"
             />
           </div> */}
-          <h1 className="text-lg font-bold ">Name: {username || 'No Name Provided'}</h1>
-          <h1 className="text-lg font-bold ">Email: {email}</h1>
-        </div>
+        <h1 className="text-lg font-bold ">Name: {username || 'No Name Provided'}</h1>
+        <h1 className="text-lg font-bold ">Email: {email}</h1>
       </div>
       <Divider className="my-4 border-2 border-black" />
       <div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {cLoading || cFetching ? (
+          {isLoading ? (
             <Spin />
           ) : (
-            AllCourse?.data?.map((course: any) => (
+            data?.data?.map((course: any) => (
               <div
                 key={course._id}
                 className="flex items-center p-2 border border-gray-200 rounded-lg shadow-sm bg-white hover:shadow-md transition-all"
@@ -147,7 +114,7 @@ export default function AddContentMain() {
         </div>
 
         <AddMilestoneModal
-          user={id}
+          user={user_id}
           visible={isModalVisible}
           selectedCourse={selectedCourse}
           selectedMilestoneIds={selectedMilestoneIds}

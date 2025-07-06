@@ -47,7 +47,10 @@ export default function SingleMilestone({
         } rounded-t-md px-3 text-white brightness-95`}
       >
         <ContainerOutlined />
-        <span>{milestoneData?.title}</span>
+        <span>
+          {/* @ts-ignore */}
+          {milestoneData?.title} ({milestoneData?.gradeLevelsDetails?.title})
+        </span>
 
         {/* //! Milestone Title */}
       </Link>
@@ -56,29 +59,10 @@ export default function SingleMilestone({
         {milestoneData?.modules?.map((module: any, index: number) => {
           // testfunction(module?._id)
           return (
-            // <Link
-            //   href={`/lesson/module/${module?._id}?module=${module?.title}`}
-            //   key={module?._id || index}
-            //   className="text-gray-900 text-start flex justify-start  gap-1"
-            // >
             <div key={index}>
               <p className="mt-1">{/* <HiOutlineClipboardDocumentList /> */}</p>
               <div>
                 <div className="flex gap-3">
-                  {/* <Image
-                    className="hover:opacity-[70%]"
-                    style={{
-                      transform: `${
-                        openIndex === index ? 'rotate(180deg)' : 'rotate(90deg)'
-                      }`,
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => {
-                      toggleOpen(index);
-                    }}
-                    src={Arrow}
-                    alt=""
-                  /> */}
                   {index + 1}.
                   <Link
                     href={`/lesson/module/${module?._id}?module=${module?.title}`}

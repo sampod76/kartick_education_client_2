@@ -1,26 +1,19 @@
 'use client';
-import ActionBar from '@/components/ui/ActionBar';
 import UMTable from '@/components/ui/UMTable';
 import { useDebounced } from '@/redux/hooks';
-import { ReloadOutlined } from '@ant-design/icons';
-import { Button, Drawer, DrawerProps, Dropdown, Input, Menu, Space, message } from 'antd';
+import { DrawerProps, Dropdown, Menu, Space, message } from 'antd';
 import Link from 'next/link';
 import { useState } from 'react';
-
-import UMModal from '@/components/ui/UMModal';
 
 import { Error_model_hook, Success_model, confirm_modal } from '@/utils/modalHook';
 import Image from 'next/image';
 
 import { AllImage } from '@/assets/AllImge';
-import FilterCourse from '@/components/dashboard/Filter/FilterCourse';
 import {
   useDeleteMilestoneMutation,
   useGetAllMilestoneQuery,
 } from '@/redux/api/adminApi/milestoneApi';
-import { useGetAllCategoryChildrenQuery } from '@/redux/api/categoryChildrenApi';
 import { useGlobalContext } from '../ContextApi/GlobalContextApi';
-import SelectCategoryChildren from '../Forms/GeneralField/SelectCategoryChildren';
 
 const MileStoneList = ({
   queryObject,
@@ -37,24 +30,6 @@ const MileStoneList = ({
   const [openDrawer, setOpenDrawer] = useState(false);
   const [placement, setPlacement] = useState<DrawerProps['placement']>('right');
   //
-  //----------------------------------------------------------------
-  const [category, setCategory] = useState<{ _id?: string; title?: string }>({});
-  const [course, setCourse] = useState<{ _id?: string; title?: string }>({});
-
-  const queryCategory: Record<string, any> = {};
-  queryCategory['children'] = 'course';
-  if (userInfo?.role !== 'admin') {
-    queryCategory['author'] = userInfo?.id;
-  }
-  //! for Category options selection
-  const { data: Category, isLoading: categoryLoading } = useGetAllCategoryChildrenQuery(
-    {
-      ...queryCategory,
-    },
-    { skip: !!queryObject?.course },
-  );
-  const categoryData: any = Category?.data;
-  //----------------------------------------------------------------
 
   const query: Record<string, any> = {};
 
@@ -75,8 +50,8 @@ const MileStoneList = ({
   query['sortOrder'] = sortOrder;
   query['status'] = 'active';
   //
-  query['category'] = queryObject?.category || category?._id;
-  query['course'] = queryObject?.course || course?._id;
+  query['category'] = queryObject?.category;
+  query['course'] = queryObject?.course;
   //
   if (filterValue) {
     query['course'] = filterValue;
@@ -163,8 +138,8 @@ const MileStoneList = ({
       width: 120,
     },
     {
-      title: 'course',
-      dataIndex: ['course', 'title'],
+      title: 'Grade level',
+      dataIndex: ['gradeLevelsDetails', 'title'],
       ellipsis: true,
       // render: function (data: any) {
       //   return <>{data?.title}</>;
@@ -291,35 +266,6 @@ const MileStoneList = ({
       }}
     >
       <h1>Milestone List</h1>
-      {!queryObject?.course && (
-        <ActionBar>
-          <div className="flex gap-2">
-            <Input
-              size="large"
-              placeholder="Search"
-              onChange={(e) => setSearchTerm(e.target.value)}
-              style={{
-                width: '250px',
-              }}
-            />
-            <FilterCourse filterValue={filterValue} setFilterValue={setFilterValue} />
-          </div>
-          <div>
-            <Button type="default" style={{ marginRight: '5px' }} onClick={showDrawer}>
-              Filter
-            </Button>
-
-            <Link href={`/${userInfo?.role}/milestone/create`}>
-              <Button type="default">Create Milestone</Button>
-            </Link>
-            {(!!sortBy || !!sortOrder || !!searchTerm) && (
-              <Button style={{ margin: '0px 5px' }} type="default" onClick={resetFilters}>
-                <ReloadOutlined />
-              </Button>
-            )}
-          </div>
-        </ActionBar>
-      )}
       <UMTable
         loading={isLoading}
         columns={columns}
@@ -331,50 +277,6 @@ const MileStoneList = ({
         onTableChange={onTableChange}
         showPagination={true}
       />
-      <UMModal
-        title="Remove Milestone"
-        isOpen={open}
-        closeModal={() => setOpen(false)}
-        handleOk={() => deleteAdminHandler(adminId)}
-      >
-        <p className="my-5">Do you want to remove this admin?</p>
-      </UMModal>
-      <Drawer
-        title={
-          <div className="flex items-center justify-between">
-            <p>Filter</p>{' '}
-            <button
-              onClick={onClose}
-              className="rounded px-5 text-lg text-red-500 hover:bg-red-600 hover:text-white"
-            >
-              X
-            </button>
-          </div>
-        }
-        placement={placement}
-        closable={false}
-        onClose={onClose}
-        open={openDrawer}
-        key={placement}
-        size="large"
-      >
-        <SelectCategoryChildren
-          lableText="Select category"
-          setState={setCategory}
-          isLoading={categoryLoading}
-          categoryData={categoryData}
-        />
-
-        <SelectCategoryChildren
-          lableText="Select courses"
-          setState={setCourse}
-          categoryData={
-            //@ts-ignore
-            category?.courses || []
-          }
-        />
-      </Drawer>
-      ;
     </div>
   );
 };

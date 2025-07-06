@@ -58,6 +58,22 @@ export const purchaseCoursesApi = baseApi.injectEndpoints({
       },
       providesTags: [tagTypes.userPurchaseCourse, tagTypes.course],
     }),
+    getStudentPurchaseCoursesToMilestoneModule: build.query({
+      query: (arg: Record<string, any>) => {
+        return {
+          url: `${PURCHASE_COURSE_URL}/` + 'student-purchase-courses-to-milestone-module',
+          method: 'GET',
+          params: arg,
+        };
+      },
+      transformResponse: (response: any, meta: IMeta) => {
+        return {
+          data: response,
+          meta,
+        };
+      },
+      providesTags: [tagTypes.userPurchaseCourse, tagTypes.course],
+    }),
 
     // update ac department
   }),
@@ -69,4 +85,5 @@ export const {
   useAddSpatialConsiderCourseMutation,
   useAddMilestoneInPurchaseCourseMutation,
   useGetCourseToAllMilestoneInPackageQuery,
+  useGetStudentPurchaseCoursesToMilestoneModuleQuery,
 } = purchaseCoursesApi;
