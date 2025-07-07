@@ -1,12 +1,9 @@
 'use client';
 
 import AddContentMain from '@/components/addContent/addContentMain';
+import AllContentList from '@/components/addContent/allContentList';
 import { Tabs } from 'antd';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-
-function ContentList() {
-  return <div>Content list</div>;
-}
 
 export default function AddContent() {
   const router = useRouter();
@@ -31,13 +28,13 @@ export default function AddContent() {
       items={[
         {
           key: '1',
-          label: 'Add Content',
-          children: <AddContentMain />,
+          label: 'Content list',
+          children: <AllContentList />,
         },
         {
           key: '2',
-          label: 'Content list',
-          children: <ContentList />,
+          label: 'Add Content',
+          children: <AddContentMain />,
         },
       ]}
     />
