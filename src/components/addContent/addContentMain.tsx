@@ -73,10 +73,13 @@ export default function AddContentMain() {
           purchasePackageId: '65b0ca7bee87699d456ede0b',
         },
       }).unwrap();
-      if (res._id) {
-        Success_model('Milestones added successfully');
-        setIsModalVisible(false);
-      }
+      // if (res._id) {
+      // }
+      Success_model('Milestones added successfully');
+      setIsModalVisible(false);
+      setSelectedMilestoneIds([]);
+      setSelectedCourse(null);
+
       console.log('🚀 ~ handleModalOk ~ res:', res);
     } catch (error: any) {
       console.log('🚀 ~ handleModalOk ~ error:', error);
@@ -145,16 +148,21 @@ export default function AddContentMain() {
             ))
           )}
         </div>
-
-        <AddMilestoneModal
-          user={id}
-          visible={isModalVisible}
-          selectedCourse={selectedCourse}
-          selectedMilestoneIds={selectedMilestoneIds}
-          setSelectedMilestoneIds={setSelectedMilestoneIds}
-          onClose={() => setIsModalVisible(false)}
-          onSave={handleModalOk}
-        />
+        {isModalVisible && selectedCourse._id && id && (
+          <AddMilestoneModal
+            user={id}
+            visible={isModalVisible}
+            selectedCourse={selectedCourse}
+            selectedMilestoneIds={selectedMilestoneIds}
+            setSelectedMilestoneIds={setSelectedMilestoneIds}
+            onClose={() => {
+              setIsModalVisible(false);
+              setSelectedMilestoneIds([]);
+              setSelectedCourse(null);
+            }}
+            onSave={handleModalOk}
+          />
+        )}
       </div>
     </div>
   );

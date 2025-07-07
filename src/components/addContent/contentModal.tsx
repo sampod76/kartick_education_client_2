@@ -23,10 +23,15 @@ const AddMilestoneModal: React.FC<AddMilestoneModalProps> = ({
   onClose,
   onSave,
 }) => {
-  const { data, isLoading, isFetching } = useGetCourseToAllMilestoneInPackageQuery({
-    course: selectedCourse?._id,
-    userId: user,
-  });
+  const { data, isLoading, isFetching } = useGetCourseToAllMilestoneInPackageQuery(
+    {
+      course: selectedCourse?._id,
+      userId: user,
+    },
+    {
+      skip: !selectedCourse?._id || !user,
+    },
+  );
 
   const permissionMilestones = data?.data?.length
     ? data?.data[0]?.permissionMilestones
@@ -37,7 +42,7 @@ const AddMilestoneModal: React.FC<AddMilestoneModalProps> = ({
     if (visible && permissionMilestones?.length > 0) {
       setSelectedMilestoneIds(permissionMilestones);
     }
-  }, [visible, permissionMilestones.length]);
+  }, [visible, permissionMilestones?.length]);
 
   const handleMilestoneCheck = (milestoneId: string, checked: boolean) => {
     if (checked) {
