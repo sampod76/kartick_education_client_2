@@ -160,7 +160,7 @@ const StudentListCom = ({ setOpen, author }: { setOpen: any; author?: string }) 
                     </Menu.Item>
                     <Menu.Item key="dd">
                       <Link
-                        href={`/${userInfo?.role}/manage-users/students/add-content?user_name=${data?.name?.fastName}${data?.name?.lastName}&email=${data?.userDetails?.email}&user_id=${data?.userDetails?._id}`}
+                        href={`/${userInfo?.role}/manage-users/students/add-content?user_name=${data?.name?.firstName} ${data?.name?.lastName}&email=${data?.userDetails?.email}&user_id=${data?.userDetails?._id}`}
                         className="my-1"
                       >
                         ➕ Add/Remove Content

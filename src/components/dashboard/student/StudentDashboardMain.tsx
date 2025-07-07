@@ -1,19 +1,14 @@
 'use client';
 import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
-import { AnimatePresenceWrapper } from '@/components/framer_motion/AnimatePresence';
 import CustomImageTag from '@/components/ui/CustomTag/CustomImageTag';
 import LoadingSkeleton from '@/components/ui/Loading/LoadingSkeleton';
 import { ENUM_YN } from '@/constants/globalEnums';
 import { useGetAllPurchaseAcceptedCourseQuery } from '@/redux/api/public/purchaseAPi';
-import { useGetSubmitAllQuizQuery } from '@/redux/api/quizSubmitApi';
-import { useGetAllPackageAndCourseQuery } from '@/redux/api/sellerApi/addPackageAndCourse';
 import fileObjectToLink from '@/utils/fileObjectToLink';
 import { Pagination, PaginationProps } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
-import { FaUser } from 'react-icons/fa';
-import { GiBookCover } from 'react-icons/gi';
 
 export default function StudentDashboardMain() {
   const [current, setCurrent] = useState(1);
@@ -36,37 +31,37 @@ export default function StudentDashboardMain() {
 
   // console.log(allPurchaseCourse, 'allPurchaseCourse');
 
-  const {
-    data: allPurchasePackage,
-    error: allPurchasePackageError,
-    isLoading: allPurchasePackageLoading,
-  } = useGetAllPackageAndCourseQuery(
-    {
-      isDelete: ENUM_YN.NO,
-      status: 'active',
-      user: userInfo?.id,
-    },
-    { skip: !Boolean(userInfo?.id) },
-  );
+  // const {
+  //   data: allPurchasePackage,
+  //   error: allPurchasePackageError,
+  //   isLoading: allPurchasePackageLoading,
+  // } = useGetAllPackageAndCourseQuery(
+  //   {
+  //     isDelete: ENUM_YN.NO,
+  //     status: 'active',
+  //     user: userInfo?.id,
+  //   },
+  //   { skip: !Boolean(userInfo?.id) },
+  // );
 
-  const {
-    data: allSingleQuiz,
-    error: allSingleQuizError,
-    isLoading: allSingleQuizLoading,
-  } = useGetSubmitAllQuizQuery(
-    {
-      isDelete: ENUM_YN.NO,
-      status: 'active',
-      user: userInfo?.id,
-    },
-    { skip: !Boolean(userInfo?.id) },
-  );
+  // const {
+  //   data: allSingleQuiz,
+  //   error: allSingleQuizError,
+  //   isLoading: allSingleQuizLoading,
+  // } = useGetSubmitAllQuizQuery(
+  //   {
+  //     isDelete: ENUM_YN.NO,
+  //     status: 'active',
+  //     user: userInfo?.id,
+  //   },
+  //   { skip: !Boolean(userInfo?.id) },
+  // );
 
   if (
     PurchaseCourseLoading ||
-    userInfoLoading ||
-    allSingleQuizLoading ||
-    allPurchasePackageLoading
+    userInfoLoading
+    // allSingleQuizLoading ||
+    // allPurchasePackageLoading
   ) {
     return <LoadingSkeleton />;
   }
@@ -128,7 +123,7 @@ export default function StudentDashboardMain() {
         <div className="mx-auto min-h-screen w-full gap-2 p-4">
           <div className="relative top-0 z-10 col-span-12">
             {/* <Chart></Chart> */}
-            <AnimatePresenceWrapper>
+            {/* <AnimatePresenceWrapper>
               <div className="grid grid-cols-1 gap-4 text-[30px] sm:grid-cols-2 md:grid-cols-3 xl:gap-6">
                 <div className="flex h-28 w-full items-center justify-between rounded-xl border bg-[#4e36e2] p-4 text-white shadow">
                   <p className="rounded-md border-2 border-white p-1">
@@ -171,7 +166,7 @@ export default function StudentDashboardMain() {
                   </div>
                 </div>
               </div>
-            </AnimatePresenceWrapper>
+            </AnimatePresenceWrapper> */}
           </div>
           <div>
             {allPurchaseCourse?.data?.length ? (

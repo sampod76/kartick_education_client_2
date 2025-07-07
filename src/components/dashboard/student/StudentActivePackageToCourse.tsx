@@ -1,21 +1,13 @@
 'use client';
-import React from 'react';
-import { useGetAllCourseQuery } from '@/redux/api/adminApi/courseApi';
-import { Error_model_hook } from '@/utils/modalHook';
-import NotFoundCourse from '@/components/ui/NotFound/NotFoundCourse';
 import LoadingSkeleton from '@/components/ui/Loading/LoadingSkeleton';
-import { AllImage } from '@/assets/AllImge';
-import Image from 'next/image';
-import { Dropdown, Menu, Progress, Rate, Space } from 'antd';
-import { EllipsisMiddle } from '@/utils/CutTextElliples';
-import { ICourseData } from '@/types/courseType';
-import formatMongoCreatedAtDate from '@/hooks/formateMongoTimeToLocal';
+import NotFoundCourse from '@/components/ui/NotFound/NotFoundCourse';
+import UMTable from '@/components/ui/UMTable';
+import { useGetAllPurchaseAcceptedPackageQuery } from '@/redux/api/public/purchaseAPi';
 import { getUserInfo } from '@/services/auth.service';
-import { useGetAllPackageAndCourseQuery } from '@/redux/api/sellerApi/addPackageAndCourse';
+import { Error_model_hook } from '@/utils/modalHook';
+import { Space } from 'antd';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import UMTable from '@/components/ui/UMTable';
 
 export default function StudentActivePackageToCourse() {
   const userInfo = getUserInfo() as any;
@@ -23,7 +15,7 @@ export default function StudentActivePackageToCourse() {
   const router = useRouter();
 
   // !auto detection userid
-  const { data, isLoading, error } = useGetAllPackageAndCourseQuery(
+  const { data, isLoading, error } = useGetAllPurchaseAcceptedPackageQuery(
     { user: userInfo.id },
     { skip: !Boolean(userInfo.id) },
   );
@@ -33,6 +25,7 @@ export default function StudentActivePackageToCourse() {
   //   return <LoadingSkeleton number={20} />;
   // }
   const packageData = data?.data || [];
+  console.log(packageData);
   if (error) {
     const errorType: any = error;
     Error_model_hook(errorType?.message);

@@ -9,7 +9,7 @@ import LoadingSkeleton from '../ui/Loading/LoadingSkeleton';
 
 export default function PackageBuilderPage() {
   const { data, isLoading } = useGetAllPackagesV2Query({ status: 'active' });
-  console.log(data, 'data');
+
   const apiData = data?.data || [];
 
   if (isLoading) {

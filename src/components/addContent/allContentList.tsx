@@ -23,7 +23,8 @@ export default function AllContentList() {
     userId: user_id,
     status: 'active',
   });
-
+  const allCourse = data?.data || [];
+  console.log(allCourse, 'data');
   const handleQueryChange = (key: string, value: string) => {
     const currentParams = new URLSearchParams(searchParams.toString());
     currentParams.set(key, value);
@@ -35,7 +36,6 @@ export default function AllContentList() {
     setSelectedMilestoneIds([]); // 🔸 No pre-selected milestones
     setIsModalVisible(true);
   };
-
   const handleModalOk = async () => {
     try {
       console.log('Selected Milestones:', selectedMilestoneIds);
@@ -49,10 +49,13 @@ export default function AllContentList() {
           purchasePackageId: '65b0ca7bee87699d456ede0b',
         },
       }).unwrap();
-      if (res._id) {
-        Success_model('Milestones added successfully');
-        setIsModalVisible(false);
-      }
+      // if (res._id) {
+      // }
+      Success_model('Milestones added successfully');
+      setIsModalVisible(false);
+      setSelectedMilestoneIds([]);
+      setSelectedCourse(null);
+
       console.log('🚀 ~ handleModalOk ~ res:', res);
     } catch (error: any) {
       console.log('🚀 ~ handleModalOk ~ error:', error);
@@ -82,16 +85,16 @@ export default function AllContentList() {
           {isLoading ? (
             <Spin />
           ) : (
-            data?.data?.map((course: any) => (
+            allCourse?.map((purchaseCourse: any) => (
               <div
-                key={course._id}
+                key={purchaseCourse._id}
                 className="flex items-center p-2 border border-gray-200 rounded-lg shadow-sm bg-white hover:shadow-md transition-all"
               >
                 <div className="rounded-md overflow-hidden w-[60px] h-[60px] mb-2">
                   <ImageAnt
                     style={{ width: '60px', height: '60px', objectFit: 'cover' }}
-                    src={fileObjectToLink(course?.img)}
-                    alt={course.title}
+                    src={fileObjectToLink(purchaseCourse?.course?.img)}
+                    alt={purchaseCourse.title}
                     preview={false}
                   />
                 </div>
@@ -99,13 +102,14 @@ export default function AllContentList() {
                 <br />
                 <div>
                   <div className="mx-2 text-sm font-semibold line-clamp-2">
-                    {course.title}
+                    {purchaseCourse?.course?.title}
                   </div>
                   <button
                     className="text-blue-500 mt-1 p-0 h-auto"
-                    onClick={() => openMilestoneModal(course)}
+                    onClick={() => openMilestoneModal(purchaseCourse?.course)}
                   >
-                    + Add Milestones (total={(course?.milestones ?? []).length})
+                    + Add Milestones (already added=
+                    {(purchaseCourse?.permissionMilestones ?? []).length})
                   </button>
                 </div>
               </div>
@@ -113,15 +117,21 @@ export default function AllContentList() {
           )}
         </div>
 
-        <AddMilestoneModal
-          user={user_id}
-          visible={isModalVisible}
-          selectedCourse={selectedCourse}
-          selectedMilestoneIds={selectedMilestoneIds}
-          setSelectedMilestoneIds={setSelectedMilestoneIds}
-          onClose={() => setIsModalVisible(false)}
-          onSave={handleModalOk}
-        />
+        {isModalVisible && selectedCourse._id && user_id && (
+          <AddMilestoneModal
+            user={user_id}
+            visible={isModalVisible}
+            selectedCourse={selectedCourse}
+            selectedMilestoneIds={selectedMilestoneIds}
+            setSelectedMilestoneIds={setSelectedMilestoneIds}
+            onClose={() => {
+              setIsModalVisible(false);
+              setSelectedMilestoneIds([]);
+              setSelectedCourse(null);
+            }}
+            onSave={handleModalOk}
+          />
+        )}
       </div>
     </div>
   );

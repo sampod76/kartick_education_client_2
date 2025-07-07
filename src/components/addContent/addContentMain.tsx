@@ -63,7 +63,6 @@ export default function AddContentMain() {
   const handleModalOk = async () => {
     try {
       console.log('Selected Milestones:', selectedMilestoneIds);
-
       const res = await addMilestone({
         course: selectedCourse._id,
         permissionMilestones: selectedMilestoneIds,
