@@ -3,14 +3,14 @@
 import {
   useAddMilestoneMutation,
   useGetSingleMilestoneQuery,
+  useUpdateMilestoneMutation,
 } from '@/redux/api/adminApi/milestoneApi';
 
 import { Button, Col, Form, Input, message, Row, Select, Spin } from 'antd';
-import { useState } from 'react';
 
-import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
 import ModalComponent from '@/components/Modal/ModalComponents';
 import CreateGradeLevel from '@/components/gradeLevel/CreateUpdateGradeLevel';
+import LoadingSkeleton from '@/components/ui/Loading/LoadingSkeleton';
 import { removeNullUndefinedAndFalsey } from '@/hooks/removeNullUndefinedAndFalsey';
 import { useGetAllGradeLevelQuery } from '@/redux/api/adminApi/gradeLevelApi';
 //
@@ -18,53 +18,68 @@ import { useGetAllGradeLevelQuery } from '@/redux/api/adminApi/gradeLevelApi';
 // courseId -->For update
 const CreateMilestone = ({ courseId, categoryId, title, milestoneId }: any) => {
   const [form] = Form.useForm();
-  const { data: getAllGrade, isLoading: gradeLoading } = useGetAllGradeLevelQuery({});
-  const { data: getMilestone, isLoading } = useGetSingleMilestoneQuery(milestoneId);
+  const { data: getAllGrade, isLoading: gradeLoading } = useGetAllGradeLevelQuery({
+    limit: 100,
+    status: 'active',
+    sortBy: 'serial_number',
+    sortOrder: 'asc',
+  });
+  const { data: getMilestone, isLoading } = useGetSingleMilestoneQuery(milestoneId, {
+    skip: !Boolean(milestoneId),
+  });
   const getAllGradeLevel = getAllGrade?.data?.map((item: any) => {
     return {
       label: item?.title,
       value: item?._id,
     };
   });
-  const { userInfo, userInfoLoading } = useGlobalContext();
-
-  const [isReset, setIsReset] = useState(false);
 
   const [addMilestone, { isLoading: serviceLoading }] = useAddMilestoneMutation();
+  const [updateMilestone, { isLoading: uLoading }] = useUpdateMilestoneMutation();
 
   const onSubmit = async (values: any) => {
-    console.log('🚀 ~ onSubmit ~ values:', values);
-    if (!courseId) {
-      message.error('Course must be selected');
-      return;
-    }
-
-    removeNullUndefinedAndFalsey(values);
-
-    const MilestoneData: any = {
-      ...values,
-      category: categoryId,
-      course: courseId,
-    };
-    if (values.milestone_number) {
-      MilestoneData['milestone_number'] = Number(values.milestone_number);
-    }
-
-    removeNullUndefinedAndFalsey(MilestoneData);
-
     try {
-      const res = await addMilestone(MilestoneData).unwrap();
-      if (res?.success === false) {
-        message.error(res?.message);
-      } else {
+      if (getMilestone._id) {
+        const MilestoneData: any = {
+          ...values,
+        };
+        if (values.milestone_number) {
+          MilestoneData['milestone_number'] = Number(values.milestone_number);
+        }
+        removeNullUndefinedAndFalsey(MilestoneData);
+        const resUpdate = await updateMilestone({
+          id: getMilestone._id,
+          data: MilestoneData,
+        }).unwrap();
+        message.success('Successfully Update Milestone');
+      }
+      //------------ create milestone --------------
+      else {
+        if (!courseId) {
+          message.error('Course must be selected');
+          return;
+        }
+        const MilestoneData: any = {
+          ...values,
+          category: categoryId,
+          course: courseId,
+        };
+        if (values.milestone_number) {
+          MilestoneData['milestone_number'] = Number(values.milestone_number);
+        }
+
+        removeNullUndefinedAndFalsey(MilestoneData);
+        const res = await addMilestone(MilestoneData).unwrap();
         message.success('Successfully added Milestone');
-        setIsReset(true);
         form.resetFields();
       }
     } catch (error: any) {
       message.error(error?.message);
     }
   };
+  if (isLoading) {
+    return <LoadingSkeleton />;
+  }
 
   return (
     <>
@@ -78,7 +93,7 @@ const CreateMilestone = ({ courseId, categoryId, title, milestoneId }: any) => {
           padding: '1rem',
         }}
       >
-        {courseId ? (
+        {courseId || milestoneId ? (
           <div>
             <h1 className="my-2 text-xl font-bold">
               Create Milestone <br />
@@ -103,7 +118,7 @@ const CreateMilestone = ({ courseId, categoryId, title, milestoneId }: any) => {
               >
                 <div className="flex flex-wrap items-center gap-3">
                   <Col xs={24} md={12} lg={12} style={{}}>
-                    <Form.Item label="Select Grade level" name="grade_level_id">
+                    <Form.Item required label="Select Grade level" name="grade_level_id">
                       <Select
                         size="large"
                         loading={gradeLoading}
@@ -141,11 +156,11 @@ const CreateMilestone = ({ courseId, categoryId, title, milestoneId }: any) => {
               </div>
 
               <div className="mx-auto w-fit mt-4 text-center">
-                {serviceLoading ? (
+                {serviceLoading || uLoading ? (
                   <Spin />
                 ) : (
                   <Button type="primary" htmlType="submit">
-                    Create Milestone
+                    {getMilestone?._id ? 'Update' : 'Add'} Milestone
                   </Button>
                 )}
               </div>

@@ -67,6 +67,16 @@ export const gradeLevelApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [tagTypes.GradeLevel],
     }),
+    updateGradeLevelSerialNumber: build.mutation({
+      query: ({ data }) => {
+        return {
+          url: `${URL}/serialnumber-update`,
+          method: 'PATCH',
+          data: data,
+        };
+      },
+      invalidatesTags: [tagTypes.GradeLevel],
+    }),
   }),
   overrideExisting: true,
 });
@@ -77,4 +87,6 @@ export const {
   useGetAllGradeLevelQuery,
   useGetSingleGradeLevelQuery,
   useUpdateGradeLevelMutation,
+  //
+  useUpdateGradeLevelSerialNumberMutation,
 } = gradeLevelApi;

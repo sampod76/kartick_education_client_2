@@ -1,7 +1,7 @@
 'use client';
 import UMTable from '@/components/ui/UMTable';
 import { useDebounced } from '@/redux/hooks';
-import { DrawerProps, Dropdown, Menu, Space, message } from 'antd';
+import { Dropdown, Menu, Space } from 'antd';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -14,6 +14,8 @@ import {
   useGetAllMilestoneQuery,
 } from '@/redux/api/adminApi/milestoneApi';
 import { useGlobalContext } from '../ContextApi/GlobalContextApi';
+import ModalComponent from '../Modal/ModalComponents';
+import CreateMilestone from './create/createAndUpdateMilestoned';
 
 const MileStoneList = ({
   queryObject,
@@ -26,10 +28,6 @@ const MileStoneList = ({
   };
 }) => {
   const { userInfo } = useGlobalContext();
-  //
-  const [openDrawer, setOpenDrawer] = useState(false);
-  const [placement, setPlacement] = useState<DrawerProps['placement']>('right');
-  //
 
   const query: Record<string, any> = {};
 
@@ -40,8 +38,7 @@ const MileStoneList = ({
   const [sortBy, setSortBy] = useState<string>(queryObject?.sortBy || '');
   const [sortOrder, setSortOrder] = useState<string>(queryObject?.setSortOrder || '');
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [open, setOpen] = useState<boolean>(false);
-  const [adminId, setAdminId] = useState<string>('');
+
   const [filterValue, setFilterValue] = useState('');
 
   query['limit'] = size;
@@ -84,8 +81,6 @@ const MileStoneList = ({
           const res = await deleteMilestone(id).unwrap();
 
           if (res?.success == false) {
-            // message.success("Admin Successfully Deleted!");
-            // setOpen(false);
             Error_model_hook(res?.message);
           } else {
             Success_model('Milestone Successfully Deleted');
@@ -120,17 +115,12 @@ const MileStoneList = ({
     {
       title: 'Name',
       dataIndex: 'title',
-      // ellipsis: true,
-      // sorter: true,
+
       render: function (data: any) {
         return <p className="line-clamp-2">{data}</p>;
       },
     },
-    // {
-    //   title: 'Description',
-    //   dataIndex: 'short_description',
-    //   ellipsis: true,
-    // },
+
     {
       title: 'S/N',
       dataIndex: 'milestone_number',
@@ -141,28 +131,15 @@ const MileStoneList = ({
       title: 'Grade level',
       dataIndex: ['gradeLevelsDetails', 'title'],
       ellipsis: true,
-      // render: function (data: any) {
-      //   return <>{data?.title}</>;
-      // },
     },
     {
       title: 'Total module',
       dataIndex: ['totalModules'],
       ellipsis: true,
-      // render: function (data: any) {
-      //   return <>{data?.title}</>;
-      // },
+
       width: 150,
     },
-    // {
-    //   title: 'Created at',
-    //   dataIndex: 'createdAt',
-    //   width: 150,
-    //   render: function (data: any) {
-    //     return data && dayjs(data).format('MMM D, YYYY hh:mm A');
-    //   },
-    //   sorter: true,
-    // },
+
     {
       title: 'Action',
       // fixed: "right",
@@ -180,9 +157,19 @@ const MileStoneList = ({
                     </Link>
                   </Menu.Item>
                   <Menu.Item key="edit">
-                    <Link href={`/${userInfo?.role}/milestone/edit/${record._id}`}>
+                    {/* <Link href={`/${userInfo?.role}/milestone/edit/${record._id}`}>
                       Edit
-                    </Link>
+                    </Link> */}
+                    <ModalComponent
+                      button={<button className="text-blue-700">Edit</button>}
+                    >
+                      <CreateMilestone
+                        milestoneId={record._id}
+                        // courseId={record?.course?._id || record?.course}
+                        // categoryId={record?.category?._id || record?.category}
+                        // title={record.title}
+                      />
+                    </ModalComponent>
                   </Menu.Item>
                   <Menu.Item key="Material">
                     <Link href={`/${userInfo?.role}/milestone/material/${record._id}`}>
@@ -225,35 +212,6 @@ const MileStoneList = ({
     setSortBy(field as string);
     setSortOrder(order === 'ascend' ? 'asc' : 'desc');
   };
-
-  const resetFilters = () => {
-    setSortBy('');
-    setSortOrder('');
-    setSearchTerm('');
-  };
-
-  const deleteAdminHandler = async (id: string) => {
-    // console.log(id);
-    try {
-      const res = await deleteMilestone(id);
-      if (res) {
-        message.success('Milestone Successfully Deleted!');
-        setOpen(false);
-      }
-    } catch (error: any) {
-      Error_model_hook(error.message);
-    }
-  };
-
-  //---------------------------------
-  const showDrawer = () => {
-    setOpenDrawer(true);
-  };
-  const onClose = () => {
-    setOpenDrawer(false);
-  };
-
-  //--------------------------------
 
   return (
     <div

@@ -208,6 +208,7 @@ const Course_labelList = () => {
             width: '20%',
           }}
         />
+
         <div className="space-x-2">
           <Link href={`/${userInfo?.role}/course_label/create`}>
             <Button size="middle" type="default">

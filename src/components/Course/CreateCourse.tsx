@@ -54,7 +54,12 @@ const CreateCourse = ({ setOpen }: any) => {
   const { data: findSeller, isLoading: sellerLoading } = useGetSingleSellerQuery(id, {
     skip: disable,
   });
-  const { data: getAllGrade, isLoading: gradeLoading } = useGetAllGradeLevelQuery({});
+  const { data: getAllGrade, isLoading: gradeLoading } = useGetAllGradeLevelQuery({
+    limit: 9000,
+    status: ENUM_STATUS.ACTIVE,
+    sortBy: 'serial_number',
+    sortOrder: 'asc',
+  });
   // console.log(findSeller, 'findSeller');
   const [category, setCategory] = useState('');
   const [textEditorValue, setTextEditorValue] = useState('');
