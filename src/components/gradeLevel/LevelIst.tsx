@@ -14,6 +14,7 @@ import { ReloadOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Input, Menu, Space } from 'antd';
 import { useState } from 'react';
 import { useGlobalContext } from '../ContextApi/GlobalContextApi';
+import GradeSerialUpdate from '../course_label/GradeSerialNuberUpdate';
 import PDFViewer from '../ui/PdfViewer';
 import CreateUpdateGradeLevel from './CreateUpdateGradeLevel';
 
@@ -24,8 +25,8 @@ const GradeLevelList = ({ categoryId }: { categoryId?: string }) => {
   const [deleteGradeLevel, { isLoading: deleteLoading }] = useDeleteGradeLevelMutation();
   const [page, setPage] = useState<number>(1);
   const [size, setSize] = useState<number>(10);
-  const [sortBy, setSortBy] = useState<string>('');
-  const [sortOrder, setSortOrder] = useState<string>('');
+  const [sortBy, setSortBy] = useState<string>('serial_number');
+  const [sortOrder, setSortOrder] = useState<string>('asc');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [filterValue, setFilterValue] = useState(categoryId || '');
   query['limit'] = size;
@@ -113,6 +114,11 @@ const GradeLevelList = ({ categoryId }: { categoryId?: string }) => {
             <Dropdown
               overlay={
                 <Menu>
+                  <Menu.Item key="update">
+                    <ModalComponent button={<p>Edit</p>}>
+                      <CreateUpdateGradeLevel id={record?._id} />
+                    </ModalComponent>
+                  </Menu.Item>
                   <Menu.Item
                     key="delete"
                     onClick={() => {
@@ -120,11 +126,6 @@ const GradeLevelList = ({ categoryId }: { categoryId?: string }) => {
                     }}
                   >
                     Delete
-                  </Menu.Item>
-                  <Menu.Item key="update">
-                    <ModalComponent buttonText="Edit">
-                      <CreateUpdateGradeLevel id={record?._id} />
-                    </ModalComponent>
                   </Menu.Item>
                 </Menu>
               }
@@ -172,6 +173,9 @@ const GradeLevelList = ({ categoryId }: { categoryId?: string }) => {
         <div>
           <ModalComponent buttonText="Create">
             <CreateUpdateGradeLevel />
+          </ModalComponent>
+          <ModalComponent buttonText="Position update">
+            <GradeSerialUpdate />
           </ModalComponent>
           {(!!sortBy || !!sortOrder || !!searchTerm) && (
             <Button style={{ margin: '0px 5px' }} type="default" onClick={resetFilters}>

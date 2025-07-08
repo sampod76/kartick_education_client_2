@@ -1,15 +1,8 @@
 'use client';
 import { authKey } from '@/constants/storageKey';
-import { IDecodedInfo, getUserInfo } from '@/services/auth.service';
+import { getUserInfo, IDecodedInfo } from '@/services/auth.service';
 import { getFromLocalStorage } from '@/utils/local-storage';
-import React, {
-  createContext,
-  Dispatch,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 export const GlobalContext = createContext({});
 export const useGlobalContext = () => {
   return useContext(GlobalContext) as IContextType;
