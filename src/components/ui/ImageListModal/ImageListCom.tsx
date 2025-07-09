@@ -5,6 +5,7 @@ import React from 'react';
 import { FileUploaderUi } from '../FileUploader/FileUploaderUi';
 import VimeoFileUpload from '../FileUploader/VimeoFileUpload';
 import ImageListShow from './imageListShow';
+import VimeoVideoList from './vimeoVideoList';
 const { Option } = Select;
 
 interface ImageModalProps {
@@ -21,13 +22,15 @@ const ImageListInServer: React.FC<ImageModalProps> = ({
   const router = useRouter();
   const path = usePathname();
   const searchQuery = useSearchParams();
-  const mainTab = searchQuery.get('mainTab');
+  const [mainTab, setMainTeb] = React.useState('1');
+  // const mainTab = searchQuery.get('mainTab');
   const secondTab = searchQuery.get('secondTab');
   const displayImages: any[] = [];
   const handleMainTabChange = (activeKey: string) => {
     const currentParams = new URLSearchParams(searchQuery.toString());
     currentParams.set('mainTab', activeKey);
-    router.replace(`${path}?${currentParams.toString()}`);
+    // router.replace(`${path}?${currentParams.toString()}`);
+    setMainTeb(activeKey);
   };
   const items = [
     // {
@@ -45,6 +48,11 @@ const ImageListInServer: React.FC<ImageModalProps> = ({
           setAddedImages={setAddedImages}
         />
       ),
+    },
+    {
+      key: '5',
+      label: 'Search vimeo Files',
+      children: <VimeoVideoList />,
     },
     {
       key: '2',

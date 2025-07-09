@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { baseApi } from './api/baseApi';
+import { vimeoBaseApi } from './api/vimeoBaseApi';
 import { reducer } from './rootReducer';
 
 export const store = configureStore({
   reducer,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(baseApi.middleware),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(baseApi.middleware).concat(vimeoBaseApi.middleware),
   devTools: true,
 });
 
