@@ -39,7 +39,7 @@ const CreateMilestone = ({ courseId, categoryId, title, milestoneId }: any) => {
 
   const onSubmit = async (values: any) => {
     try {
-      if (getMilestone._id) {
+      if (getMilestone?._id) {
         const MilestoneData: any = {
           ...values,
         };

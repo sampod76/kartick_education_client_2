@@ -35,7 +35,7 @@ const MileStoneList = ({
 
   const [page, setPage] = useState<number>(1);
   const [size, setSize] = useState<number>(10);
-  const [sortBy, setSortBy] = useState<string>(queryObject?.sortBy || '');
+  const [sortBy, setSortBy] = useState<string>(queryObject?.sortBy || 'milestone_number');
   const [sortOrder, setSortOrder] = useState<string>(queryObject?.setSortOrder || '');
   const [searchTerm, setSearchTerm] = useState<string>('');
 
