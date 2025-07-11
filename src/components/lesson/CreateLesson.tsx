@@ -10,12 +10,12 @@ import { removeNullUndefinedAndFalsey } from '@/hooks/removeNullUndefinedAndFals
 import { IFileAfterUpload } from '@/types/globalType';
 import { multipleFilesUploaderS3 } from '@/utils/handelFileUploderS3';
 import { isValidJson } from '@/utils/jsonUtls';
+import VimeoPlayer from '@/utils/vimoPlayer';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Col, Form, Input, Select, Upload } from 'antd';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { useGlobalContext } from '../ContextApi/GlobalContextApi';
-import FileContainShow from '../Course/FileContaintShow';
 import ModalComponent from '../Modal/ModalComponents';
 import ImageListInServer from '../ui/ImageListModal/ImageListCom';
 const TextEditorNotSetForm = dynamic(
@@ -176,7 +176,7 @@ const CreateLesson = ({
                   />
                 </ModalComponent>
               </div>
-              <Form.Item
+              {/* <Form.Item
                 // label="Custom Video JSON Format"
                 name="customVideos"
                 className=""
@@ -194,28 +194,33 @@ const CreateLesson = ({
                     <FileContainShow files={[JSON.parse(customVideo)]} />
                   </div>
                 )}
-              </Form.Item>
+              </Form.Item> */}
               <div>
                 {videos.map((video, index) => (
-                  <div key={index} style={{ display: 'flex', marginBottom: '10px' }}>
-                    <Select
-                      value={video.platform}
-                      onChange={(value) => handleVideoChange(index, 'platform', value)}
-                      style={{ width: '20%', marginRight: '10px' }}
-                    >
-                      <Option value="vimeo">Vimeo</Option>
-                      <Option value="youtube">Youtube</Option>
-                    </Select>
-                    <Input
-                      placeholder="Enter Video URL"
-                      value={video.link}
-                      onChange={(e) => handleVideoChange(index, 'link', e.target.value)}
-                      style={{ width: '70%', marginRight: '10px' }}
-                    />
-                    <MinusCircleOutlined
-                      onClick={() => removeVideo(index)}
-                      style={{ fontSize: '20px', color: 'red' }}
-                    />
+                  <div key={index}>
+                    <div style={{ display: 'flex', marginBottom: '10px' }}>
+                      <Select
+                        value={video.platform}
+                        onChange={(value) => handleVideoChange(index, 'platform', value)}
+                        style={{ width: '20%', marginRight: '10px' }}
+                      >
+                        <Option value="vimeo">Vimeo</Option>
+                        <Option value="youtube">Youtube</Option>
+                      </Select>
+                      <Input
+                        placeholder="Enter Video URL"
+                        value={video.link}
+                        onChange={(e) => handleVideoChange(index, 'link', e.target.value)}
+                        style={{ width: '70%', marginRight: '10px' }}
+                      />
+                      <MinusCircleOutlined
+                        onClick={() => removeVideo(index)}
+                        style={{ fontSize: '20px', color: 'red' }}
+                      />
+                    </div>
+                    {video.platform === 'vimeo' && video.link && (
+                      <VimeoPlayer width={450} height={450} link={video.link} />
+                    )}
                   </div>
                 ))}
                 <div className="flex items-center justify-center">

@@ -35,10 +35,15 @@ export async function GET(req: NextRequest) {
 
     const raw = await res.json();
 
+    // Optionally ensure owner is you (if somehow needed)
+    const strict = raw.data.filter(
+      (video: { user: { uri: string } }) => video.user?.uri === '/users/242052702', // optional
+    );
+
     return new Response(
       JSON.stringify({
-        data: raw.data,
-        total: raw.total,
+        data: strict,
+        total: strict?.length,
       }),
       { status: 200 },
     );

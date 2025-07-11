@@ -74,7 +74,7 @@ export default function VimeoVideoList() {
       {(isLoading || isFetching) && <LoadingForDataFetch />}
 
       {/* Video Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4  gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-4">
         {videoList.map((video) => {
           const thumbnail = video?.pictures?.sizes?.[2]?.link || '';
           return (
@@ -88,12 +88,12 @@ export default function VimeoVideoList() {
                   height={300}
                   width={300}
                   alt={typeof video.name === 'string' ? video.name : 'Vimeo Video'}
-                  className="w-full h-32 object-cover cursor-pointer"
+                  className="w-full  object-cover cursor-pointer"
                   onClick={() => handleOpenModal(video.link)}
                 />
               </Tooltip>
               <div className="p-2 bg-white">
-                <p className="text-sm font-medium truncate">
+                <p className="text-sm font-medium ">
                   {typeof video.name === 'string' ? video.name : 'Untitled'}
                 </p>
 
