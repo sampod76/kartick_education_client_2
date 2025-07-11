@@ -2,13 +2,13 @@
 'use client';
 import UMTable from '@/components/ui/UMTable';
 import { useDebounced } from '@/redux/hooks';
-import { Dropdown, Menu, Space } from 'antd';
+import { Dropdown, Menu, message, Space } from 'antd';
 import Link from 'next/link';
 import { useState } from 'react';
 
 import dayjs from 'dayjs';
 
-import { Error_model_hook, Success_model, confirm_modal } from '@/utils/modalHook';
+import { confirm_modal, Error_model_hook, Success_model } from '@/utils/modalHook';
 import Image from 'next/image';
 
 import HeadingUI from '@/components/ui/dashboardUI/HeadingUI';
@@ -19,6 +19,7 @@ import {
   useDeleteSingleQuizMutation,
   useGetAllSingleQuizQuery,
 } from '@/redux/api/adminApi/singleQuizApi';
+import { CopyOutlined } from '@ant-design/icons';
 import { useGlobalContext } from '../ContextApi/GlobalContextApi';
 const SingleQuizList = ({
   categoryId,
@@ -263,7 +264,28 @@ const SingleQuizList = ({
           },
         ]}
       /> */}
-      <HeadingUI>Single Quiz List</HeadingUI>
+      <div className="flex items-center justify-between">
+        <HeadingUI>Single Quiz List</HeadingUI>
+        <p
+          style={{
+            cursor: 'pointer',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '4px',
+          }}
+          onClick={async () => {
+            if (quizId) {
+              await navigator.clipboard.writeText(quizId);
+
+              message.success('Quiz ID copied!');
+            }
+          }}
+          title="Copy Quiz ID"
+        >
+          {quizId}
+          <CopyOutlined />
+        </p>
+      </div>
 
       <UMTable
         loading={isLoading}

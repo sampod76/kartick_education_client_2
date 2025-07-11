@@ -10,22 +10,50 @@ export async function GET(req: NextRequest) {
       status: 400,
     });
   }
-
+  const token = process.env.VIMEO_ACCESS_TOKEN;
   try {
     const res = await fetch(
-      `https://api.vimeo.com/videos?query=${encodeURIComponent(query)}&per_page=10&sort=relevant&direction=desc`,
+      `https://api.vimeo.com/me/videos?query=${encodeURIComponent(query)}&per_page=10`,
       {
         headers: {
-          //   Authorization: `Bearer ${process.env.VIMEO_ACCESS_TOKEN}`,
-          Authorization: `Bearer 2f7f420a6604b9d24f1bfb437c292b08`,
+          Authorization: `Bearer ${token}`,
           Accept: 'application/vnd.vimeo.*+json;version=3.4',
         },
       },
     );
 
-    const data = await res.json();
-    return new Response(JSON.stringify(data), { status: 200 });
-  } catch (error) {
-    return new Response(JSON.stringify({ error: 'Vimeo API error' }), { status: 500 });
+    if (!res.ok) {
+      const text = await res.text();
+      console.error('Vimeo API error response:', text);
+      return new Response(
+        JSON.stringify({ error: 'Failed to fetch Vimeo videos', details: text }),
+        {
+          status: res.status,
+        },
+      );
+    }
+
+    const raw = await res.json();
+
+    // Optionally ensure owner is you (if somehow needed)
+    const strict = raw.data.filter(
+      (video: { user: { uri: string } }) => video.user?.uri === '/users/242052702', // optional
+    );
+
+    return new Response(
+      JSON.stringify({
+        data: strict,
+        total: strict?.length,
+      }),
+      { status: 200 },
+    );
+  } catch (error: any) {
+    console.error('Unexpected error:', error);
+    return new Response(
+      JSON.stringify({ error: 'Unexpected server error', message: error?.message }),
+      {
+        status: 500,
+      },
+    );
   }
 }
