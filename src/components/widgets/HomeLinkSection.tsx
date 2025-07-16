@@ -119,7 +119,7 @@ const HomeLinkSection = () => {
                     className="text-black w-full whitespace-break-spaces xl:whitespace-nowrap hover:text-white"
                     href={'/home/iblossom-private-academy'}
                   >
-                    iBLossomLearn Private Academy
+                    iBLossomLearn Private School
                   </Link>
                 </Dropdown>
               </div>
