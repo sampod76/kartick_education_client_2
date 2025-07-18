@@ -13,16 +13,22 @@ export default function VimeoVideoList() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [searchTerm, setSearchTerm] = useState('');
-
+  const query: Record<string, any> = {};
   const debouncedSearchTerm = useDebounced({
     searchQuery: searchTerm,
     delay: 600,
   });
 
+  if (!!debouncedSearchTerm) {
+    query['searchTerm'] = debouncedSearchTerm;
+  }
+
   const { data, isFetching, isLoading, refetch } = useSearchVideosByNameQuery(
-    debouncedSearchTerm,
+    query?.searchTerm,
     {
       skip: !debouncedSearchTerm && !searchTerm,
+      refetchOnMountOrArgChange: true,
+      refetchOnReconnect: true,
     },
   );
 

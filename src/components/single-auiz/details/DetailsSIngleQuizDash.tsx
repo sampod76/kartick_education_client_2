@@ -1,5 +1,6 @@
 'use client';
 import LoadingSkeleton from '@/components/ui/Loading/LoadingSkeleton';
+import MathDisplay from '@/components/Utlis/MathDisplay';
 import { useGetSingleOneQuizQuery } from '@/redux/api/adminApi/singleQuizApi';
 import { IAnswer } from '@/types/quiz/singleQuizType';
 import TextToSpeech from '@/utils/TextToSpeech';
@@ -31,10 +32,16 @@ export default function ViewSIngleQuizDash({ singleQuizId }: { singleQuizId: str
           </div>
 
           <div className="flex justify-between items-center my-2 pr-4">
-            <p className={`lg:text-lg font-[550] mb-2 text-base mx-2`}>
-              <TextToSpeech text={quiz?.title} />
-              Question : {quiz?.title}
-            </p>
+            {quiz.type === 'math' ? (
+              <>
+                <MathDisplay content={quiz?.title} />
+              </>
+            ) : (
+              <p className={`lg:text-lg font-[550] mb-2 text-base mx-2`}>
+                <TextToSpeech text={quiz?.title} />
+                Question {quiz?.title}
+              </p>
+            )}
           </div>
           {/*  */}
           <div className="flex flex-wrap mx-5">
@@ -168,6 +175,78 @@ export default function ViewSIngleQuizDash({ singleQuizId }: { singleQuizId: str
               })}
             </Checkbox.Group>
           )}
+          {/* {quiz?.type === 'math' && (
+            <Radio.Group
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1rem',
+              }}
+              name="radiogroup"
+              defaultValue={submittedDefaultData?.submitAnswers[0]} // Set the default value based on isDefaultValue
+              onChange={(e) => handleAnswerChange(index + 1, e.target.value)}
+            >
+              {quiz?.answers?.map((option: any) => {
+                const isCorrect = allCorrectAnswer?.find(
+                  (id: string) => id === option?._id,
+                );
+                const isSubmitted = submittedDefaultData?.submitAnswers?.find(
+                  (item: string) => item === option?._id,
+                );
+
+                return (
+                  <Radio
+                    key={option?._id}
+                    value={option?._id}
+                    // defaultChecked={
+                    //   submittedDefaultData?.submitAnswers[0] === option?._id &&
+                    //   true
+                    // }
+                  >
+                    <div
+                      className={`border-2 rounded-xl p-2 w-full 
+                              
+                            ${
+                              submittedDefaultData?.submitAnswers[0] === option?._id
+                                ? 'bg-slate-600 text-white'
+                                : ''
+                            }
+                            ${
+                              submittedDefaultData?.singleQuiz
+                                ? isCorrect
+                                  ? ' border-2 border-green-600'
+                                  : isSubmitted === option?._id
+                                    ? 'border-2 border-red-500 '
+                                    : ''
+                                : ''
+                            }
+                            `}
+                    >
+                      <div className="flex gap-1">
+                        <>
+                          <MathDisplay content={option?.title} />
+                        </>
+                      </div>
+                      <div className="flex flex-wrap w-full">
+                        {option?.imgs?.map(
+                          (img: string, key: number, allimages: any[]) => (
+                            <Image
+                              key={key}
+                              src={img}
+                              width={700}
+                              height={700}
+                              className={`w-96 lg:w-full  max-h-24 lg:max-h-44`}
+                              alt=""
+                            ></Image>
+                          ),
+                        )}
+                      </div>
+                    </div>
+                  </Radio>
+                );
+              })}
+            </Radio.Group>
+          )} */}
         </div>
       }
     </div>
