@@ -21,7 +21,7 @@ import { CiLogin } from 'react-icons/ci';
 import { FaPage4 } from 'react-icons/fa';
 import { GiJetPack } from 'react-icons/gi';
 import { MdAssignment, MdMarkEmailRead } from 'react-icons/md';
-import { PiPackageDuotone } from 'react-icons/pi';
+import { PiCertificateLight, PiPackageDuotone } from 'react-icons/pi';
 import { USER_ROLE } from './role';
 export const dashboardItems = (role: string, setCollapsed?: any) => {
   const defaultSidebarItems: MenuProps['items'] = [
@@ -39,6 +39,7 @@ export const dashboardItems = (role: string, setCollapsed?: any) => {
       key: `/dashboard`,
       icon: <HomeOutlined />,
     },
+
     {
       label: 'Profile',
       key: 'profile',
@@ -321,6 +322,24 @@ export const dashboardItems = (role: string, setCollapsed?: any) => {
   ];
   const adminSidebarItems: MenuProps['items'] = [
     ...defaultSidebarItems,
+    {
+      label: 'Certifyme',
+      key: 'certifyme',
+      icon: <PiCertificateLight />,
+      children: [
+        {
+          label: (
+            <Link
+              onClick={() => (setCollapsed ? setCollapsed(false) : null)}
+              href={`/${role}/certifyme/send`}
+            >
+              Send certifyme
+            </Link>
+          ),
+          key: `/${role}/certifyme`,
+        },
+      ],
+    },
     {
       label: (
         <Link
