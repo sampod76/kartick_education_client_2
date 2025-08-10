@@ -17,8 +17,8 @@ export type IContextType = {
 };
 export default function GlobalContextApi({ children }: { children: React.ReactNode }) {
   // const userInfo = getUserInfo() as any;
-  const pathname = usePathname();
-  const search = useSearchParams();
+  // const pathname = usePathname();
+  // const search = useSearchParams();
 
   const [userInfoLoading, setUserInfoLoading] = useState(true);
   const [userInfo, setUserInfo] = useState<Partial<IDecodedInfo>>({
@@ -28,17 +28,18 @@ export default function GlobalContextApi({ children }: { children: React.ReactNo
   });
   const [refetch, setRefetch] = useState(false);
 
-  useTimeTracker({
-    disabled: userInfo.role !== 'student',
-    page: pathname,
-    milestoneId: search.get('milestoneId') || search.get('milestone_id') || '',
-    heartbeatSec: process.env.NEXT_PUBLIC_TIME_TRACKER_SECOND
-      ? Number(process.env.NEXT_PUBLIC_TIME_TRACKER_SECOND)
-      : 300, // 2 minutes
-    idleAfterSec: 60, // idle হলে কাউন্ট বন্ধ
-    // onTickSeconds: setSeconds,
-    // userId: "student-123" // কুকি না থাকলে fallback
-  });
+  // useTimeTracker({
+  //   disabled: userInfo.role !== 'student',
+  //   page: pathname,
+  //   userId: userInfo.id,
+  //   milestoneId: search.get('milestoneId') || search.get('milestone_id') || '',
+  //   heartbeatSec: process.env.NEXT_PUBLIC_TIME_TRACKER_SECOND
+  //     ? Number(process.env.NEXT_PUBLIC_TIME_TRACKER_SECOND)
+  //     : 300, // 2 minutes
+  //   idleAfterSec: 60, // idle হলে কাউন্ট বন্ধ
+  //   // onTickSeconds: setSeconds,
+  //   // userId: "student-123" // কুকি না থাকলে fallback
+  // });
   // const memoizedFetchUserInfo = useMemo(
   //   () => async () => {
   //     const userInfo = await getUserInfo();

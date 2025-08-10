@@ -11,6 +11,7 @@ import GlobalContextApi from '@/components/ContextApi/GlobalContextApi';
 import { useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import TimeTrackerMount from '@/components/timerTracker/timerTrackerCom';
 // import { Head } from "next/document";
 // import { CookiesProvider } from "react-cookie";
 const inter = Noto_Sans({ subsets: ['latin'], weight: ['400'] });
@@ -48,6 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               className={`mx-auto max-w-[1850px]`}
             >
               {children}
+              <TimeTrackerMount />
             </body>
           </html>
         </DndProvider>

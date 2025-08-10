@@ -2,33 +2,41 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import axios from 'axios';
+import { useAddTimeTrackerMutation } from '@/redux/api/timeTracker';
 
 type BatchItem = { page: string; milestoneId?: string | null; seconds: number };
 
 type Opts = {
-  apiUrl?: string; // default: /api/save-time
+  apiUrl?: string; // RTK mutation এর জন্য (same as your existing endpoint path)
+  beaconUrl?: string; // ABSOLUTE URL strongly recommended for sendBeacon/keepalive
   heartbeatSec?: number; // default: 120
   idleAfterSec?: number; // default: 60
   maxSecsPerBeat?: number; // per-beat cap per page, default: 300
-  page?: string; // current pathname (e.g., usePathname())
-
+  page?: string;
   milestoneId?: string | null;
-  userId?: string | null; // dev fallback if cookie missing
-  onTickSeconds?: (s: number) => void; // seconds on current page (for UI)
-  disabled: boolean;
+  userId?: string | null;
+  authToken?: string | null; // OPTIONAL: cross-origin হলে include করুন (server will verify)
+  onTickSeconds?: (s: number) => void;
+  disabled?: boolean;
+  maxBeaconBytes?: number; // default ~ 60000 (keepalive safe limit)
 };
 
 export function useTimeTracker(opts: Opts = { disabled: false }) {
+  const [addTimeTracker] = useAddTimeTrackerMutation();
+
   const {
-    apiUrl = '/api/save-time',
+    apiUrl = '/time-tracker',
+    beaconUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/time-tracker`,
     heartbeatSec = 120,
     idleAfterSec = 60,
     maxSecsPerBeat = 300,
     page,
     milestoneId = null,
     userId = null,
+    authToken = null,
     onTickSeconds,
+    disabled = false,
+    maxBeaconBytes = 60000,
   } = opts;
 
   // ------------ IDs ------------
@@ -36,6 +44,8 @@ export function useTimeTracker(opts: Opts = { disabled: false }) {
   const sessionIdRef = useRef<string>(getOrSetSessionId());
 
   function getOrSetTabId() {
+    if (typeof window === 'undefined') return null; // SSR: skip
+
     let id = sessionStorage.getItem('tt.tabId');
     if (!id) {
       id = crypto.randomUUID?.() ?? String(Math.random());
@@ -44,6 +54,7 @@ export function useTimeTracker(opts: Opts = { disabled: false }) {
     return id;
   }
   function getOrSetSessionId() {
+    if (typeof window === 'undefined') return null; // SSR: skip
     let id = localStorage.getItem('tt.sessionId');
     if (!id) {
       id = crypto.randomUUID?.() ?? String(Math.random());
@@ -54,7 +65,7 @@ export function useTimeTracker(opts: Opts = { disabled: false }) {
 
   // ------------ state/clocks ------------
   const startTs = useRef<number>(Date.now());
-  const currentPageMs = useRef<number>(0); // শুধুমাত্র current পেজের accumulator (UI/debug)
+  const currentPageMs = useRef<number>(0);
   const lastActivity = useRef<number>(Date.now());
   const active = useRef<boolean>(true);
 
@@ -70,8 +81,8 @@ export function useTimeTracker(opts: Opts = { disabled: false }) {
   const ownerTimer = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // storage keys
-  const PAGE_ACC_KEY = 'tt.pageAcc.v1'; // { [page]: seconds }
-  const QUEUE_KEY = 'tt.queue.v1'; // queued batches: Array<{ batch: BatchItem[], meta... }>
+  const PAGE_ACC_KEY = 'tt.pageAcc.v1';
+  const QUEUE_KEY = 'tt.queue.v1';
 
   const isVisible = () => document.visibilityState === 'visible';
   const isIdle = () =>
@@ -129,7 +140,7 @@ export function useTimeTracker(opts: Opts = { disabled: false }) {
     const cur = readOwner();
     if (!cur || cur.until < now || cur.tabId === tabIdRef.current) {
       isOwner.current = true;
-      writeOwner({ tabId: tabIdRef.current, until: now + OWNER_TTL_MS });
+      writeOwner({ tabId: tabIdRef.current as string, until: now + OWNER_TTL_MS });
       ensureHeartbeat();
       return true;
     }
@@ -139,7 +150,7 @@ export function useTimeTracker(opts: Opts = { disabled: false }) {
   };
   const ownerBeat = () => {
     if (isOwner.current && isVisible())
-      writeOwner({ tabId: tabIdRef.current, until: Date.now() + OWNER_TTL_MS });
+      writeOwner({ tabId: tabIdRef.current as string, until: Date.now() + OWNER_TTL_MS });
   };
   const releaseOwnership = () => {
     const cur = readOwner();
@@ -156,7 +167,7 @@ export function useTimeTracker(opts: Opts = { disabled: false }) {
     const now = Date.now();
     const cur = readLock();
     if (!cur || cur.until < now) {
-      writeLock({ tabId: tabIdRef.current, until: now + NETLOCK_TTL_MS });
+      writeLock({ tabId: tabIdRef.current as string, until: now + NETLOCK_TTL_MS });
       return true;
     }
     return cur.tabId === tabIdRef.current;
@@ -166,37 +177,34 @@ export function useTimeTracker(opts: Opts = { disabled: false }) {
     if (cur && cur.tabId === tabIdRef.current) writeLock(null);
   };
 
-  // ------------ tick: শুধু লোকালি জমা ------------
+  // ------------ tick / fold ------------
+  const resolvePage = () => page ?? window.location.pathname;
   const tick = () => {
     const now = Date.now();
     const canCount = active.current && isVisible() && !isIdle() && isOwner.current;
     if (canCount) {
       const delta = now - startTs.current;
-      currentPageMs.current += delta; // UI/debug
+      currentPageMs.current += delta;
       onTickSeconds?.(Math.floor(currentPageMs.current / 1000));
     }
     startTs.current = now;
   };
-
-  // current page accumulator → pageAcc store এ যোগ
   const foldCurrentPageToStore = () => {
     const secs = Math.floor(currentPageMs.current / 1000);
     if (secs > 0) addToPageAcc(resolvePage(), Math.min(secs, maxSecsPerBeat));
     currentPageMs.current = 0;
   };
-  const resolvePage = () => page ?? window.location.pathname;
 
-  // ------------ heartbeat: batch send (owner only) ------------
+  // ------------ heartbeat (owner only) ------------
   const ensureHeartbeat = () => {
     if (!isOwner.current) return;
     if (hbTimer.current) return;
     const jitter = Math.floor(Math.random() * 5000);
     const start = () => {
       hbTimer.current = setInterval(async () => {
-        // প্রতি বিটে: টিক + current পেজের জমা লোকালি যোগ + সব পেজ ব্যাচ সেন্ড
         tick();
-        foldCurrentPageToStore(); // শুধু লোকাল স্টোরে যোগ, সাথে সাথে API না
-        await sendAllPagesBatch(); // owner হলে কেবল API কল
+        foldCurrentPageToStore();
+        await sendAllPagesBatch();
       }, heartbeatSec * 1000);
     };
     setTimeout(start, jitter);
@@ -208,80 +216,6 @@ export function useTimeTracker(opts: Opts = { disabled: false }) {
     }
   };
 
-  // সব পেজের ব্যাচ বানিয়ে পাঠানো
-  const sendAllPagesBatch = async () => {
-    if (!isOwner.current || !navigator.onLine) return;
-
-    // queue-তে পুরনো থাকলে আগে পাঠানোর চেষ্টা (merge আগেই হয়েছে ধরে নিচ্ছি)
-    if (!acquireNetLock()) return;
-    try {
-      // build batch from pageAcc store
-      const acc = readPageAcc();
-      const batch: BatchItem[] = Object.entries(acc)
-        .map(([pg, secs]) => ({
-          page: pg,
-          milestoneId: pg === resolvePage() ? milestoneId : null,
-          seconds: Math.floor(secs),
-        }))
-        .filter((it) => it.seconds > 0);
-
-      // কিউতে পুরনো থাকলে merge করে একসাথে পাঠানো
-      const q = readQueue();
-      const queuedBatches = q.map((x) => x.batch).flat();
-      const all = mergeByPage([...batch, ...queuedBatches]);
-
-      if (!all.length) return;
-      console.log({
-        batch: all,
-        userId, // dev fallback
-        sessionId: sessionIdRef.current,
-        tabId: tabIdRef.current,
-      });
-      // POST one batch payload
-      await axios.post(
-        process.env.NEXT_PUBLIC_API_BASE_URL
-          ? `${process.env.NEXT_PUBLIC_API_BASE_URL}${apiUrl}`
-          : apiUrl,
-        {
-          batch: all,
-          userId, // dev fallback
-          sessionId: sessionIdRef.current,
-          tabId: tabIdRef.current,
-        },
-        { withCredentials: true },
-      );
-
-      // success হলে pageAcc থেকে শূন্য করা + queue ক্লিয়ার
-      writePageAcc({});
-      writeQueue([]);
-    } catch {
-      // ব্যর্থ হলে: বর্তমান batch কিউতে ঢোকাও (merge করে)
-      const acc = readPageAcc();
-      const batch: BatchItem[] = Object.entries(acc)
-        .map(([pg, secs]) => ({
-          page: pg,
-          milestoneId: pg === resolvePage() ? milestoneId : null,
-          seconds: Math.floor(secs),
-        }))
-        .filter((it) => it.seconds > 0);
-      if (batch.length) {
-        const q = readQueue();
-        q.push({
-          batch,
-          meta: {
-            sessionId: sessionIdRef.current,
-            tabId: tabIdRef.current,
-            ts: Date.now(),
-          },
-        });
-        writeQueue(q);
-      }
-    } finally {
-      releaseNetLock();
-    }
-  };
-
-  // helper: merge same page entries
   const mergeByPage = (arr: BatchItem[]) => {
     const map = new Map<string, number>();
     const lessons = new Map<string, string | null>();
@@ -297,44 +231,144 @@ export function useTimeTracker(opts: Opts = { disabled: false }) {
     }));
   };
 
-  // ------------ immediate flush on close ONLY ------------
-  const finalFlushOnClose = () => {
-    // ১) বর্তমান পেজের জমা লোকাল স্টোরে যোগ
-    tick();
-    foldCurrentPageToStore();
-
-    // ২) batch payload বানাও
+  const buildBatchFromStore = (): BatchItem[] => {
     const acc = readPageAcc();
-    const batch: BatchItem[] = Object.entries(acc)
+    return Object.entries(acc)
       .map(([pg, secs]) => ({
         page: pg,
         milestoneId: pg === resolvePage() ? milestoneId : null,
         seconds: Math.floor(secs),
       }))
       .filter((it) => it.seconds > 0);
+  };
+
+  const sendAllPagesBatch = async () => {
+    if (!isOwner.current || !navigator.onLine) return;
+    if (!acquireNetLock()) return;
+    try {
+      const accBatch = buildBatchFromStore();
+      const queued = readQueue()
+        .map((x) => x.batch)
+        .flat();
+      const all = mergeByPage([...accBatch, ...queued]);
+      if (!all.length) return;
+
+      await addTimeTracker({
+        batch: all,
+        userId,
+        sessionId: sessionIdRef.current,
+        tabId: tabIdRef.current,
+        authToken: authToken ?? undefined,
+      });
+
+      writePageAcc({});
+      writeQueue([]);
+    } catch {
+      const batch = buildBatchFromStore();
+      if (batch.length) enqueueBatch(batch);
+    } finally {
+      releaseNetLock();
+    }
+  };
+
+  // ------------ helpers for beacon ------------
+  const toAbsoluteUrl = (u?: string) => {
+    if (!u) return undefined;
+    try {
+      // absolute?
+      // eslint-disable-next-line no-new
+      new URL(u);
+      return u;
+    } catch {
+      return `${window.location.origin}${u.startsWith('/') ? '' : '/'}${u}`;
+    }
+  };
+
+  const chunkAndSend = (payloadObj: any) => {
+    const url = toAbsoluteUrl(beaconUrl ?? apiUrl); // IMPORTANT
+    if (!url) return;
+
+    const sendOne = (obj: any) => {
+      const json = JSON.stringify(obj);
+      // Use text/plain to avoid preflight during unload
+      const blob = new Blob([json], { type: 'text/plain;charset=UTF-8' });
+
+      let sent = false;
+      if ('sendBeacon' in navigator) {
+        try {
+          sent = navigator.sendBeacon(url, blob);
+        } catch {
+          /* ignore */
+        }
+      }
+      if (!sent) {
+        try {
+          void fetch(url, {
+            method: 'POST',
+            body: json,
+            headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+            keepalive: true,
+            credentials: 'include', // same-origin cookies only
+          });
+          sent = true;
+        } catch {
+          /* ignore */
+        }
+      }
+      return sent;
+    };
+
+    // size guard
+    const jsonStr = JSON.stringify(payloadObj);
+    if (new TextEncoder().encode(jsonStr).length <= maxBeaconBytes) {
+      return sendOne(payloadObj);
+    }
+
+    // chunk batches if too large
+    const items: BatchItem[] = payloadObj.batch ?? [];
+    let idx = 0;
+    while (idx < items.length) {
+      const chunk: BatchItem[] = [];
+      // grow until near the byte limit
+      while (idx < items.length) {
+        chunk.push(items[idx]);
+        const test = JSON.stringify({ ...payloadObj, batch: chunk });
+        if (new TextEncoder().encode(test).length > maxBeaconBytes) {
+          chunk.pop();
+          break;
+        }
+        idx++;
+      }
+      if (!chunk.length) break;
+      sendOne({ ...payloadObj, batch: chunk, part: true });
+    }
+    return true;
+  };
+
+  // ------------ final flush on exit/reload ------------
+  const finalFlushOnClose = () => {
+    tick();
+    foldCurrentPageToStore();
+
+    const batch: BatchItem[] = buildBatchFromStore();
     if (!batch.length) return;
 
-    // ৩) sendBeacon ট্রাই (owner হলে); না হলে কিউ
-    const payload = JSON.stringify({
+    const payload = {
       batch,
       userId,
       sessionId: sessionIdRef.current,
       tabId: tabIdRef.current,
-    });
-    const blob = new Blob([payload], { type: 'application/json' });
-    const url = process.env.NEXT_PUBLIC_API_BASE
-      ? `${process.env.NEXT_PUBLIC_API_BASE}${apiUrl}`
-      : apiUrl;
+      authToken: authToken ?? undefined,
+      ts: Date.now(),
+      source: 'beacon',
+    };
 
-    if (isOwner.current && 'sendBeacon' in navigator) {
-      const ok = navigator.sendBeacon(url, blob);
-      if (ok) {
-        // সাকসেস হলে লোকাল মেমরি শূন্য
-        writePageAcc({});
-        writeQueue([]);
-      } else {
-        enqueueBatch(batch);
-      }
+    const ok = chunkAndSend(payload);
+
+    if (ok) {
+      // optimistic clear
+      writePageAcc({});
+      writeQueue([]);
     } else {
       enqueueBatch(batch);
     }
@@ -342,10 +376,8 @@ export function useTimeTracker(opts: Opts = { disabled: false }) {
 
   // ------------ effects ------------
   useEffect(() => {
-    if (opts.disabled) {
-      return; // হুক কিছুই করবে না
-    }
-    // user activity
+    if (disabled) return;
+
     const act = () => {
       lastActivity.current = Date.now();
     };
@@ -353,40 +385,33 @@ export function useTimeTracker(opts: Opts = { disabled: false }) {
       window.addEventListener(ev, act, { passive: true }),
     );
 
-    // ownership init + keep alive
     tryAcquireOwnership();
     ownerTimer.current = setInterval(ownerBeat, 3000);
 
-    // visibility:
-    // - visible: শুধু owner নেওয়ার চেষ্টা + হার্টবিট চালু + কোনো API কল না
-    // - hidden: শুধু current page accumulator লোকাল স্টোরে যোগ; **API কল না**
     const onVis = () => {
       if (isVisible()) {
         tryAcquireOwnership();
         active.current = true;
         startTs.current = Date.now();
-        // NO immediate tryFlushQueue here
       } else {
         tick();
-        foldCurrentPageToStore(); // শুধু লোকালি সেভ
+        foldCurrentPageToStore();
         active.current = false;
-        // owner ছাড়ুন যাতে অন্য visible ট্যাব নিতে পারে
         releaseOwnership();
+        finalFlushOnClose(); // send immediately on hidden
       }
     };
     document.addEventListener('visibilitychange', onVis);
 
-    // online হলে owner হলে ব্যাচ সেন্ড
     const onOnline = () => {
-      sendAllPagesBatch();
+      void sendAllPagesBatch();
     };
     window.addEventListener('online', onOnline);
 
-    // close/tab leave → একবার batch try (sendBeacon/queue)
+    // multiple safety nets on exit/reload
     window.addEventListener('pagehide', finalFlushOnClose, { capture: true });
     window.addEventListener('beforeunload', finalFlushOnClose, { capture: true });
-
-    // NOTE: প্রথমে কোনো তাত্ক্ষণিক API কল নেই; শুধু heartbeat অপেক্ষা করবে
+    window.addEventListener('unload', finalFlushOnClose, { capture: true });
 
     return () => {
       ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach((ev) =>
@@ -396,8 +421,9 @@ export function useTimeTracker(opts: Opts = { disabled: false }) {
       window.removeEventListener('online', onOnline);
       window.removeEventListener('pagehide', finalFlushOnClose);
       window.removeEventListener('beforeunload', finalFlushOnClose);
+      window.removeEventListener('unload', finalFlushOnClose);
 
-      // unmount এও **কোনো API কল না** — শুধু লোকাল স্টোরে current page সেভ করলে চাইলে:
+      // persist to local only
       tick();
       foldCurrentPageToStore();
 
@@ -406,5 +432,17 @@ export function useTimeTracker(opts: Opts = { disabled: false }) {
       releaseOwnership();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [apiUrl, heartbeatSec, idleAfterSec, maxSecsPerBeat, page, milestoneId, userId]);
+  }, [
+    apiUrl,
+    beaconUrl,
+    heartbeatSec,
+    idleAfterSec,
+    maxSecsPerBeat,
+    page,
+    milestoneId,
+    userId,
+    authToken,
+    disabled,
+    maxBeaconBytes,
+  ]);
 }

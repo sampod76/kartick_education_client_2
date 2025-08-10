@@ -1,22 +1,35 @@
+// components/TimeTrackerMount.tsx
 'use client';
-import { useTimeTracker } from '@/lib/useTimeTracker';
-import { usePathname } from 'next/navigation';
-import React, { useState } from 'react';
 
-export default function TimerTrackerCom() {
+import { Suspense } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
+
+import { useTimeTracker } from '@/lib/useTimeTracker';
+import { useGlobalContext } from '../ContextApi/GlobalContextApi';
+
+function TimeTrackerInner() {
   const pathname = usePathname();
-  const [seconds, setSeconds] = useState(0);
-  //   useTimeTracker({
-  //     page: pathname,
-  //     lessonId: '',
-  //     heartbeatSec: 120, // 2 minutes
-  //     idleAfterSec: 60, // idle হলে কাউন্ট বন্ধ
-  //     onTickSeconds: setSeconds,
-  //     // userId: "student-123" // কুকি না থাকলে fallback
-  //   });
+  const search = useSearchParams();
+  const { userInfo } = useGlobalContext();
+
+  useTimeTracker({
+    disabled: userInfo?.role !== 'student',
+    page: pathname,
+    userId: userInfo?.id,
+    milestoneId: search.get('milestoneId') || search.get('milestone_id') || '',
+    heartbeatSec: process.env.NEXT_PUBLIC_TIME_TRACKER_SECOND
+      ? Number(process.env.NEXT_PUBLIC_TIME_TRACKER_SECOND)
+      : 300,
+    idleAfterSec: 60,
+  });
+
+  return null;
+}
+
+export default function TimeTrackerMount() {
   return (
-    <div>
-      <div>{seconds}</div>
-    </div>
+    <Suspense fallback={null}>
+      <TimeTrackerInner />
+    </Suspense>
   );
 }
