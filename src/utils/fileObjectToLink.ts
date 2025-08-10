@@ -26,7 +26,7 @@ export default function fileObjectToLink(src?: {
   if (src?.cdn && src.path) {
     // imageSrc = src.cdn + '/' + src.path;
     imageSrc = buildS3Url(src.cdn, src.path);
-    console.log('🚀 ~ imageSrc:', imageSrc);
+    // console.log('🚀 ~ imageSrc:', imageSrc);
   } else if (typeof src === 'object' && src.url) {
     imageSrc = src.url;
   } else if (src?.server_url) {

@@ -10,6 +10,7 @@ export enum tagTypes {
   assignment = 'assignment',
   submitassignment = 'submitassignment',
   deleteAssignment = 'deleteAssignment',
+  TimeTracker = 'TimeTracker',
   user = 'user',
   moderator = 'moderator',
   admin = 'admin',
