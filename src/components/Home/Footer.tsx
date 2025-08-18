@@ -141,7 +141,7 @@ const Footer = () => {
               </ModalComponent>
             </div>
             <div className="flex justify-between">
-              <div>© Ibossomlearn All Rights Reserved</div>
+              <div>© iBLossomLearn All Rights Reserved</div>
               <div className="flex gap-5">
                 {/* <div>Follow Us</div>
                 <div>twitter logo</div>
