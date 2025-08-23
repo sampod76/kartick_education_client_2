@@ -14,7 +14,7 @@ export default function WelcomeMissionStatement() {
             <h1 className="text-center text-5xl font-medium">Welcome to IBLossomLearn</h1>
             <h1 className="text-center text-3xl font-extrabold">Mission Statement</h1>
             <p className="max-w-[750px] text-lg">
-              Our mission is to revolutionize homeschooling by providing a comprehensive
+              Our mission is to revolutionize learning by providing a comprehensive
               and holistic curriculum tailored to the diverse needs of families.
             </p>
             <Link href={'/inclusion-approach'}>
