@@ -111,7 +111,7 @@ export default function LessonList({
         ),
         children: (
           <div>
-            <div className="mx-10">
+            <div className="mx-10 ">
               <div className="relative my-1 ">{playerVideoFunc(lesson, index)}</div>
 
               {lesson?.details && parse(lesson?.details)}
@@ -183,10 +183,10 @@ export default function LessonList({
                 {playerVideoFunc(lesson, index)}
               </div>
 
-              <div className="line-clamp-3">
+              <div className="line-clamp-3 p-2">
                 {IsExistPremonitionCourse && lesson?.short_description}
               </div>
-              {lesson?.details && parse(lesson?.details)}
+              <div className="p-2">{lesson?.details && parse(lesson?.details)}</div>
             </div>
             {/* {IsExistPremonitionCourse &&
                 lessonQuizData &&
