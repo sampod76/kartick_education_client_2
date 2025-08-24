@@ -20,7 +20,6 @@ const LessonSchema = yup.object().shape({
 
 export { LessonSchema };
 
-import { Schema, Types } from 'mongoose';
 import { IFileAfterUpload } from '@/types/globalType';
 
 interface IFile {
