@@ -8,20 +8,26 @@ import { urlChecker } from '@/utils/urlChecker';
 import VimeoPlayer from '@/utils/vimoPlayer';
 import { Tabs, Tooltip } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
 import YouTubePlayer from 'react-player/youtube';
 import CustomImageTag from '../ui/CustomTag/CustomImageTag';
 import LoadingSkeleton from '../ui/Loading/LoadingSkeleton';
 import PDFViewer from '../ui/PdfViewer';
+import { ILesson } from '@/schemas/lessonSchema';
+import { useAddGradeBookMutation } from '@/redux/api/gradeBookApi';
 
 export default function LessonContainShow({
   lesson,
   modalId,
 }: {
-  lesson: any;
+  lesson: ILesson;
   modalId: string;
 }) {
+  console.log(lesson);
+
+  const [addGreadBook] = useAddGradeBookMutation();
+
   const isPageOpen = useAppSelector((state) => state.modal[modalId || lesson._id]);
   const [activeKey, setActiveKey] = useState<string>('0');
   const [loading, setLoading] = useState(false);
@@ -31,8 +37,6 @@ export default function LessonContainShow({
   };
 
   const items: Tab[] | undefined = [];
-
-  if (!isPageOpen) return null;
 
   // Add videos
   if (lesson?.videos?.length) {
@@ -52,6 +56,7 @@ export default function LessonContainShow({
       items.push({
         key,
         label: `Video ${index + 1}`,
+
         children:
           activeKey === key ? (
             <div className="my-3 flex items-center justify-center border">
@@ -82,7 +87,6 @@ export default function LessonContainShow({
 
   // Add files
   if (lesson?.files?.length) {
-    console.log('🚀 ~ files:', lesson?.files);
     lesson.files.forEach((file: IFileAfterUpload, index: number) => {
       const key = (items.length + index).toString();
       const application = LinkToGetExtensions(fileObjectToLink(file), [
@@ -129,8 +133,28 @@ export default function LessonContainShow({
       });
     });
   }
-
+  useEffect(() => {
+    if (isPageOpen && lesson._id) {
+      addGreadBook({
+        lesson: lesson._id,
+        module: lesson.module?._id || lesson.module,
+        milestone: lesson.milestone,
+        course: lesson.course,
+        category: lesson.category,
+        totalCompletedContentRatio: ((Number(activeKey) + 1) / items.length) * 100,
+        totalCompletedNumber: Number(activeKey) + 1,
+      });
+    }
+  }, [isPageOpen, lesson._id, activeKey]);
+  if (!isPageOpen) return null;
   return (
-    <Tabs activeKey={activeKey} onChange={(key) => setActiveKey(key)} items={items} />
+    <Tabs
+      activeKey={activeKey}
+      onChange={(key) => {
+        setActiveKey(key);
+        // console.log(((Number(key) + 1) / items.length) * 100);
+      }}
+      items={items}
+    />
   );
 }

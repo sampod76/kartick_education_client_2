@@ -92,6 +92,9 @@ const CertifyForm: React.FC = () => {
           </Button>
         </Form.Item>
       </Form>
+      <div>
+        <p className="text-red-500 text-end text-3xl">Error Api call certifyme</p>
+      </div>
     </div>
   );
 };

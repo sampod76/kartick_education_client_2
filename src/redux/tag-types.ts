@@ -1,5 +1,6 @@
 export enum tagTypes {
   student = 'student',
+  greadBook = 'greadBook',
   PageBuilder = 'PageBuilder',
   EmailMarketing = 'EmailMarketing',
   FileList = 'FileList',
