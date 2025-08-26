@@ -12,6 +12,7 @@ import QuizTimer from './QuizTimer';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import MathDisplay from '../Utlis/MathDisplay';
+import { useGlobalContext } from '../ContextApi/GlobalContextApi';
 const { Option } = Select;
 export default function QuizQuestionCard({
   quiz,
@@ -33,7 +34,7 @@ export default function QuizQuestionCard({
   submittedDefaultData: ISubmittedUserQuizData;
 }) {
   // console.log(quiz);
-
+  const { userInfo } = useGlobalContext();
   const dispatch = useAppDispatch();
   const router = useRouter();
 
@@ -83,11 +84,9 @@ export default function QuizQuestionCard({
 
   //// ! for getting single or select answer
   const isCorrectAnswer = checkAnswers(submittedDefaultData);
-  // console.log("🚀 ~ isCorrectAnswer:", isCorrectAnswer)
   // console.log(submittedDefaultData);
 
   const getCorrectAnswerIdsHandler = (responseData: any): string[] => {
-    // console.log("🚀 ~ getCorrectAnswerIdsHandler ~ responseData:", responseData)
     // Existing functionality for single select answer
 
     const correctAnswerIds: string[] = responseData?.submitAnswers.reduce(
@@ -141,7 +140,6 @@ export default function QuizQuestionCard({
   const allCorrectAnswer = allCorrectAnsweredIdHanlder(submittedDefaultData);
 
   const handleAnswerChange = (questionIndex: number, answer: any) => {
-    // console.log("🚀 ~ handleAnswerChange ~ answer:", answer)
     let changedAnswer = [];
     console.log('answer', questionIndex);
 
@@ -315,7 +313,7 @@ export default function QuizQuestionCard({
                   }
                   ${
                     submittedDefaultData?.singleQuiz
-                      ? isCorrect
+                      ? isCorrect && userInfo?.role === 'admin'
                         ? ' border-2 border-green-600'
                         : isSubmitted === option?._id
                           ? 'border-2 border-red-500 '
