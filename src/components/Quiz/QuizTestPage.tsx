@@ -260,7 +260,7 @@ export default function QuizTestPage({
             </Button>
           ) : (
             <div>
-              {/* {quizData?.length !== userSubmitData?.length ? (
+              {quizData?.length !== userSubmitData?.length ? (
                 <Button type="default" disabled={isDisabledNext} onClick={handleNext}>
                   Finish Quiz
                 </Button>
@@ -268,10 +268,11 @@ export default function QuizTestPage({
                 // <Button type="default" onClick={handleFinishQuiz}>
                 //   See Result
                 // </Button>
+
                 <Button type="default" disabled={isDisabledNext} onClick={handleNext}>
                   Finish Quiz
                 </Button>
-              )} */}
+              )}
             </div>
           )}
           <Button type="default" onClick={handleFinishQuiz}>

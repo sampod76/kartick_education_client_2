@@ -316,7 +316,7 @@ export default function QuizQuestionCard({
                       ? isCorrect && userInfo?.role === 'admin'
                         ? ' border-2 border-green-600'
                         : isSubmitted === option?._id
-                          ? 'border-2 border-red-500 '
+                          ? 'border-2  '
                           : ''
                       : ''
                   }
