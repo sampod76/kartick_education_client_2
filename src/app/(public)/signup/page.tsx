@@ -92,7 +92,7 @@ const SignUpTeacherAndStudent = ({ setOpen }: any) => {
             // router.push("/profile");
             message.success('User logged in successfully!');
             storeUserInfo({ accessToken: res?.accessToken });
-            router.push('/');
+            router.push('/login');
             // setOpen(false)
           } else {
             Error_model_hook(res?.message);
@@ -173,6 +173,18 @@ const SignUpTeacherAndStudent = ({ setOpen }: any) => {
                   ]}
                 >
                   <Input placeholder="Please enter your email address" />
+                </Form.Item>
+              </Col>
+              <Col xs={24} md={12} lg={8}>
+                <Form.Item
+                  label="Parents Email Address"
+                  name="parentsEmail"
+                  rules={[
+                    { required: true, message: 'Please enter your parents email!' },
+                    { type: 'email', message: 'Please enter a valid email!' },
+                  ]}
+                >
+                  <Input placeholder="'Please enter your parents email!" />
                 </Form.Item>
               </Col>
               <Col xs={24} md={12} lg={8}>

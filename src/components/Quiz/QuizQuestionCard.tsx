@@ -91,11 +91,10 @@ export default function QuizQuestionCard({
 
     const correctAnswerIds: string[] = responseData?.submitAnswers.reduce(
       (acc: string[], answerId: string) => {
-        console.log(answerId, 'answerId');
         const submittedAnswered = responseData?.singleQuiz?.answers?.find(
           (answer: any) => answer.id === answerId,
         );
-        console.log(submittedAnswered, 'submmm');
+
         if (submittedAnswered && submittedAnswered.correct) {
           acc.push(answerId);
         }
