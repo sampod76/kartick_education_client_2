@@ -91,11 +91,10 @@ export default function QuizQuestionCard({
 
     const correctAnswerIds: string[] = responseData?.submitAnswers.reduce(
       (acc: string[], answerId: string) => {
-        console.log(answerId, 'answerId');
         const submittedAnswered = responseData?.singleQuiz?.answers?.find(
           (answer: any) => answer.id === answerId,
         );
-        console.log(submittedAnswered, 'submmm');
+
         if (submittedAnswered && submittedAnswered.correct) {
           acc.push(answerId);
         }
@@ -316,7 +315,7 @@ export default function QuizQuestionCard({
                       ? isCorrect && userInfo?.role === 'admin'
                         ? ' border-2 border-green-600'
                         : isSubmitted === option?._id
-                          ? 'border-2 border-red-500 '
+                          ? 'border-2  '
                           : ''
                       : ''
                   }
