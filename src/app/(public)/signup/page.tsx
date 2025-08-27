@@ -92,7 +92,7 @@ const SignUpTeacherAndStudent = ({ setOpen }: any) => {
             // router.push("/profile");
             message.success('User logged in successfully!');
             storeUserInfo({ accessToken: res?.accessToken });
-            router.push('/login');
+            window.location.href = '/';
             // setOpen(false)
           } else {
             Error_model_hook(res?.message);
