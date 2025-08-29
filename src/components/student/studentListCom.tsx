@@ -20,9 +20,15 @@ import { getUserInfo } from '@/services/auth.service';
 import Image from 'next/image';
 import SellerAddPackageStudent from '../package/SellerAddPackageStudent';
 import SellerDeactivedStudentPackage from '../package/SellerDeactiveStudentPackage';
+import { useSearchParams } from 'next/navigation';
+import { useQuerySetter } from '@/hooks/useQuerySetter';
 
 const StudentListCom = ({ setOpen, author }: { setOpen: any; author?: string }) => {
-  // const SUPER_ADMIN = USER_ROLE.ADMIN;
+  const { setQueryParam } = useQuerySetter();
+  const searchParams = useSearchParams();
+  const searchTermParams = searchParams.get('searchTerm');
+
+  // console.log('🚀 ~ author:', author);
   const userInfo = getUserInfo() as any;
   const query: Record<string, any> = {};
   const [updateStudent, { isLoading: updateUserLoading }] = useUpdateUserMutation();
@@ -31,7 +37,7 @@ const StudentListCom = ({ setOpen, author }: { setOpen: any; author?: string }) 
   const [size, setSize] = useState<number>(10);
   const [sortBy, setSortBy] = useState<string>('');
   const [sortOrder, setSortOrder] = useState<string>('');
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>(searchTermParams || '');
 
   query['limit'] = size;
   query['page'] = page;
@@ -50,6 +56,7 @@ const StudentListCom = ({ setOpen, author }: { setOpen: any; author?: string }) 
   });
 
   if (!!debouncedSearchTerm) {
+    setQueryParam('searchTerm', debouncedSearchTerm);
     query['searchTerm'] = debouncedSearchTerm;
   }
   const { data, isLoading, refetch, error } = useGetAllStudentsQuery({
@@ -58,7 +65,7 @@ const StudentListCom = ({ setOpen, author }: { setOpen: any; author?: string }) 
 
   //@ts-ignore
   const StudentData = data?.data;
-  console.log('🚀 ~ StudentData:', StudentData);
+  // console.log('🚀 ~ StudentData:', StudentData);
 
   //@ts-ignore
   const meta = data?.meta;
@@ -158,7 +165,7 @@ const StudentListCom = ({ setOpen, author }: { setOpen: any; author?: string }) 
                     >
                       {data.status === ENUM_STATUS.ACTIVE ? 'Deactivate' : 'Active'} User
                     </Menu.Item>
-                    <Menu.Item key="dd">
+                    <Menu.Item key="dd3">
                       <Link
                         href={`/${userInfo?.role}/manage-users/students/materials?user_name=${data?.name?.firstName} ${data?.name?.lastName}&email=${data?.userDetails?.email}&user_id=${data?.userDetails?._id}`}
                         className="my-1"
@@ -166,7 +173,7 @@ const StudentListCom = ({ setOpen, author }: { setOpen: any; author?: string }) 
                         Materials
                       </Link>
                     </Menu.Item>
-                    <Menu.Item key="dd">
+                    <Menu.Item key="ddd">
                       <Link
                         href={`/${userInfo?.role}/manage-users/students/add-content?user_name=${data?.name?.firstName} ${data?.name?.lastName}&email=${data?.userDetails?.email}&user_id=${data?.userDetails?._id}`}
                         className="my-1"
@@ -209,6 +216,7 @@ const StudentListCom = ({ setOpen, author }: { setOpen: any; author?: string }) 
     setSortBy('');
     setSortOrder('');
     setSearchTerm('');
+    setQueryParam('searchTerm', '', { keepEmpty: true });
   };
 
   const handleDeactivate = async (id: string, data: any) => {
@@ -255,6 +263,7 @@ const StudentListCom = ({ setOpen, author }: { setOpen: any; author?: string }) 
         <Input
           size="large"
           placeholder="Search"
+          value={searchTerm || ''}
           onChange={(e) => setSearchTerm(e.target.value)}
           style={{
             width: '250px',

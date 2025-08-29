@@ -105,7 +105,6 @@ const UpdateCourse = ({ courseId }: { courseId: string }) => {
   // });
   const [form] = Form.useForm();
   const onFinish = async (values: any) => {
-    console.log('🚀 ~ onFinish ~ values:', values);
     setLoading(true);
     // Define a unique key for the loading message
     const key = 'loadingMessage';

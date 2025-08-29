@@ -20,7 +20,6 @@ const SupportPage = () => {
   const [addSupport, { isLoading }] = useAddSupportMutation();
   const [form] = Form.useForm();
   const onFinish = async (values: any) => {
-    // console.log("🚀 ~ onFinish ~ values:", values);
     try {
       const res = await addSupport({ ...values }).unwrap();
       // console.log(res);

@@ -16,7 +16,6 @@ export default function VimeoFileUpload() {
     return Promise.reject(new Error('Please enter a valid Vimeo video URL'));
   };
   const onFinish = async (values: any) => {
-    console.log('🚀 ~ onFinish ~ values:', values);
     try {
       values.videos.map((video: any) => {
         if (!video.fileName) {
