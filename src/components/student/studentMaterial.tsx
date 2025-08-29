@@ -3,6 +3,8 @@ import { useGetAllTimeTrackerQuery } from '@/redux/api/timeTracker';
 import React, { use } from 'react';
 import LoadingSkeleton from '../ui/Loading/LoadingSkeleton';
 import { useSearchParams } from 'next/navigation';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { FloatButton } from 'antd';
 export type TimeEntry = {
   _id?: string;
   user?: {
@@ -72,7 +74,10 @@ function classNames(...xs: (string | false | null | undefined)[]) {
 export default function StudentMaterial() {
   const search = useSearchParams();
   const user_id = search.get('user_id');
-  const { data, isLoading } = useGetAllTimeTrackerQuery({ userId: user_id });
+  const { data, isLoading, refetch } = useGetAllTimeTrackerQuery({
+    userId: user_id,
+    limit: 30,
+  });
   if (isLoading) return <LoadingSkeleton />;
   const cleaned = (data?.data || [])
     .filter((x) => x && x.totalSeconds >= 0 && x.isDelete !== 'yes')
@@ -88,9 +93,8 @@ export default function StudentMaterial() {
         <div className="px-5 py-4 sm:px-6 sm:py-5 border-b border-gray-100 flex items-center justify-between">
           <div>
             <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-gray-900">
-              {"Dhaka's Time Tracker"}
+              {'Time Tracker'}
             </h2>
-            <p className="text-sm text-gray-500">Timezone: Asia/Dhaka</p>
           </div>
           <div className="text-right">
             <div className="text-xs uppercase tracking-wider text-gray-500">Total</div>
@@ -174,6 +178,11 @@ export default function StudentMaterial() {
           </div>
         </div>
       </div>
+      <FloatButton
+        icon={<QuestionCircleOutlined />}
+        type="default"
+        style={{ insetInlineEnd: 94 }}
+      />
     </div>
   );
 }
