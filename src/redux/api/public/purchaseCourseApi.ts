@@ -22,6 +22,22 @@ export const purchaseCoursesApi = baseApi.injectEndpoints({
       },
       providesTags: [tagTypes.userPurchaseCourse],
     }),
+    milestoneGradebook: build.query({
+      query: (arg: Record<string, any>) => {
+        return {
+          url: `${PURCHASE_COURSE_URL}/milestone-gradebook`,
+          method: 'GET',
+          params: arg,
+        };
+      },
+      transformResponse: (response: any, meta: IMeta) => {
+        return {
+          data: response,
+          meta,
+        };
+      },
+      providesTags: [tagTypes.userPurchaseCourse],
+    }),
     addSpatialConsiderCourse: build.mutation({
       query: (data: Record<string, any>) => {
         return {
@@ -86,4 +102,5 @@ export const {
   useAddMilestoneInPurchaseCourseMutation,
   useGetCourseToAllMilestoneInPackageQuery,
   useGetStudentPurchaseCoursesToMilestoneModuleQuery,
+  useMilestoneGradebookQuery,
 } = purchaseCoursesApi;
