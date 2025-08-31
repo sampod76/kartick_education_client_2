@@ -3,36 +3,61 @@
 import React from 'react';
 import { Card } from 'antd';
 import { Progress, Tooltip } from 'antd';
+import { useMilestoneGradebookQuery } from '@/redux/api/public/purchaseCourseApi';
+import { useSearchParams } from 'next/navigation';
+import LoadingSkeleton from '@/components/ui/Loading/LoadingSkeleton';
 
-interface QuizData {
+export interface IquizData {
   _id: string;
   title: string;
+  imgs: any[];
+  author: string;
+  course: string;
+  category: string;
+  grade_level_id: string;
+  status: string;
+  isDelete: string;
+  milestone_number: number;
+  favorite: string;
+  tags: any[];
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  gradeLevelDetails: GradeLevelDetails;
   totalQuizzes: number;
   userTotalSubmits: number;
   userCorrectSubmits: number;
   userIncorrectSubmits: number;
 }
 
-const quizData: QuizData[] = [
-  {
-    _id: '687617437f178c590bd0533b',
-    title: 'Beginning German Vocabulary Practice',
-    totalQuizzes: 320,
-    userTotalSubmits: 35,
-    userCorrectSubmits: 10,
-    userIncorrectSubmits: 25,
-  },
-  {
-    _id: '68761c95f8470828574b0448',
-    title: 'Classical Languages Vocabulary Practice',
-    totalQuizzes: 495,
-    userTotalSubmits: 30,
-    userCorrectSubmits: 20,
-    userIncorrectSubmits: 10,
-  },
-];
+export interface GradeLevelDetails {
+  _id: string;
+  title: string;
+  serial_number: number;
+  author: string;
+  status: string;
+  isDelete: string;
+  files: any[];
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
 
 const Gradebook: React.FC = () => {
+  const search = useSearchParams();
+  const userId = search.get('userId') || '';
+  //
+  const { data, isLoading } = useMilestoneGradebookQuery({ userId });
+  if (isLoading) {
+    return (
+      <div>
+        <LoadingSkeleton number={10} />
+      </div>
+    );
+  }
+  const quizData: IquizData[] =
+    data?.data?.map((item: any) => item?.permissionMilestonesDetails)?.flat() || [];
+
   return (
     <div className="grid md:grid-cols-2 gap-6 p-6">
       {quizData.map((quiz) => {
@@ -44,7 +69,11 @@ const Gradebook: React.FC = () => {
           <Card
             key={quiz._id}
             className="rounded-2xl shadow-md hover:shadow-lg transition-all"
-            title={<span className="font-semibold">{quiz.title}</span>}
+            title={
+              <span className="font-semibold">
+                {quiz.title}({quiz?.gradeLevelDetails?.title})
+              </span>
+            }
           >
             <div className="space-y-3">
               {/* Percentage */}

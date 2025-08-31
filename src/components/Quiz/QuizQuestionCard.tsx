@@ -3,7 +3,7 @@ import { useAppDispatch } from '@/redux/hooks';
 import { ISingleQuizData } from '@/types/quiz/singleQuizType';
 import { ISubmittedUserQuizData } from '@/types/quiz/submittedQuizType';
 import TextToSpeech from '@/utils/TextToSpeech';
-import { Checkbox, Input, Radio, Select } from 'antd';
+import { Checkbox, Input, Radio, Select, Tooltip } from 'antd';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import DragQUizTest from '../dragCustom/DragQuiz';
@@ -13,6 +13,7 @@ import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import MathDisplay from '../Utlis/MathDisplay';
 import { useGlobalContext } from '../ContextApi/GlobalContextApi';
+import CustomImageTag from '../ui/CustomTag/CustomImageTag';
 const { Option } = Select;
 export default function QuizQuestionCard({
   quiz,
@@ -254,17 +255,19 @@ export default function QuizQuestionCard({
             />
           )}
         </div>
-        <div className="flex flex-wrap mx-5">
+        <div className="flex flex-wrap w-1/2 mx-5">
           {quiz.type !== 'drag' &&
             quiz?.imgs?.map((img: string, key: number, allimages: any[]) => (
-              <Image
-                key={key}
-                src={img}
-                width={700}
-                height={700}
-                className={'w-96 lg:w-full max-h-44 lg:max-h-48 m-3'}
-                alt=""
-              ></Image>
+              <Tooltip title="Click to zoom" key={key}>
+                <CustomImageTag
+                  src={img}
+                  width={700}
+                  height={700}
+                  className={'w-full max-h-72  m-3 cursor-pointer'}
+                  alt=""
+                  preview={true}
+                />
+              </Tooltip>
             ))}
         </div>
         {/* //! For select Quiz */}
