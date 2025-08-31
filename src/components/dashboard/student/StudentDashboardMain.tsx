@@ -12,7 +12,7 @@ import { useState } from 'react';
 
 export default function StudentDashboardMain() {
   const [current, setCurrent] = useState(1);
-  const [pageCount, setPageCount] = useState(4);
+  const [pageCount, setPageCount] = useState(50);
   const { userInfo, userInfoLoading } = useGlobalContext();
   const {
     data: allPurchaseCourse,
@@ -189,7 +189,7 @@ export default function StudentDashboardMain() {
                 />
               </div>
             )}
-            {allPurchaseCourse?.data?.length ? (
+            {/* {allPurchaseCourse?.data?.length ? (
               <div className="flex items-end justify-end bg-slate-200 p-1 text-2xl">
                 <Pagination
                   showSizeChanger
@@ -197,12 +197,12 @@ export default function StudentDashboardMain() {
                   onChange={onChange}
                   showQuickJumper
                   onShowSizeChange={onShowSizeChange}
-                  defaultCurrent={1}
+                  defaultCurrent={20}
                   total={allPurchaseCourse?.data?.meta?.total}
                   pageSizeOptions={[10, 20, 50]}
                 />
               </div>
-            ) : null}
+            ) : null} */}
           </div>
         </div>
       }
