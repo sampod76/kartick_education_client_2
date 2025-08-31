@@ -40,27 +40,31 @@ export default function QuizTestPage({
 
   // ! For Test is submitted Answer is CorrectAnswer;
 
-  const checkAnswers = (responseData: ISubmittedUserQuizData): boolean => {
-    if (responseData?.singleQuiz?.type === 'input') {
+  const checkAnswers = (
+    responseData: ISubmittedUserQuizData & { singleQuizDetails: ISingleQuizData },
+  ): boolean => {
+    if (responseData?.singleQuizDetails?.type === 'input') {
       const isCorrectInput =
-        responseData?.singleQuiz?.single_answer === responseData?.submitAnswers[0]
+        responseData?.singleQuizDetails?.single_answer === responseData?.submitAnswers[0]
           ? true
           : false;
       return isCorrectInput;
     } else if (
-      responseData?.singleQuiz?.type === 'select' ||
-      responseData?.singleQuiz?.type === 'math' ||
-      responseData?.singleQuiz?.type === 'multiple_select' ||
-      responseData?.singleQuiz?.type === 'find' ||
-      responseData?.singleQuiz?.type === 'drag' ||
-      responseData?.singleQuiz?.type === 'audio'
+      responseData?.singleQuizDetails?.type === 'select' ||
+      responseData?.singleQuizDetails?.type === 'math' ||
+      responseData?.singleQuizDetails?.type === 'multiple_select' ||
+      responseData?.singleQuizDetails?.type === 'find' ||
+      responseData?.singleQuizDetails?.type === 'drag' ||
+      responseData?.singleQuizDetails?.type === 'audio'
     ) {
       const allCorrectSelect = responseData?.submitAnswers.every((answerId: string) => {
-        const submittedAnswer = responseData?.singleQuiz?.answers?.find(
-          (answer: any) => answer.id === answerId && answer.correct,
+        const submittedAnswer = responseData?.singleQuizDetails?.answers?.find(
+          (answer: any) => answer._id === answerId && answer.correct,
         );
+
         return submittedAnswer && submittedAnswer.correct;
       });
+
       return allCorrectSelect;
     }
 
@@ -70,7 +74,7 @@ export default function QuizTestPage({
   const submitAnswer = async () => {
     if (currentAnswer?.singleQuiz !== submittedDefaultData?.singleQuiz?._id) {
       const isBeforeCorrect = checkAnswers(currentAnswer);
-      // console.log(isBeforeCorrect, 'isBeforeCorrect')
+
       if (isBeforeCorrect) {
         currentAnswer['isCorrect'] = 'yes';
       } else {
@@ -79,7 +83,7 @@ export default function QuizTestPage({
 
       try {
         const res = await submitQuiz(currentAnswer).unwrap();
-        console.log(res, 'response');
+
         if (res?.success === false) {
           Error_model_hook(res?.message);
         } else {

@@ -22,6 +22,7 @@ export type ISingleQuizData = {
   _id: string;
   title: string;
   answers: IAnswer[];
+  single_answer?: string;
   imgs: string[];
   type: IQuizType;
   serialNumber: 3;

@@ -172,6 +172,7 @@ export default function QuizQuestionCard({
       category: quiz?.category,
       quiz: quiz?.quiz?._id,
       singleQuiz: quiz?._id,
+      singleQuizDetails: quiz,
       submitAnswers: changedAnswer,
     };
 
@@ -214,15 +215,14 @@ export default function QuizQuestionCard({
           </p>
         )}
 
-        <div className="text-center mt-3 flex justify-center items-center">
-          {/* <p>Time Remaining: {timer} seconds</p> */}
+        {/* <div className="text-center mt-3 flex justify-center items-center">
           <QuizTimer
             quiz={quiz}
             time_duration={quiz?.time_duration}
             index={index}
             submittedDefaultData={submittedDefaultData}
           />
-        </div>
+        </div> */}
         <div className="absolute right-4 top-0 p-">
           {submittedDefaultData?.singleQuiz ? (
             isCorrectAnswer ? (
