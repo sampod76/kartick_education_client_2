@@ -195,7 +195,6 @@ const Gradebook: React.FC = () => {
 
       {/* ==== Course-wise Sections ==== */}
       {sortedByCourse.map((block) => {
-        console.log('🚀 ~ block:', block);
         const courseId = block.course?._id || block._id;
 
         // (ঐচ্ছিক) কোর্স-লেভেল কিছু Aggregate দেখাতে চাইলে:
