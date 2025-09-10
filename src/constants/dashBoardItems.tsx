@@ -1,5 +1,6 @@
 import {
   AccountBookFilled,
+  ApartmentOutlined,
   BorderOuterOutlined,
   ContactsFilled,
   ContactsOutlined,
@@ -11,10 +12,12 @@ import {
   PicLeftOutlined,
   ProfileOutlined,
   ShoppingCartOutlined,
+  SnippetsOutlined,
   UsergroupDeleteOutlined,
   UserOutlined,
   UserSwitchOutlined,
 } from '@ant-design/icons';
+
 import type { MenuProps } from 'antd';
 import Link from 'next/link';
 import { CiLogin } from 'react-icons/ci';
@@ -783,6 +786,30 @@ export const dashboardItems = (role: string, setCollapsed?: any) => {
       ),
       icon: <PiPackageDuotone />,
       key: `/${role}/activePackage`,
+    },
+    {
+      label: (
+        <Link
+          onClick={() => (setCollapsed ? setCollapsed(false) : null)}
+          href={`/${role}/attendance`}
+        >
+          Attendance
+        </Link>
+      ),
+      icon: <SnippetsOutlined />,
+      key: `/${role}/attendance`,
+    },
+    {
+      label: (
+        <Link
+          onClick={() => (setCollapsed ? setCollapsed(false) : null)}
+          href={`/${role}/gradebook`}
+        >
+          Gradebook
+        </Link>
+      ),
+      icon: <ApartmentOutlined />,
+      key: `/${role}/gradebook`,
     },
 
     // {
