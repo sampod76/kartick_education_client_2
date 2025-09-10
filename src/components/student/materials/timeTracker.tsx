@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { FloatButton } from 'antd';
 import LoadingSkeleton from '@/components/ui/Loading/LoadingSkeleton';
+import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
 
 export type TimeEntry = {
   _id?: string;
@@ -104,10 +105,11 @@ function groupByDate(entries: TimeEntry[], tz?: string) {
 }
 
 export default function TimeTracker() {
+  const { userInfo } = useGlobalContext();
   const search = useSearchParams();
   const user_id = search.get('user_id');
   const { data, isLoading } = useGetAllTimeTrackerQuery({
-    userId: user_id,
+    userId: user_id || userInfo?.userId,
     limit: 30,
   });
 

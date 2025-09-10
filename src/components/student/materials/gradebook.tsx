@@ -5,6 +5,7 @@ import { Card, Progress, Tooltip, Segmented, Select, Tag, Avatar } from 'antd';
 import { useMilestoneGradebookQuery } from '@/redux/api/public/purchaseCourseApi';
 import { useSearchParams } from 'next/navigation';
 import LoadingSkeleton from '@/components/ui/Loading/LoadingSkeleton';
+import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
 
 export interface IquizData {
   _id: string;
@@ -64,9 +65,12 @@ const gradeFromPercent = (p: number): GradeInfo => {
 };
 
 const Gradebook: React.FC = () => {
+  const { userInfo } = useGlobalContext();
   const search = useSearchParams();
   const userId = search.get('user_id') || '';
-  const { data, isLoading } = useMilestoneGradebookQuery({ userId });
+  const { data, isLoading } = useMilestoneGradebookQuery({
+    userId: userId || userInfo?.userId,
+  });
 
   // ⬇ API থেকে কোর্স-লেভেল অ্যারে (প্রতিটি আইটেমে course + permissionMilestonesDetails থাকে)
   type CourseBlock = {
