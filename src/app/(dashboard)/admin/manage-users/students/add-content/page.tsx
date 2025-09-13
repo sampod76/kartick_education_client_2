@@ -12,6 +12,7 @@ export default function AddContent() {
   const searchQuery = useSearchParams();
   const mainTab = searchQuery.get('mainTab');
   const secondTab = searchQuery.get('secondTab');
+
   const handleSecondTabChange = (activeKey: string) => {
     const currentParams = new URLSearchParams(searchQuery.toString());
     currentParams.set('mainTab', activeKey);
