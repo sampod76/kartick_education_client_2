@@ -163,7 +163,7 @@ export default function LearningMain() {
                     <div className="flex justify-between pr-2">
                       <button
                         onClick={() => {
-                          toggleOpen(index), setLabelData(label);
+                          (toggleOpen(index), setLabelData(label));
                         }}
                         key={label?._id}
                         className={`relative px-3 py-2 text-xl font-bold text-[#1C3052]`}
@@ -184,7 +184,7 @@ export default function LearningMain() {
                           cursor: 'pointer',
                         }}
                         onClick={() => {
-                          toggleOpen(index), setLabelData(label);
+                          (toggleOpen(index), setLabelData(label));
                         }}
                         src={Arrow}
                         alt=""
