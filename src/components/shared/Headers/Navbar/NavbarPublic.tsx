@@ -16,23 +16,28 @@ const NavbarPublic = () => {
     <div
       className={`mx-auto block w-full items-center justify-between rounded-b-[50px] bg-white px-[2rem] py-2 shadow backdrop-blur-xl md:flex lg:flex xl:flex 2xl:w-[81%]`}
     >
-      <nav className="text-[#dedee0 py-[8px md:pt-[0.9em align-center flex justify-between gap-[5rem] text-black">
-        <Logo />
+      <nav className="flex w-full items-center justify-between">
+        <div className="max-w-86 max-h-[56px]">
+          <Logo />
+        </div>
 
-        <Menu
-          mode="horizontal"
-          className="hidden items-center border border-red-500 md:flex"
-          style={{
-            fontWeight: '700',
-            fontFamily: 'roboto',
-            background: 'none',
-            backdropFilter: 'blur(80px)',
-            boxShadow: 'none',
-            color: `black`,
-          }}
-          disabledOverflow
-          items={navItemsHome}
-        />
+        <div className="">
+          {' '}
+          <Menu
+            mode="horizontal"
+            className="hidden items-center  md:flex"
+            style={{
+              fontWeight: '700',
+              fontFamily: 'roboto',
+              background: 'none',
+              backdropFilter: 'blur(80px)',
+              boxShadow: 'none',
+              color: `black`,
+            }}
+            disabledOverflow
+            items={navItemsHome}
+          />
+        </div>
 
         <div className="flex md:hidden lg:hidden xl:hidden">
           <SideBarHome
