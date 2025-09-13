@@ -56,7 +56,6 @@ password : 11223344
   - Course create and update form
   -
 - 2. Table sorting include - OK
-
   - status condition
   -
 
