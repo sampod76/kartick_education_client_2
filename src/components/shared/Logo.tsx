@@ -24,8 +24,8 @@ const Logo = () => {
         src={logoFullImage}
         height={120}
         width={200}
-        className="hidden md:flex lg:-[110px] 2xl:w-[150px] 
-         h-[40px] lg:h-[56px] 
+        className="hidden md:flex 2xl:w-full  max-h-[56px]
+        
        "
         alt="Logo"
       />
