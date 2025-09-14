@@ -5,12 +5,17 @@ import { Card, Pagination } from 'antd';
 import { useGetAllGradeBookReportQuery } from '@/redux/api/gradeBookApi';
 import { useSearchParams } from 'next/navigation';
 import LoadingSkeleton from '@/components/ui/Loading/LoadingSkeleton';
+import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
 
 export default function Reports() {
+  const { userInfo } = useGlobalContext();
   const search = useSearchParams();
   const author_id = search.get('user_id') || '';
 
-  const { data, isLoading } = useGetAllGradeBookReportQuery({ author_id, limit: 20 });
+  const { data, isLoading } = useGetAllGradeBookReportQuery({
+    author_id: author_id || userInfo?.userId,
+    limit: 20,
+  });
   const [page, setPage] = useState(1);
   const pageSize = 20; // প্রতি পেজে কতগুলো milestone দেখাবে
 
