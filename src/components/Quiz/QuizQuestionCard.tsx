@@ -390,7 +390,7 @@ export default function QuizQuestionCard({
                   }
                   ${
                     submittedDefaultData?.singleQuiz
-                      ? isCorrect
+                      ? isCorrect && userInfo?.role === 'admin'
                         ? ' border-2 border-green-600'
                         : isSubmitted === option?._id
                           ? 'border-2 border-red-500 '
@@ -464,7 +464,7 @@ export default function QuizQuestionCard({
                       }
                       ${
                         submittedDefaultData?.singleQuiz
-                          ? isCorrect
+                          ? isCorrect && userInfo?.role === 'admin'
                             ? ' border-2 border-green-600'
                             : isSubmitted === option?._id
                               ? 'border-2 border-red-500 '
@@ -534,7 +534,7 @@ export default function QuizQuestionCard({
                         ? '#2d3748'
                         : 'transparent',
                     border: submittedDefaultData?.singleQuiz
-                      ? isCorrect
+                      ? isCorrect && userInfo?.role === 'admin'
                         ? '2px solid #38a169'
                         : isSubmitted === option?._id
                           ? '2px solid #e53e3e'

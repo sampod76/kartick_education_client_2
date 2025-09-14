@@ -6,6 +6,7 @@ import { Tabs } from 'antd';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import TimeTracker from './materials/timeTracker';
 import Gradebook from './materials/gradebook';
+import Reports from './materials/reports';
 
 export default function StudentMaterial() {
   const router = useRouter();
@@ -37,6 +38,11 @@ export default function StudentMaterial() {
           key: '2',
           label: 'Gradebook',
           children: <Gradebook />,
+        },
+        {
+          key: '3',
+          label: 'Reports',
+          children: <Reports />,
         },
       ]}
     />
