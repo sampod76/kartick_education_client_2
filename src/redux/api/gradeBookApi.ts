@@ -1,6 +1,24 @@
 import { tagTypes } from '@/redux/tag-types';
 import { IMeta } from '@/types';
 import { baseApi } from './baseApi';
+export interface RootReport {
+  _id: string;
+  totalCompleted: number;
+  avgRatio: number;
+  lessons: Lesson[];
+  milestoneId: string;
+  milestoneTitle: string;
+}
+
+interface Lesson {
+  _id: string;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  totalCompletedContentRatio: number;
+  totalCompletedNumber: number;
+}
 
 const URL = '/grade-books';
 
@@ -16,6 +34,22 @@ export const gradeBookApi = baseApi.injectEndpoints({
         };
       },
       transformResponse: (response: IGradeBook[], meta: IMeta) => {
+        return {
+          data: response,
+          meta,
+        };
+      },
+      providesTags: [tagTypes.greadBook],
+    }),
+    getAllGradeBookReport: build.query({
+      query: (arg: Record<string, any>) => {
+        return {
+          url: `${URL}/gradebook-report`,
+          method: 'GET',
+          params: arg,
+        };
+      },
+      transformResponse: (response: RootReport[], meta: IMeta) => {
         return {
           data: response,
           meta,
@@ -69,4 +103,5 @@ export const {
   useGetAllGradeBookQuery,
   useGetSingleGradeBookQuery,
   useUpdateGradeBookMutation,
+  useGetAllGradeBookReportQuery,
 } = gradeBookApi;
