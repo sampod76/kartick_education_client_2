@@ -190,7 +190,7 @@ export const homeNavItems = (role: string | null): MenuProps['items'] => {
       ),
       key: '/enroll',
     },
-    ,
+
     {
       label: (
         <p className="text-[16px] capitalize lg:font-extrabold 2xl:text-[20px]">
