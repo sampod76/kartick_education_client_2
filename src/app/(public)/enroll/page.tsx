@@ -1,12 +1,17 @@
+'use client';
+import { useGlobalContext } from '@/components/ContextApi/GlobalContextApi';
 import CoursesTab from '@/components/Home/coureses/CoursesTab';
+import SellingCourseInMilestone from '@/components/sellingCourseInMilestone/sellingCourseInMilestone';
 import SupportDonateHelpDesk from '@/components/widgets/SupportDonate';
 import Link from 'next/link';
 import React from 'react';
 
 export default function Enroll() {
+  const { userInfo } = useGlobalContext();
   return (
     <div>
-      <CoursesTab />
+      <SellingCourseInMilestone />
+      {userInfo?.role == 'admin' && <CoursesTab />}
       <div className="flex justify-center items-center mb-3 lg:mb-16">
         <Link data-aos="zoom-out" href={'/signup'}>
           <div className="  self-center w-80 mt-6 rounded-3xl p-1 border-2 border-primary">

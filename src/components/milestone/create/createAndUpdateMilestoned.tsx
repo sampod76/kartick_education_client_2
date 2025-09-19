@@ -6,17 +6,36 @@ import {
   useUpdateMilestoneMutation,
 } from '@/redux/api/adminApi/milestoneApi';
 
-import { Button, Col, Form, Input, message, Row, Select, Spin } from 'antd';
+import {
+  Button,
+  Checkbox,
+  Col,
+  Form,
+  Input,
+  message,
+  Row,
+  Select,
+  Spin,
+  Upload,
+} from 'antd';
 
 import ModalComponent from '@/components/Modal/ModalComponents';
 import CreateGradeLevel from '@/components/gradeLevel/CreateUpdateGradeLevel';
 import LoadingSkeleton from '@/components/ui/Loading/LoadingSkeleton';
 import { removeNullUndefinedAndFalsey } from '@/hooks/removeNullUndefinedAndFalsey';
 import { useGetAllGradeLevelQuery } from '@/redux/api/adminApi/gradeLevelApi';
+import {
+  useAddSellingReadyCourseMutation,
+  useGetAllSellingReadyCourseQuery,
+  useUpdateSellingReadyCourseMutation,
+} from '@/redux/api/adminApi/selling_ready_courses';
+import { multipleFilesUploaderS3 } from '@/utils/handelFileUploderS3';
+import { useState } from 'react';
 //
 
 // courseId -->For update
 const CreateMilestone = ({ courseId, categoryId, title, milestoneId }: any) => {
+  const [isGlobalLoading, setIsGlobalLoading] = useState(false);
   const [form] = Form.useForm();
   const { data: getAllGrade, isLoading: gradeLoading } = useGetAllGradeLevelQuery({
     limit: 100,
@@ -36,8 +55,24 @@ const CreateMilestone = ({ courseId, categoryId, title, milestoneId }: any) => {
 
   const [addMilestone, { isLoading: serviceLoading }] = useAddMilestoneMutation();
   const [updateMilestone, { isLoading: uLoading }] = useUpdateMilestoneMutation();
+  const [publishMilestone, { isLoading: pLoading }] = useAddSellingReadyCourseMutation();
+  const [updatePublishMilestone, { isLoading: upLoading }] =
+    useUpdateSellingReadyCourseMutation();
+  const { data, isLoading: courseLoading } = useGetAllSellingReadyCourseQuery(
+    { milestone_id: milestoneId, limit: 1, status: 'active' },
+    {
+      skip: !Boolean(milestoneId),
+    },
+  );
 
-  const onSubmit = async (values: any) => {
+  const sellingCourse = data?.data[0];
+
+  if (isLoading || courseLoading) {
+    return <LoadingSkeleton />;
+  }
+  const onSubmit = async (formValue: any) => {
+    const { img, is_published, price, ...values } = formValue;
+
     try {
       if (getMilestone?._id) {
         const MilestoneData: any = {
@@ -46,6 +81,40 @@ const CreateMilestone = ({ courseId, categoryId, title, milestoneId }: any) => {
         if (values.milestone_number) {
           MilestoneData['milestone_number'] = Number(values.milestone_number);
         }
+        const publishCourseData: any = {
+          milestone_id: getMilestone?._id,
+          ...(is_published === false &&
+            data?.data[0]?._id && {
+              isStart: false,
+              status: 'deactivate',
+            }),
+          ...(is_published === true && {
+            isStart: true,
+            status: 'active',
+          }),
+          price: Number(price),
+        };
+        setIsGlobalLoading(true);
+        if (img?.length) {
+          const imageUrl = await multipleFilesUploaderS3([img[0]?.originFileObj]);
+          // values.imgs = imageUrl[0];
+          publishCourseData['bannerImage'] = imageUrl[0];
+        }
+
+        console.log('🚀 ~ onSubmit ~ sellingCourse:', sellingCourse);
+        if (!sellingCourse?._id) {
+          const res = await publishMilestone(publishCourseData).unwrap();
+          message.success('Publish is successfully');
+          return;
+        } else if (sellingCourse?._id) {
+          const res = await updatePublishMilestone({
+            id: sellingCourse?._id,
+            data: publishCourseData,
+          }).unwrap();
+          message.success('Successfully Update Publish');
+          return;
+        }
+
         removeNullUndefinedAndFalsey(MilestoneData);
         const resUpdate = await updateMilestone({
           id: getMilestone._id,
@@ -75,11 +144,10 @@ const CreateMilestone = ({ courseId, categoryId, title, milestoneId }: any) => {
       }
     } catch (error: any) {
       message.error(error?.message);
+    } finally {
+      setIsGlobalLoading(false);
     }
   };
-  if (isLoading) {
-    return <LoadingSkeleton />;
-  }
 
   return (
     <>
@@ -107,7 +175,15 @@ const CreateMilestone = ({ courseId, categoryId, title, milestoneId }: any) => {
               form={form}
               layout="vertical"
               onFinish={onSubmit}
-              initialValues={getMilestone ? { ...getMilestone } : {}}
+              initialValues={
+                getMilestone
+                  ? {
+                      ...getMilestone,
+                      is_published: sellingCourse?._id && true,
+                      price: sellingCourse?.price,
+                    }
+                  : {}
+              }
             >
               <div
                 style={{
@@ -135,7 +211,7 @@ const CreateMilestone = ({ courseId, categoryId, title, milestoneId }: any) => {
                 </div>
 
                 <Row gutter={[12, 12]}>
-                  <Col xs={24}>
+                  <Col xs={18}>
                     <Form.Item
                       name="title"
                       label="Milestone Title"
@@ -153,10 +229,64 @@ const CreateMilestone = ({ courseId, categoryId, title, milestoneId }: any) => {
                     </Form.Item>
                   </Col>
                 </Row>
+                {getMilestone?._id && (
+                  <div>
+                    <Col xs={8}>
+                      <Form.Item name="is_published" valuePropName="checked">
+                        <Checkbox>Publish Milestone</Checkbox>
+                      </Form.Item>
+                    </Col>
+                    <Col xs={8}>
+                      <Form.Item
+                        name={['price']}
+                        label="Price"
+                        rules={[
+                          {
+                            required: false,
+                            type: 'number',
+                            min: 0,
+                            message: 'Please enter a valid price',
+                            transform: (value) => (value ? Number(value) : undefined),
+                          },
+                        ]}
+                      >
+                        <Input
+                          type="number"
+                          placeholder="Enter price"
+                          size="large"
+                          min={0}
+                          step="0.01"
+                        />
+                      </Form.Item>
+                    </Col>
+                  </div>
+                )}
+                <Col xs={24}>
+                  <Form.Item
+                    name="img"
+                    label="Banner (optional)"
+                    valuePropName="fileList"
+                    getValueFromEvent={(e) => (Array.isArray(e) ? e : e?.fileList)}
+                  >
+                    <Upload
+                      multiple={false}
+                      maxCount={1}
+                      showUploadList={true}
+                      accept={'image/*'}
+                      listType="picture-circle"
+                      beforeUpload={(file) => {
+                        return false; // Stop automatic upload
+                      }}
+                      customRequest={() => {}} // Disable default upload behavior
+                    >
+                      <Button className="!font-sm !overflow-hidden">+</Button>
+                    </Upload>
+                  </Form.Item>
+                </Col>
               </div>
 
               <div className="mx-auto w-fit mt-4 text-center">
-                {serviceLoading || uLoading ? (
+                {serviceLoading || uLoading || isGlobalLoading ? (
                   <Spin />
                 ) : (
                   <Button type="primary" htmlType="submit">
