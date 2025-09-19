@@ -177,40 +177,20 @@ export const homeNavItems = (role: string | null): MenuProps['items'] => {
         },
       ],
     },
-    ...(role === 'admin'
-      ? [
-          {
-            label: (
-              <Link
-                className="text-[16px] font-extrabold capitalize text-[#1d1c1c] hover:text-[#1d1c1c] 2xl:text-[20px]"
-                // href="/enroll"
-                href="/enroll"
-              >
-                COURSES
-              </Link>
-            ),
-            key: '/enroll',
-          },
-        ]
-      : []),
-    /* 
-     ...(role === 'admin'
-      ? [
-          {
-            label: (
-              <Link
-                className="text-[16px] font-extrabold capitalize text-[#1d1c1c] hover:text-[#1d1c1c] 2xl:text-[20px]"
-                href="/enroll"
-              >
-                COURSES
-              </Link>
-            ),
-            key: '/enroll',
-          },
-        ]
-      : []),
-    
-    */
+
+    {
+      label: (
+        <Link
+          className="text-[16px] font-extrabold capitalize text-[#1d1c1c] hover:text-[#1d1c1c] 2xl:text-[20px]"
+          // href="/enroll"
+          href="/enroll"
+        >
+          COURSES
+        </Link>
+      ),
+      key: '/enroll',
+    },
+    ,
     {
       label: (
         <p className="text-[16px] capitalize lg:font-extrabold 2xl:text-[20px]">

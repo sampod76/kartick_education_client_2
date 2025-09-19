@@ -16,6 +16,7 @@ import {
 import { useGlobalContext } from '../ContextApi/GlobalContextApi';
 import ModalComponent from '../Modal/ModalComponents';
 import CreateMilestone from './create/createAndUpdateMilestoned';
+import CustomImageTag from '../ui/CustomTag/CustomImageTag';
 
 const MileStoneList = ({
   queryObject,
@@ -99,8 +100,9 @@ const MileStoneList = ({
         return (
           <>
             {
-              <Image
+              <CustomImageTag
                 src={data?.imgs?.length ? data?.imgs[0] : AllImage.notFoundImage}
+                //@ts-ignore
                 style={{ height: '50px', width: '80px' }}
                 width={50}
                 height={50}
