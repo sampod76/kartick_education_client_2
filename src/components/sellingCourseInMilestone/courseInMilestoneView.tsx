@@ -18,7 +18,9 @@ export default function CourseSellingCard({ data, onBuy }: CourseSellingCardProp
       {/* Image */}
       <div className="relative h-48 w-full">
         <Image
-          src={fileObjectToLink(courseDetails?.image || courseDetails?.img)}
+          src={fileObjectToLink(
+            milestoneDetails?.imgs[0] || courseDetails?.image || courseDetails?.img,
+          )}
           alt={courseDetails?.title || 'Course'}
           fill
           className="object-cover"
