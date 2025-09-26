@@ -2,6 +2,7 @@
 
 import fileObjectToLink from '@/utils/fileObjectToLink';
 import Image from 'next/image';
+import Link from 'next/link';
 
 type CourseSellingCardProps = {
   data: any;
@@ -18,7 +19,9 @@ export default function CourseSellingCard({ data, onBuy }: CourseSellingCardProp
       {/* Image */}
       <div className="relative h-48 w-full">
         <Image
-          src={fileObjectToLink(courseDetails?.image || courseDetails?.img)}
+          src={fileObjectToLink(
+            milestoneDetails?.imgs[0] || courseDetails?.image || courseDetails?.img,
+          )}
           alt={courseDetails?.title || 'Course'}
           fill
           className="object-cover"
@@ -44,12 +47,17 @@ export default function CourseSellingCard({ data, onBuy }: CourseSellingCardProp
         <p className="text-xl font-bold text-green-600">${price ?? 0}</p>
 
         {/* Actions */}
-        <button
-          onClick={() => onBuy?.(data._id)}
-          className="mt-2 w-full px-4 py-2 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition"
+        <Link
+          href={
+            '/enroll/view/' +
+            milestoneDetails._id +
+            `?p=${price ?? 0}&title=${milestoneDetails.title}`
+          }
+          // onClick={() => onBuy?.(data._id)}
+          className="mt-2 w-full px-4 py-2 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition text-center"
         >
-          {isStart ? 'Continue Learning' : 'Buy Now'}
-        </button>
+          {isStart ? 'Visit Course Details' : 'Buy Now'}
+        </Link>
       </div>
     </div>
   );

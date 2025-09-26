@@ -30,11 +30,23 @@ import {
   useUpdateSellingReadyCourseMutation,
 } from '@/redux/api/adminApi/selling_ready_courses';
 import { multipleFilesUploaderS3 } from '@/utils/handelFileUploderS3';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 //
-
+const TextEditorNotSetForm = dynamic(
+  () => import('@/components/shared/TextEditor/TextEditorNotSetForm'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex items-center justify-center h-32">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-600"></div>
+      </div>
+    ),
+  },
+);
 // courseId -->For update
 const CreateMilestone = ({ courseId, categoryId, title, milestoneId }: any) => {
+  const [textEditorValue, setTextEditorValue] = useState('');
   const [isGlobalLoading, setIsGlobalLoading] = useState(false);
   const [form] = Form.useForm();
   const { data: getAllGrade, isLoading: gradeLoading } = useGetAllGradeLevelQuery({
@@ -66,7 +78,12 @@ const CreateMilestone = ({ courseId, categoryId, title, milestoneId }: any) => {
   );
 
   const sellingCourse = data?.data[0];
-
+  useEffect(() => {
+    console.log('🚀 ~ CreateMilestone ~ getMilestone:', getMilestone);
+    if (getMilestone?.details) {
+      setTextEditorValue(getMilestone?.details);
+    }
+  }, [getMilestone?._id]);
   if (isLoading || courseLoading) {
     return <LoadingSkeleton />;
   }
@@ -77,7 +94,9 @@ const CreateMilestone = ({ courseId, categoryId, title, milestoneId }: any) => {
       if (getMilestone?._id) {
         const MilestoneData: any = {
           ...values,
+          details: textEditorValue,
         };
+        console.log('🚀 ~ onSubmit ~ MilestoneData:', MilestoneData);
         if (values.milestone_number) {
           MilestoneData['milestone_number'] = Number(values.milestone_number);
         }
@@ -101,18 +120,16 @@ const CreateMilestone = ({ courseId, categoryId, title, milestoneId }: any) => {
           publishCourseData['bannerImage'] = imageUrl[0];
         }
 
-        console.log('🚀 ~ onSubmit ~ sellingCourse:', sellingCourse);
-        if (!sellingCourse?._id) {
+        // console.log('🚀 ~ onSubmit ~ sellingCourse:', sellingCourse);
+        if (!sellingCourse?._id && is_published === true) {
           const res = await publishMilestone(publishCourseData).unwrap();
           message.success('Publish is successfully');
-          return;
         } else if (sellingCourse?._id) {
           const res = await updatePublishMilestone({
             id: sellingCourse?._id,
             data: publishCourseData,
           }).unwrap();
           message.success('Successfully Update Publish');
-          return;
         }
 
         removeNullUndefinedAndFalsey(MilestoneData);
@@ -132,6 +149,7 @@ const CreateMilestone = ({ courseId, categoryId, title, milestoneId }: any) => {
           ...values,
           category: categoryId,
           course: courseId,
+          details: textEditorValue,
         };
         if (values.milestone_number) {
           MilestoneData['milestone_number'] = Number(values.milestone_number);
@@ -282,6 +300,27 @@ const CreateMilestone = ({ courseId, categoryId, title, milestoneId }: any) => {
                       <Button className="!font-sm !overflow-hidden">+</Button>
                     </Upload>
                   </Form.Item>
+                </Col>
+                <Col xs={24}>
+                  <Form.Item
+                    name="short_description"
+                    label="Short description (optional)"
+                  >
+                    <Input.TextArea placeholder="Short description" size="large" />
+                  </Form.Item>
+                </Col>
+                <Col xs={24}>
+                  <div style={{ borderTopWidth: '2px' }} /* className=" border-t-2" */>
+                    <p className="my-3 text-center text-xl font-bold">
+                      Description (optional)
+                    </p>
+                    <TextEditorNotSetForm
+                      defaultTextEditorValue={getMilestone?.details}
+                      textEditorValue={textEditorValue}
+                      setTextEditorValue={setTextEditorValue}
+                      height={300}
+                    />
+                  </div>
                 </Col>
               </div>
 
