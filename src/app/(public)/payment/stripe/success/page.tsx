@@ -13,11 +13,11 @@ export default function Sudjdkj() {
           subTitle={`Thank you so much`}
           extra={[
             <Link
-              href={'/'}
+              href={`/dashboard`}
               key={'dd'}
-              className="rounded bg-green-600 px-3 py-[5px] text-white hover:!text-white"
+              className="rounded bg-green-600 px-3 py-[5px] "
             >
-              Go Home
+              Go Dashboard
             </Link>,
             // <Button key="buy">Buy Again</Button>,
           ]}

@@ -85,7 +85,7 @@ const Footer = () => {
         <div className="container mx-auto">
           <div className="sm:grid-col-2 grid gap-10 md:grid-cols-5">
             <div className="col-span-2">
-              <Logo />
+              {/* <Logo /> */}
               <p className="px-4 py-6 text-lg">
                 iBLossomLearn facilitates individualized instruction. By providing a
                 comprehensive K–12 curriculum, personalized support, and up-to-date

@@ -79,6 +79,7 @@ const CreateMilestone = ({ courseId, categoryId, title, milestoneId }: any) => {
 
   const sellingCourse = data?.data[0];
   useEffect(() => {
+    console.log('🚀 ~ CreateMilestone ~ getMilestone:', getMilestone);
     if (getMilestone?.details) {
       setTextEditorValue(getMilestone?.details);
     }
@@ -123,14 +124,12 @@ const CreateMilestone = ({ courseId, categoryId, title, milestoneId }: any) => {
         if (!sellingCourse?._id && is_published === true) {
           const res = await publishMilestone(publishCourseData).unwrap();
           message.success('Publish is successfully');
-          return;
         } else if (sellingCourse?._id) {
           const res = await updatePublishMilestone({
             id: sellingCourse?._id,
             data: publishCourseData,
           }).unwrap();
           message.success('Successfully Update Publish');
-          return;
         }
 
         removeNullUndefinedAndFalsey(MilestoneData);
@@ -316,6 +315,7 @@ const CreateMilestone = ({ courseId, categoryId, title, milestoneId }: any) => {
                       Description (optional)
                     </p>
                     <TextEditorNotSetForm
+                      defaultTextEditorValue={getMilestone?.details}
                       textEditorValue={textEditorValue}
                       setTextEditorValue={setTextEditorValue}
                       height={300}

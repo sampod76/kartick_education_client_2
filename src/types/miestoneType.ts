@@ -1,7 +1,7 @@
 export type IMilestoneData = {
   _id: string;
   title: string;
-  imgs: [];
+  imgs: any[];
   details: string;
   short_description: string;
   course: {

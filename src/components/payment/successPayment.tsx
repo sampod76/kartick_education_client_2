@@ -2,6 +2,7 @@
 import { Button, Result } from 'antd';
 import Link from 'next/link';
 import React from 'react';
+import { useGlobalContext } from '../ContextApi/GlobalContextApi';
 
 export default function PaymentSuccessComponent({
   orderNumber = '',
@@ -16,13 +17,12 @@ export default function PaymentSuccessComponent({
         subTitle={`Thank you so much`}
         extra={[
           <Link
-            href={'/'}
+            href={`/dashboard`}
             key={'dd'}
-            className="rounded bg-green-600 px-3 py-[5px] text-white"
+            className="rounded bg-green-600 px-3 py-[5px] "
           >
-            Go Home
+            Go Dashboard
           </Link>,
-          <Button key="buy">Buy Again</Button>,
         ]}
       />
     </div>
