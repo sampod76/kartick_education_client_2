@@ -22,6 +22,23 @@ export const purchaseCoursesApi = baseApi.injectEndpoints({
       },
       providesTags: [tagTypes.userPurchaseCourse],
     }),
+    getCourseToAllMilestoneAndQuizzesCount: build.query({
+      query: (arg: Record<string, any>) => {
+        return {
+          url: `${PURCHASE_COURSE_URL}/get-course-to-all-milestone-and-quizzes-count`,
+          method: 'GET',
+          params: arg,
+        };
+      },
+      transformResponse: (response: CoursePermission[], meta: IMeta) => {
+        return {
+          data: response,
+          meta,
+        };
+      },
+      providesTags: [tagTypes.userPurchaseCourse],
+    }),
+
     milestoneGradebook: build.query({
       query: (arg: Record<string, any>) => {
         return {
@@ -58,6 +75,7 @@ export const purchaseCoursesApi = baseApi.injectEndpoints({
       },
       invalidatesTags: [tagTypes.course],
     }),
+
     getCourseToAllMilestoneInPackage: build.query({
       query: (arg: Record<string, any>) => {
         return {
@@ -103,4 +121,41 @@ export const {
   useGetCourseToAllMilestoneInPackageQuery,
   useGetStudentPurchaseCoursesToMilestoneModuleQuery,
   useMilestoneGradebookQuery,
+  useGetCourseToAllMilestoneAndQuizzesCountQuery,
 } = purchaseCoursesApi;
+
+export interface CoursePermission {
+  _id: string;
+  course: string;
+  permissionMilestones: string[];
+  packageToAdd: {
+    packageId: string;
+    purchasePackageId: string;
+  };
+  user: string;
+  status: string;
+  isDelete: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  permissionMilestonesDetails: {
+    _id: string;
+    title: string;
+    imgs: string[];
+    author: string;
+    course: string;
+    category: string;
+    grade_level_id: string;
+    status: string;
+    isDelete: string;
+    milestone_number: number;
+    favorite: string;
+    tags: string[];
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+    totalQuizzes: number;
+    userTotalSubmits: number;
+    userCorrectSubmits: number;
+  }[];
+}

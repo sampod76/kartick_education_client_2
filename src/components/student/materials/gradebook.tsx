@@ -65,12 +65,12 @@ const gradeFromPercent = (p: number): GradeInfo => {
 };
 
 const Gradebook: React.FC = () => {
-  const { userInfo } = useGlobalContext();
   const search = useSearchParams();
   const userId = search.get('user_id') || '';
   const { data, isLoading } = useMilestoneGradebookQuery({
-    userId: userId || userInfo?.userId,
+    userId: userId, // when student call this page then auto apt to set user id
   });
+  console.log('🚀 ~ Gradebook ~ data:', data);
 
   // ⬇ API থেকে কোর্স-লেভেল অ্যারে (প্রতিটি আইটেমে course + permissionMilestonesDetails থাকে)
   type CourseBlock = {

@@ -18,3 +18,7 @@ export const getCloudinaryEnv = (): {
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'duyfxtcdd',
   };
 };
+
+export const configEnv = {
+  private_academy_category_id: process.env.NEXT_PUBLIC_PRIVATE_ACADEMY_CATEGORY_ID,
+};

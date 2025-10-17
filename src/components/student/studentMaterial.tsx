@@ -7,6 +7,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import TimeTracker from './materials/timeTracker';
 import Gradebook from './materials/gradebook';
 import Reports from './materials/reports';
+import Gradebook_v2 from './materials/gradebook_v2';
 
 export default function StudentMaterial() {
   const router = useRouter();
@@ -31,18 +32,24 @@ export default function StudentMaterial() {
       items={[
         {
           key: '1',
-          label: 'Attendance list',
-          children: <TimeTracker />,
+          label: 'Gradebook',
+          children: <Gradebook_v2 />,
         },
         {
           key: '2',
-          label: 'Gradebook',
-          children: <Gradebook />,
+          label: 'Attendance list',
+          children: <TimeTracker />,
         },
+
         {
           key: '3',
           label: 'Reports',
           children: <Reports />,
+        },
+        {
+          key: '4',
+          label: 'Gradebook _temp',
+          children: <Gradebook />,
         },
       ]}
     />
